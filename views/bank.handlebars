@@ -1,0 +1,12 @@
+<h2>Bank (all coins)</h2>
+<table>
+	<tr><th>id</th><th>serial</th><th>created</th><th>owner</th></tr>
+	{{#each records}}
+		<tr>
+			<td>{{id}}</td>
+			<td>{{serialNum}}</td>
+			<td>{{createdAt}}</td>
+			<td>{{#if username}}{{username}}{{else}}BANK{{/if}}</td>
+		</tr>
+	{{/each}}
+</table>

@@ -1,0 +1,26 @@
+<h2>{{username}}</h2>
+<p><strong>Balance:</strong> {{balance}} tokens</p>
+<!--
+	EXAMPLE
+ 	id: 14,
+    createdAt: Fri Mar 17 2017 15:23:49 GMT-0400 (EDT),
+    updatedAt: Fri Mar 17 2017 15:23:49 GMT-0400 (EDT),
+    senderId: 1,
+    receiverId: null,
+    coinSerialnum: 'a5f61...' 
+
+-->
+<h2>Transaction Ledger</h2>
+<table>
+	<tr><th>id</th><th>date</th><th>receiver</th><th>sender</th><th>serial</th></tr>
+	{{#each ledger}}
+		<tr>
+			<td>{{id}}</td>
+			<td>{{createdAt}}</td>
+			<td>{{receiverId}}</td>
+			<td>{{senderId}}</td>
+			<td>{{coinSerialnum}}</td>
+		</tr>
+	{{/each}}
+
+</table>

@@ -1,0 +1,15 @@
+<h2>Transaction Ledger</h2>
+<table>
+	<tr><th>id</th><th>serial</th><th>created</th><th>receiver</th><th>sender</th></tr>
+	{{#each records}}
+		<tr>
+			<td>{{id}}</td>
+			<td>{{coinSerialnum}}</td>
+			<td>{{createdAt}}</td>
+			<td>{{receiver}}</td>
+			<td>{{sender}}</td>
+		
+		</tr>
+	{{/each}}
+
+</table>
