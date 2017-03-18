@@ -37,7 +37,7 @@ module.exports = function(userId,amt){
 							var sn = r[j].serialNum;
 							
 							var l = Ledger.create({
-							  senderId:userId,
+							  receiverId:userId,
 							  coinSerialnum:sn
 							},{transaction: t});
 							ledgerPromises.push(l);

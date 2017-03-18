@@ -1,24 +1,15 @@
 <h2>{{username}}</h2>
-<p><strong>Balance:</strong> {{balance}} tokens</p>
-<!--
-	EXAMPLE
- 	id: 14,
-    createdAt: Fri Mar 17 2017 15:23:49 GMT-0400 (EDT),
-    updatedAt: Fri Mar 17 2017 15:23:49 GMT-0400 (EDT),
-    senderId: 1,
-    receiverId: null,
-    coinSerialnum: 'a5f61...' 
+<p><strong>Balance:</strong> {{balance}} {{pluralize balance 'token' 'tokens'}}</p>
 
--->
-<h2>Transaction Ledger</h2>
+<h3>Transaction Ledger</h3>
 <table>
 	<tr><th>id</th><th>date</th><th>receiver</th><th>sender</th><th>serial</th></tr>
 	{{#each ledger}}
 		<tr>
 			<td>{{id}}</td>
 			<td>{{createdAt}}</td>
-			<td>{{receiverId}}</td>
-			<td>{{senderId}}</td>
+			<td>{{receiver}}</td>
+			<td>{{#if sender}}{{sender}}{{else}}BANK{{/if}}</td>
 			<td>{{coinSerialnum}}</td>
 		</tr>
 	{{/each}}

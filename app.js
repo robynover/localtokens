@@ -9,8 +9,11 @@ var Config = require('./config.js');
 var passport = require('passport');
 
 // set up handlebars view engine
-var handlebars = require('express-handlebars').create({ defaultLayout:'main' });
-app.engine('handlebars', handlebars.engine);
+var exphbs  = require('express-handlebars');
+app.engine('handlebars', exphbs({
+	defaultLayout: 'main',
+	helpers: require("./helpers/handlebars.helpers.js").helpers
+}));
 app.set('view engine', 'handlebars');
 
 // set up the public directory to serve static files
@@ -98,6 +101,7 @@ Issue(userId,amt).then(r=>{
 });*/
 
 
+
 // routing
 app.get('/',function(req,res){
 	res.send('Hello');
@@ -147,7 +151,7 @@ app.get('/bank',function(req,res){
 
 app.get('/bestow/:userid',function(req,res){
 	let uid = req.params.userid;
-	let amt = 2;
+	let amt = 1;
 	if (uid > 0){
 		Issue(uid,amt).then(r=>{
 			var msg = 'The following coins were bestowed on user #' + uid + ':<br>';
@@ -187,14 +191,14 @@ app.get('/profile/:username',function(req,res){
 });
 
 app.post('/send',function(req,res){
-	let bid = 1; // TODO: check login and use stored ID in req.user
-	let sid = parseInt(req.body.receiver_id);
+	let sender_id = 1; // TODO: check login and use stored ID in req.user
+	let receiver_id = parseInt(req.body.receiver_id);
 	let amt = parseInt(req.body.amt);
-	if (bid <= 0 || sid <= 0 || amt <= 0){
+	if (sender_id <= 0 || receiver_id <= 0 || amt <= 0){
 		res.send('invalid values for transaction');
 		return;
 	}
-	Transact(bid,sid,amt).then(tr=>{
+	Transact(sender_id,receiver_id,amt).then(tr=>{
 		console.log(tr);
 		var msg = 'Successfully sent ' + amt + ' to user #' + tr[0].receiverId;
 		res.send(msg);

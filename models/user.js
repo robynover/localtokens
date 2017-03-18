@@ -35,9 +35,6 @@ module.exports = function(sequelize, DataTypes) {
 				                   .update(pw)
 				                   .digest('hex');
 				return hash == this.password;
-				/*return User.findOne({
-					where:{username:this.username,password:hash}
-				});*/
 			},
 			getAcctBalance: function(){
 				var q = 'SELECT count(*) FROM coins LEFT JOIN users on users.id = "ownerId" WHERE "ownerId" = ?';
@@ -46,7 +43,12 @@ module.exports = function(sequelize, DataTypes) {
 				);
 			},
 			getUserLedger: function(){
-				var q = 'SELECT * FROM ledger WHERE "senderId"=? OR "receiverId"=?';
+				//var q = 'SELECT * FROM ledger WHERE "senderId"=? OR "receiverId"=? ORDER BY "createdAt" DESC';
+				var q = 'SELECT ledger.*,u1.username AS sender, u2.username AS receiver ';
+				q += ' FROM ledger LEFT JOIN users AS u1 ON u1.id = "senderId" ';
+				q += ' LEFT JOIN users AS u2 ON u2.id = "receiverId" ';
+				q += ' WHERE "senderId"=1 OR "receiverId"=1 ';
+				q += ' ORDER BY "createdAt" DESC ';
 				return sequelize.query(q,
 				  { replacements: [this.id,this.id], type: sequelize.QueryTypes.SELECT }
 				)

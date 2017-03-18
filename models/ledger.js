@@ -30,8 +30,8 @@ module.exports = function(sequelize, DataTypes) {
 		freezeTableName: true
 	});
 
-	Ledger.belongsTo(User, { foreignKey: {name: 'senderId',allowNull: false} }); // creates senderId col
-	Ledger.belongsTo(User, { as: 'receiver' }); // creates receiverId col
+	Ledger.belongsTo(User, { foreignKey: {name: 'senderId'} }); // creates senderId col
+	Ledger.belongsTo(User, { foreignKey: {name: 'receiverId',allowNull: false} }); // creates receiverId col
 	Ledger.belongsTo(Coin,{foreignKey: 'coinSerialnum', targetKey: 'serialNum'}); // coinSerialnum column
 
 	return Ledger;
