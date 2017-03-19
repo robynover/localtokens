@@ -16,5 +16,18 @@ User.sync().then(function () {
 	});
 });
 
-
+// create users
+const hash = crypto.createHmac('sha256', Config.salt)
+                   .update('opal123')
+                   .digest('hex');
+User.bulkCreate([{
+	username: 'robyn',
+	password: hash
+},
+{
+	username: 'bobby',
+	password: hash
+}]).then(u=>{
+	console.log(u);
+});
 

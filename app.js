@@ -1,6 +1,7 @@
 "use strict";
 var express = require('express');
 var app = express();
+var crypto = require('crypto');
 //set port
 app.set('port', process.env.PORT || 3000);
 
@@ -32,7 +33,10 @@ app.use(session({
   secret: Config.session,
   resave: false,
   saveUninitialized: true,
-  cookie: { secure: false }
+  cookie: { 
+  	secure: false,
+  	maxAge: 60 * 60 * 1000 // 1 hour
+  }
 }))
 app.use(passport.initialize());
 app.use(passport.session());
@@ -45,6 +49,7 @@ var sequelize = new Sequelize(Config.pg);
 var User = sequelize.import('./models/user.js');
 var Coin = sequelize.import('./models/coin.js');
 var Ledger = sequelize.import('./models/ledger.js');
+//sequelize.sync({force:true}); // <--- use to rebuild tables, with option {force:true}
 
 // controllers
 var Transact = require('./controllers/transact.js');
@@ -81,69 +86,73 @@ passport.use(new LocalStrategy(
   }
 ));
 
+//--- testing ----//
 
-/*var receiver = 3;
-var sender = 1;
-var amt = 1;
-Transact(sender,receiver,amt).then(r=>{
-	console.log('transaction made');
-}).catch(err=>{
-	console.log('ERROR');
-	console.log(err);
-});*/
-/*var userId = 1;
-var amt = 2;
-Issue(userId,amt).then(r=>{
-	console.log('transaction complete');
-}).catch(err=>{
-	console.log('ERROR');
-	console.log(err);
+/*Ledger.findById(22).then(ledger=>{
+	ledger.setCoins([1,2]).then(sc=>{
+		console.log(sc);
+	});
 });*/
 
 
 
-// routing
+
+
+
+// -----------------------------//
+// ROUTES
+// -----------------------------//
 app.get('/',function(req,res){
 	res.send('Hello');
 });
 app.post('/login',
-  passport.authenticate('local', { successRedirect: '/',
+  passport.authenticate('local', { successRedirect: '/dashboard',
                                    failureRedirect: '/login',
                                    failureFlash: false })
 );
 app.get('/login',function(req,res){
-	res.render('login');
+	res.render('login',{pagetitle:'Login'});
 });
 
 app.get('/dashboard',function(req,res){
-	if (req.user) {
-	    // logged in
-	    res.send("You're in!");
+	if (req.user){
+		User.findById(req.user.id).then(u=>{
+			var context = {};
+			context.username = u.username;
+			context.greeting = "Welcome "+ u.username + "!";
+			u.getAcctBalance().then(b=>{
+				context.balance = b[0].count;
+				u.getUserLedger(6).then(l=>{
+					context.ledger = l;
+					res.render('dashboard',context);
+				});
+			})
+			
+		});	
 	} else {
-	    // not logged in
-	    res.send("You must be logged in");
+		res.redirect('/login');
 	}
 });
 
 app.get('/mint', function(req,res){
 	Coin.create({}).then(c=>{
-		res.send("New coin created with Serial # " + c.serialNum);
+		res.send("New coin created with Serial # " + c.serial_num);
 	});
 });
 
 app.get('/ledger',function(req,res){
 	Ledger.getRecords().then(l=>{
-		//console.log(l);
 		let context = {};
+		context.pagetitle = 'Ledger';
 		context.records = l;
 		res.render('ledger',context);
-		//res.send(l[0]);
 	});
 });	
 
 app.get('/bank',function(req,res){
 	Coin.getBankLedger().then(l=>{
 		let context = {};
+		context.pagetitle = "Bank"
 		context.records = l;
 		res.render('bank',context);
 	});
@@ -156,7 +165,7 @@ app.get('/bestow/:userid',function(req,res){
 		Issue(uid,amt).then(r=>{
 			var msg = 'The following coins were bestowed on user #' + uid + ':<br>';
 			for (var i = 0; i<r.length; i++){
-				msg += '<li>' + r[i].coinSerialnum + '</li>';
+				msg += '<li>' + r[i].serial_num + '</li>';
 			}
 			var context = {};
 			context.msg = msg;
@@ -165,7 +174,6 @@ app.get('/bestow/:userid',function(req,res){
 		}).catch(err=>{
 			console.log('ERROR');
 			console.log(err);
-
 			res.send('Error '+ err);
 		});
 	} else {
@@ -174,42 +182,118 @@ app.get('/bestow/:userid',function(req,res){
 	
 });
 
-app.get('/profile/:username',function(req,res){
-	User.getByUsername(req.params.username).done(u=>{
-		u.getAcctBalance().done(ct=>{
-			var context = {};
-			context.balance = ct[0].count;
-			context.username = u.username;
-			u.getUserLedger().done(l=>{
-				//console.log(l);
-				context.ledger = l;
-				res.render('profile',context);
+app.get('/profile/:username',function(req,res,next){
+	User.getByUsername(req.params.username).then(u=>{
+		if (!u){
+			// go to 404
+			next();
+		} else{
+			u.getAcctBalance().then(ct=>{
+				var context = {};
+				context.pagetitle = u.username;
+				context.balance = ct[0].count;
+				context.username = u.username;
+				// if user is logged in, show them the ledger
+				
+				if (req.user && u.id == req.user.id){
+					u.getUserLedger(0).then(l=>{
+						//console.log(l);
+						context.ledger = l;
+						res.render('profile',context);
+					});
+				} else {
+					// otherwise, just show the basic profile
+					res.render('profile',context);
+				}
+				
+				
 			});
-			
-		})
+		}	
 	});
 });
 
-app.post('/send',function(req,res){
-	let sender_id = 1; // TODO: check login and use stored ID in req.user
-	let receiver_id = parseInt(req.body.receiver_id);
-	let amt = parseInt(req.body.amt);
-	if (sender_id <= 0 || receiver_id <= 0 || amt <= 0){
-		res.send('invalid values for transaction');
-		return;
+app.get('/profile',function(req,res,next){
+	console.log(req.user);
+	if (req.user){
+		res.redirect('/profile/'+req.user.username);
+	} else {
+		next();
 	}
-	Transact(sender_id,receiver_id,amt).then(tr=>{
-		console.log(tr);
-		var msg = 'Successfully sent ' + amt + ' to user #' + tr[0].receiverId;
-		res.send(msg);
-	}).catch(err=>{
-		res.send('Error '+ err);
-		console.log(err.stack);
-	});
+	
+})
+
+app.post('/send',function(req,res){
+	if (req.user) {
+	    // logged in
+	    let sender_id = req.user.id; 
+	    let receiver_id = parseInt(req.body.receiver_id);
+	    let amt = parseInt(req.body.amt);
+	    if (sender_id <= 0 || receiver_id <= 0 || amt <= 0){
+	    	res.send('invalid values for transaction');
+	    	return;
+	    }
+	    Transact(sender_id,receiver_id,amt).then(tr=>{
+	    	console.log(tr);
+	    	var msg = 'Successfully sent ' + amt + ' to user #' + receiver_id;
+	    	res.send(msg);
+	    }).catch(err=>{
+	    	res.send('Error '+ err);
+	    	console.log(err.stack);
+	    });
+	} else {
+	    // not logged in
+	    res.send("You must be logged in to send tokens");
+	}
+	
 });
 
 app.get('/send',function(req,res){
-	res.render('transact');
+	if (req.user) {
+	    // logged in
+	    res.render('transact',{pagetitle:'Send'});
+	} else {
+	    // not logged in
+	    res.send("You must be logged in to send tokens");
+	}
+	
+});
+
+// API routes
+app.get('/api/user/transactions',function(req,res){
+	if (req.user){
+		var limit = 0;
+		if (req.query.n){
+			var limit = parseInt(req.query.n);
+		}
+		User.findById(req.user.id).then(u=>{
+			u.getUserLedger(limit).then(l=>{				
+				res.json(l);
+			});
+		});	
+	} else {
+		res.json({error:'user not logged in'});
+	}
+});
+
+/*
+other api routes:
+/api/user/:username
+/api/user/new  ?
+
+
+
+ */
+
+// 404
+app.use(function (req,res,next) {
+	res.status(404);
+	res.render('404');
+});
+// 500
+app.use(function (err, req, res, next) {
+	console.error(err.stack);
+	res.status(500);
+	res.render('500');
 });
 
 // listen

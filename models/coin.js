@@ -8,6 +8,7 @@ var Sequelize = require('sequelize');
 var sequelize = new Sequelize(Config.pg);
 
 var User = sequelize.import('./user.js');
+//var Ledger = sequelize.import('./ledger.js');
 
 module.exports = function(sequelize, DataTypes) {
 	var Coin =  sequelize.define('coin', {
@@ -16,12 +17,12 @@ module.exports = function(sequelize, DataTypes) {
 			primaryKey: true,
 			autoIncrement: true
 		},
-		serialNum: {
+		serial_num: {
 			type: DataTypes.UUID,
 			defaultValue: DataTypes.UUIDV1,
 			unique: true
 		},
-		inCirculation: {
+		in_circulation: {
 			type: DataTypes.BOOLEAN,
 			defaultValue: false
 		},
@@ -31,31 +32,35 @@ module.exports = function(sequelize, DataTypes) {
 		}
 
 	},{
+		underscored: true,
 		classMethods:{
 			countUserCoins: function(userId) {
 				return Coin.count({
-					where:{ownerId:userId}
+					where:{owner_id:userId}
 				});
 			},
 			getUserCoins: function(userId,limit){
 				return Coin.findAll({
-					where:{ownerId:userId},
+					where:{owner_id:userId},
 					limit: limit
 				});
 			},
 			countBankCoins: function(){
 				return Coin.count({
-					where:{ownerId:null}
+					where:{owner_id:null}
 				});
 			},
 			getBankCoins: function(limit){
 				return Coin.findAll({
-					where:{ownerId:null},
+					where:{owner_id:null},
 					limit: limit
 				});
 			},
 			getBankLedger: function(){
-				var q = 'SELECT coins.*, username FROM coins LEFT JOIN users ON users.id = "ownerId" ';
+				var q = 'SELECT coins.*, username ';
+				q += ' FROM coins ';
+				q += ' LEFT JOIN users ON users.id = owner_id ';
+				q += ' ORDER BY created_at DESC';
 				return sequelize.query(q, { type: sequelize.QueryTypes.SELECT});
 			}
 			
@@ -71,13 +76,14 @@ module.exports = function(sequelize, DataTypes) {
 				}
 				//console.log("OPTION");
 				//console.log(option);
-				return this.update({ownerId:newOwnerId,inCirculation:true},option);
+				return this.update({owner_id:newOwnerId,in_circulation:true},option);
 			}
 		}
 	   
 	});
 
 	Coin.belongsTo(User,{as: 'owner'}); // creates 'ownerId' column
+	//Coin.belongsToMany(Ledger, {through: 'LedgerCoin'});
 
 	return Coin;
 };

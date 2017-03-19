@@ -1,17 +1,20 @@
 <h2>{{username}}</h2>
 <p><strong>Balance:</strong> {{balance}} {{pluralize balance 'token' 'tokens'}}</p>
 
+{{#if ledger}}
 <h3>Transaction Ledger</h3>
 <table>
-	<tr><th>id</th><th>date</th><th>receiver</th><th>sender</th><th>serial</th></tr>
+	<tr><th>id</th><th>date</th><th>amount</th><th>description</th><th>balance</th></tr>
 	{{#each ledger}}
-		<tr>
+		<tr class="{{ifNegative signed_amt 'neg' 'pos'}}">
 			<td>{{id}}</td>
-			<td>{{createdAt}}</td>
-			<td>{{receiver}}</td>
-			<td>{{#if sender}}{{sender}}{{else}}BANK{{/if}}</td>
-			<td>{{coinSerialnum}}</td>
+			<td>{{created_at}}</td>
+			<td class="amt">{{signed_amt}}</td>
+			<td>{{description}}</td>
+			<td>{{balance}}</td>
+			
 		</tr>
 	{{/each}}
 
 </table>
+{{/if}}

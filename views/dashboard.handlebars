@@ -1,0 +1,40 @@
+<h2>{{greeting}}</h2>
+<!--<p><strong>Balance:</strong> {{balance}} {{pluralize balance 'token' 'tokens'}}</p>-->
+
+<div class="row">
+	<div class="three columns supercolumn">
+		<div class="subcolumn">
+			<h4 class="subcolumn-heading">Balance</h4>
+			<p class="balance">{{balance}}</p>
+		</div>
+		{{!-- <div class="subcolumn">
+			<h4 class="subcolumn-heading">Something</h4>
+			<p>Hi</p>
+		</div> --}}
+	</div>
+	<div class="nine columns">
+		<h4>Recent Transactions</h4>
+		<table>
+			<tr><th>id</th><th>date</th><th>amount</th><th>description</th><th>balance</th></tr>
+			{{#each ledger}}
+				<tr class="{{ifNegative signed_amt 'neg' 'pos'}}">
+					<td>{{id}}</td>
+					<td>{{created_at}}</td>
+					<td class="amt">{{signed_amt}}</td>
+					<td>{{description}}</td>
+					<td>{{balance}}</td>
+					
+				</tr>
+			{{/each}}
+
+		</table>
+
+	</div>
+</div>
+
+<div class="row under-row">
+    <div class="one-third column">1/3</div>
+    <div class="one-third column">1/3</div>
+    <div class="one-third column">1/3</div>
+</div>
+

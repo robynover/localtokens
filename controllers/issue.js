@@ -20,38 +20,30 @@ module.exports = function(userId,amt){
 				throw new Error("bank doesn't have that much");
 			} else {
 				return Coin.getBankCoins(amt).then(coins=>{
-					var promises = [];
-					//var serials = [];
-			        for (var i=0; i< coins.length; i++){
-						var newPromise = coins[i].changeOwner(userId,t);
-						promises.push(newPromise);
-						//serials[i] = coins[i]	
-					}
-					console.log("PROMISES");
-					console.log(promises.length);
-					return Promise.all(promises).then(r=>{
-						var ledgerPromises = [];
-						// record in ledger
-						for (var j=0; j< promises.length; j++){
-							//var p = r[j];
-							var sn = r[j].serialNum;
-							
-							var l = Ledger.create({
-							  receiverId:userId,
-							  coinSerialnum:sn
-							},{transaction: t});
-							ledgerPromises.push(l);
-								
-						} //end for
-						return Promise.all(ledgerPromises);
-						
-						
-						
-						//.then(x=>{
-						 // console.log("New coin to user # "+userId);
-						//});
-						
+					// create a record in the ledger
+					return Ledger.create({
+						receiver_id:userId,
+						amount: amt
+					},{transaction: t}).then(l=>{
+						var promises = [];
+						var coin_ids = [];
+						console.log(coins);
+				        for (var i=0; i< coins.length; i++){
+				        	// collect coin ids
+				        	coin_ids.push(coins[i].id);
+				        	// change owner of each coin
+							var p = coins[i].changeOwner(userId,t);
+							promises.push(p);
+						}
+						return Promise.all(promises).then(r=>{
+							// attach all coins to ledger record in join table
+							return l.setCoins(coin_ids,{transaction:t}).then(sc=>{
+								return coins;
+							})
+						});
 					});
+
+					
 				});
 			}
 		})

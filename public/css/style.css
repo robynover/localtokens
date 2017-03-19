@@ -1,4 +1,41 @@
-header{
-	background: aliceblue;
-	padding-top: 1.5rem;
-}
+header {
+  background: linear-gradient(#cdeef8, #fafdfe);
+  padding-top: 1.5rem; }
+
+nav ul {
+  list-style-type: none;
+  margin-top: 1.5rem; }
+nav li {
+  display: inline;
+  padding: 1.5rem;
+  background-color: #efefef; }
+nav a {
+  text-decoration: none; }
+
+.neg td.amt {
+  color: red; }
+
+.column, .columns {
+  border: 1px solid #a3a3a3;
+  padding: 1rem; }
+
+.supercolumn {
+  border: none;
+  padding: 0; }
+
+.subcolumn {
+  border: 1px solid #a3a3a3;
+  padding: 1rem;
+  margin-bottom: 3.75rem; }
+
+.under-row {
+  margin-top: 3.75rem; }
+
+p.balance {
+  text-align: center;
+  font-size: 350%; }
+
+h4.subcolumn-heading {
+  text-align: center; }
+
+/*# sourceMappingURL=style.css.map */

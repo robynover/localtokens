@@ -5,6 +5,16 @@ var register = function(Handlebars) {
         pluralize: function(number,single,plural){
             if (parseInt(number) == 1) { return single; }
             else { return plural; }
+        },
+        ifNegative: function(number,tclassname,fclassname){
+            if (parseInt(number) < 0){ 
+                //Handlebars.Utils.escapeExpression(isneg);
+                //return new Handlebars.SafeString(result); 
+                return tclassname;
+
+            } else {
+                return fclassname;
+            }
         }
     };
 
@@ -23,10 +33,3 @@ var register = function(Handlebars) {
 module.exports.register = register;
 module.exports.helpers = register(null);
 
-
-/*
-Handlebars.registerHelper('pluralize', function(number, single, plural) {
-  if (number === 1) { return single; }
-  else { return plural; }
-});
- */

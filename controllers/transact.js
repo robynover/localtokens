@@ -18,36 +18,34 @@ module.exports = function(sender,receiver,amt){
       if (ct < amt){
         throw new Error("sender doesn't have enough coins");
       } else {
-        // get coins from sender's account
-        return Coin.getUserCoins(sender,amt).then(coins=>{
-          // coins is an array
-          //console.log(coins);
-          var promises = [];
-          for (var i=0; i< coins.length; i++){
-            //console.log(coins[0].serialNum);
-            // change owner
-            //console.log(t);
-            promises.push(coins[i].changeOwner(receiver,t));
-          } //end for
-          return Promise.all(promises).then(r=>{
-            var ledgerPromises = [];
-            // record in ledger
-            for (var j=0; j< promises.length; j++){
-              //var p = r[j];
-              var sn = r[j].serialNum;
-              
-              var l = Ledger.create({
-                receiverId:receiver,
-                senderId:sender,
-                coinSerialnum:sn
-              },{transaction: t});
-              ledgerPromises.push(l);
-                
-            } //end for
-            return Promise.all(ledgerPromises);
-            
+        // Create ledger record
+        return Ledger.create({
+          receiver_id: receiver,
+          sender_id: sender,
+          amount: amt
+        },
+        {
+          transaction: t,
+        }).then(l=>{
+          //get sender's coins
+          return Coin.getUserCoins(sender,amt).then(coins=>{
+              var coin_ids = [];
+              var promises = [];
+              for (var i = 0; i < coins.length; i++){
+                // change owner
+                promises.push(coins[i].changeOwner(receiver,t));
+                // collect ids
+                coin_ids.push(coins[i].id);
+              }
+              return Promise.all(promises).then(p=>{
+                  // add all the coins to the ledger (join table)
+                  return l.setCoins(coin_ids,{transaction:t});
+              });
+    
           });
-        }); 
+        })
+
+
       } //end if
       
     });
