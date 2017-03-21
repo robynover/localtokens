@@ -43,7 +43,7 @@ module.exports = function(sender,receiver,amt){
               });
     
           });
-        })
+        });
 
 
       } //end if
@@ -51,4 +51,4 @@ module.exports = function(sender,receiver,amt){
     });
     
   });
-}
+};

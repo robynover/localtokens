@@ -67,13 +67,10 @@ module.exports = function(sequelize, DataTypes) {
 		},
 		instanceMethods:{
 			changeOwner: function(newOwnerId,t){
+				var option = {};
 				if (t){
-					var option = {transaction: t};
-					//console.log("GOT t");
-				} else {
-					var option = {};
-					//console.log("NO t");
-				}
+					option = {transaction: t};
+				} 
 				//console.log("OPTION");
 				//console.log(option);
 				return this.update({owner_id:newOwnerId,in_circulation:true},option);

@@ -5,7 +5,7 @@
   <!-- Basic Page Needs
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
   <meta charset="utf-8">
-  <title>{{pagetitle}} Local Tokens</title>
+  <title>{{pagetitle}} Local Tokens Admin</title>
   
 
   <!-- Mobile Specific Metas
@@ -20,30 +20,31 @@
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
   <link rel="stylesheet" href="/css/normalize.css">
   <link rel="stylesheet" href="/css/skeleton.css">
-  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/admin.css">
 
 
 </head>
-<body>
+<body class="admin">
 
   <!-- Primary Page Layout
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
   <header><div class="container header"> 	
-  	<h1>Local Tokens</h1>
+  	<h1>Local Tokens :: Admin</h1>
   </div>
   </header>
   
-  <nav class="container">
-    <ul>
-      <li><a href="/user/dashboard">Dashboard</a></li>
-      <li><a href="/transact/send">Send Tokens</a></li>
-      <li><a href="/user">Your profile</a></li>
-      <li><a href="/admin/bank">Bank</a></li>
-      <li><a href="/admin/ledger">Ledger</a></li>
-    </ul>
+  <nav>
+    <div class="container">
+      <ul>
+        <li><a href="/admin/bank">Bank</a></li>
+        <li><a href="/admin/ledger">Ledger</a></li>
+        <li><a href="/admin/mint">Mint</a></li>
+        <li><a href="/admin/bestow">Bestow</a></li>
+      </ul>
+    </div>
   </nav>
 
-  <div class="container">
+  <div class="container main">
 
     {{{body}}}
 		

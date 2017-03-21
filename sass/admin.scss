@@ -1,0 +1,36 @@
+$basecolor: #1EAEDB;
+$bgcolor: #333;
+body.admin{
+	background-color: $bgcolor;
+
+	.container.main{
+		background-color: #fff;
+		padding: 2.5rem 5rem;
+	}
+
+	header{
+		background: linear-gradient(lighten($basecolor,40%),lighten($basecolor,50%));
+	}
+
+	nav{
+		background-color: lighten(#cecece,10%);
+		ul{
+			list-style-type: none;
+			margin: 0;
+			padding: 1.5rem 0;
+		}
+		li{
+			display:inline;
+			padding: 1.5rem;
+			background-color: darken(#efefef,10%);
+		}
+		a{
+			text-decoration: none;
+			
+			/* color: adjust-color(complement($basecolor),$red: -30); */
+			color: $basecolor;
+			font-weight: bold;
+		}
+	} 
+
+}

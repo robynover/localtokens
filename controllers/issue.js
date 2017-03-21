@@ -39,14 +39,14 @@ module.exports = function(userId,amt){
 							// attach all coins to ledger record in join table
 							return l.setCoins(coin_ids,{transaction:t}).then(sc=>{
 								return coins;
-							})
+							});
 						});
 					});
 
 					
 				});
 			}
-		})
+		});
 	});
 
-}
+};

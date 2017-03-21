@@ -16,9 +16,35 @@ module.exports = function(sequelize, DataTypes) {
 	  },
 	  username: {
 	    type: DataTypes.STRING,
-	    unique: true
+	    unique: true,
+	    validate: {
+	    	len: [3,16],
+	    	isAlphanumeric: true,
+	    	//msg: 'Username must be between 3 and 16 alphanumeric characters'
+	    }
 	  },
 	  password: {
+	  	type: DataTypes.STRING(64),
+	  	validate: { 
+	  		len: [6,24],
+	  		//msg: 'Password is required and must be between 6 and 24 characters'
+	  	}
+	  },
+	  email: {
+	  	type: DataTypes.STRING(64),
+	  	validate: {
+	  		isEmail:true,
+	  		//msg: 'Email is not valid'
+	  	}
+	  },
+	  firstname:{
+	  	type: DataTypes.STRING(64),
+	  	validate: { 
+	  		len: [1,32],
+	  		//msg: 'First name is required'
+	  	}
+	  },
+	  lastname:{
 	  	type: DataTypes.STRING(64)
 	  }
 	},{
@@ -28,6 +54,12 @@ module.exports = function(sequelize, DataTypes) {
 				return User.findOne({
 					where:{username:username}
 				});
+			},
+			encryptPassword: function(pw){
+				const hash = crypto.createHmac('sha256', Config.salt)
+			                   .update(pw)
+			                   .digest('hex');
+			    return hash;
 			}
 		},
 		instanceMethods:{
@@ -44,13 +76,13 @@ module.exports = function(sequelize, DataTypes) {
 				);
 			},
 			getUserLedger: function(limit){
-				var limit = parseInt(limit);
+				limit = parseInt(limit);
 				var q = 'SELECT ledger.*, u1.username AS sender, u2.username AS receiver, ';
 				q += ' CASE ';
     			q += " WHEN sender_id <> :id AND sender_id IS NOT NULL THEN CONCAT('from ', u1.username) ";
     			q += " WHEN sender_id IS NULL THEN 'bank issue' ";
     			q += " WHEN receiver_id <> :id THEN CONCAT ('to ',u2.username) ";
-  				q += ' END AS description, ',
+  				q += ' END AS description, ';
 				q += 'CASE WHEN sender_id = :id THEN -1 * amount ELSE amount END AS signed_amt, ';
 				q += 'SUM(CASE WHEN sender_id = :id THEN -1 * amount ELSE amount END) ';
 				q += 'OVER (ORDER BY ledger.created_at) AS balance ';
@@ -64,7 +96,7 @@ module.exports = function(sequelize, DataTypes) {
 				}
 				return sequelize.query(q,
 				  { replacements: {id:this.id,lmt:limit}, type: sequelize.QueryTypes.SELECT }
-				)
+				);
 			}
 			 
 		}
