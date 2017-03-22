@@ -27,12 +27,19 @@ router.get('/login',function(req,res){
 	if (err){
 		error = err.error;
 	}
-
-	res.render('login',{pagetitle:'Login', error: error});
+	var loggedin = false;
+	if (req.user){
+		loggedin = true;
+	}
+	res.render('login',{pagetitle:'Login', error: error, loggedin:loggedin});
 });
 
 router.get('/signup',function(req,res){
-	res.render('signup',{pagetitle:'Signup', error: req.flash('err')});
+	var loggedin = false;
+	if (req.user){
+		loggedin = true;
+	}
+	res.render('signup',{pagetitle:'Signup', error: req.flash('err'), loggedin:loggedin});
 });
 
 router.post('/signup',function(req,res){

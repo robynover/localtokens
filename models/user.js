@@ -46,6 +46,10 @@ module.exports = function(sequelize, DataTypes) {
 	  },
 	  lastname:{
 	  	type: DataTypes.STRING(64)
+	  },
+	  is_admin: {
+	  	type: DataTypes.BOOLEAN,
+	  	defaultValue: false
 	  }
 	},{
 		underscored: true,
@@ -54,6 +58,12 @@ module.exports = function(sequelize, DataTypes) {
 				return User.findOne({
 					where:{username:username}
 				});
+			},
+			getIdByUsername: function(username){
+				var q = "SELECT id FROM users WHERE username = ?";
+				return sequelize.query(q,
+				  { replacements: [username], type: sequelize.QueryTypes.SELECT }
+				);
 			},
 			encryptPassword: function(pw){
 				const hash = crypto.createHmac('sha256', Config.salt)
@@ -68,6 +78,13 @@ module.exports = function(sequelize, DataTypes) {
 				                   .update(pw)
 				                   .digest('hex');
 				return hash == this.password;
+			},
+			isAdmin: function(){
+				if (this.is_admin){
+					return true;
+				} else {
+					return false;
+				}
 			},
 			getAcctBalance: function(){
 				var q = 'SELECT count(*) FROM coins LEFT JOIN users on users.id = owner_id WHERE owner_id = ?';

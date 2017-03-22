@@ -20,20 +20,39 @@ router.post('/send',function(req,res){
 	if (req.user) {
 	    // logged in
 	    let sender_id = req.user.id; 
-	    let receiver_id = parseInt(req.body.receiver_id);
+	    let receiver = req.body.receiver;
 	    let amt = parseInt(req.body.amt);
-	    if (sender_id <= 0 || receiver_id <= 0 || amt <= 0){
+	    if (sender_id <= 0 || amt <= 0){
 	    	res.send('invalid values for transaction');
 	    	return;
 	    }
-	    Transact(sender_id,receiver_id,amt).then(tr=>{
-	    	console.log(tr);
-	    	var msg = 'Successfully sent ' + amt + ' to user #' + receiver_id;
-	    	res.send(msg);
+	    // Verify receiver username
+	    User.getIdByUsername(receiver).then(u=>{
+	    	//console.log(u);
+	    	if (u[0].id > 0){
+	    		var uid = u[0].id;
+	    		Transact(sender_id,uid,amt).then(tr=>{
+	    			//console.log(tr);
+	    			var word = "token";
+	    			if (amt > 1){
+	    				word += 's';
+	    			}
+	    			var msg = 'Successfully sent ' + amt + ' ' + word + ' to ' + receiver;
+	    			//res.render('generic',{msg:msg,loggedin:true});
+	    			req.flash('success', msg);
+	    			res.redirect('/user/dashboard');
+	    		}).catch(err=>{
+	    			res.send('Error '+ err);
+	    			console.log(err.stack);
+	    		});
+
+	    	} else {
+	    		throw Error;
+	    	}
 	    }).catch(err=>{
-	    	res.send('Error '+ err);
-	    	console.log(err.stack);
-	    });
+	    	res.send('invalid username for receiver');
+	    })
+	    
 	} else {
 	    // not logged in
 	    res.send("You must be logged in to send tokens");

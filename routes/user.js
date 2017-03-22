@@ -36,6 +36,8 @@ router.get('/dashboard',function(req,res){
 				context.balance = b[0].count;
 				u.getUserLedger(6).then(l=>{
 					context.ledger = l;
+					context.loggedin = true;
+					context.success = req.flash('success')
 					res.render('dashboard',context);
 				});
 			});
@@ -45,39 +47,28 @@ router.get('/dashboard',function(req,res){
 		res.redirect('/login');
 	}
 });
-router.get('/all',function(req,res){
-	User.findAll().then(users=>{
-		res.render('users',{users:users});
-	});
-});
+
 router.get('/profile/:username',function(req,res,next){
-	User.getByUsername(req.params.username).then(u=>{
-		if (!u){
-			// go to 404
-			next();
-		} else{
-			u.getAcctBalance().then(ct=>{
-				var context = {};
-				context.pagetitle = u.username;
-				context.balance = ct[0].count;
-				context.username = u.username;
-				// if user is logged in, show them the ledger
-				
-				if (req.user && u.id == req.user.id){
-					u.getUserLedger(0).then(l=>{
-						//console.log(l);
-						context.ledger = l;
-						res.render('profile',context);
-					});
-				} else {
-					// otherwise, just show the basic profile
+	if (req.user){
+		User.getByUsername(req.params.username).then(u=>{
+			if (!u){
+				// go to 404
+				next();
+			} else{
+				u.getAcctBalance().then(ct=>{
+					var context = {};
+					context.pagetitle = u.username;
+					context.balance = ct[0].count;
+					context.username = u.username;
+					context.loggedin = true;
 					res.render('profile',context);
-				}
-				
-				
-			});
-		}	
-	});
+					
+				});
+			}	
+		});
+	} else {
+		res.redirect('/login');
+	}
 });
 
 

@@ -1,16 +1,24 @@
-header {
-  background: linear-gradient(#cdeef8, #fafdfe);
-  padding-top: 1.5rem; }
+nav.menu {
+  background: linear-gradient(#cdeef8, #fafdfe); }
+  nav.menu .sendtab {
+    background-color: #ade3a9; }
 
 nav ul {
   list-style-type: none;
-  margin-top: 1.5rem; }
+  padding: 1.5rem 0; }
 nav li {
   display: inline;
   padding: 1.5rem;
   background-color: #efefef; }
 nav a {
-  text-decoration: none; }
+  text-decoration: none;
+  font-weight: bold; }
+
+.navtitle h1 a {
+  color: #fff;
+  font-weight: normal; }
+.navtitle h1 a:hover {
+  color: #1EAEDB; }
 
 .neg td.amt {
   color: red; }

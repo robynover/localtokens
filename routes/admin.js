@@ -14,6 +14,24 @@ var Ledger = sequelize.import('../models/ledger.js');
 // controllers
 var Issue = require('../controllers/issue.js');
 
+// === require admin users for this section=== //
+router.all('/*',function(req,res,next){
+	if (req.user){
+		User.findById(req.user.id).then(u=>{
+			if (u.isAdmin()){
+				next();
+			} else {
+				res.status(401);
+				res.send('You are not authorized to view this page');
+			}	
+		});
+	} else {
+		//res.send(401, 'Unauthorized');
+		res.status(401);
+		res.send('You are not authorized to view this page');
+	}	
+});
+
 // ======= ADMIN routes ======= //
 
 router.get('/mint', function(req,res){
@@ -70,6 +88,12 @@ router.get('/bestow/:userid',function(req,res){
 	} else {
 		res.send("no user id");
 	}	
+});
+
+router.get('/users',function(req,res){
+	User.findAll().then(users=>{
+		res.render('users',{users:users,layout:'admin'});
+	});
 });
 
 module.exports = router;

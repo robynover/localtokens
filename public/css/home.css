@@ -17,6 +17,11 @@ nav.topnav {
       background-color: rgba(239, 239, 239, 0.3);
       color: #fff;
       margin-bottom: 0; }
+      nav.topnav .navbuttons button a {
+        text-decoration: none;
+        color: inherit; }
+      nav.topnav .navbuttons button a:hover {
+        color: #0fa0ce; }
 
 .hero {
   height: 50rem;

@@ -5,17 +5,17 @@ body.admin {
     padding: 2.5rem 5rem; }
   body.admin header {
     background: linear-gradient(#cdeef8, #fafdfe); }
-  body.admin nav {
+  body.admin nav.menu {
     background-color: #e8e8e8; }
-    body.admin nav ul {
+    body.admin nav.menu ul {
       list-style-type: none;
       margin: 0;
       padding: 1.5rem 0; }
-    body.admin nav li {
+    body.admin nav.menu li {
       display: inline;
       padding: 1.5rem;
-      background-color: #d6d6d6; }
-    body.admin nav a {
+      background-color: rgba(214, 214, 214, 0.5); }
+    body.admin nav.menu a {
       text-decoration: none;
       /* color: adjust-color(complement($basecolor),$red: -30); */
       color: #1EAEDB;

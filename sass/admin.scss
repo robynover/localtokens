@@ -12,7 +12,7 @@ body.admin{
 		background: linear-gradient(lighten($basecolor,40%),lighten($basecolor,50%));
 	}
 
-	nav{
+	nav.menu{
 		background-color: lighten(#cecece,10%);
 		ul{
 			list-style-type: none;
@@ -22,7 +22,7 @@ body.admin{
 		li{
 			display:inline;
 			padding: 1.5rem;
-			background-color: darken(#efefef,10%);
+			background-color: rgba(darken(#efefef,10%),.5);
 		}
 		a{
 			text-decoration: none;

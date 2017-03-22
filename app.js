@@ -1,4 +1,6 @@
 "use strict";
+process.setMaxListeners(12); // suppress warning re: up to 10 listeners
+
 var express = require('express');
 var app = express();
 var crypto = require('crypto');
@@ -66,8 +68,9 @@ var Issue = require('./controllers/issue.js');
 // routes 
 var adminRoutes = require('./routes/admin.js');
 var userRoutes = require('./routes/user.js');
-var indexRoutes = require('./routes/index.js');
+var homeRoutes = require('./routes/home.js');
 var transactRoutes = require('./routes/transact.js');
+var apiRoutes = require('./routes/api.js');
 
 
 // passport
@@ -93,7 +96,7 @@ passport.use(new LocalStrategy(
 		if (!user.verifyPassword(password)) { 
 			return done(null, false, { message: 'Incorrect password.' }); 
 		}
-		//console.log(user);
+		// Success
 		return done(null, user);
   	}).catch(err=>{
 		if (err) { return done(err); }
@@ -110,44 +113,16 @@ passport.use(new LocalStrategy(
 });*/
 
 
-
-
 // -----------------------------//
 // ROUTES
 // -----------------------------//
 
 app.use('/admin', adminRoutes);
 app.use('/user', userRoutes);
-app.use('/', indexRoutes);
+app.use('/', homeRoutes);
 app.use('/transact', transactRoutes);
+app.use('/api', apiRoutes);
 
-
-
-// API routes
-app.get('/api/user/transactions',function(req,res){
-	if (req.user){
-		var limit = 0;
-		if (req.query.n){
-			limit = parseInt(req.query.n);
-		}
-		User.findById(req.user.id).then(u=>{
-			u.getUserLedger(limit).then(l=>{				
-				res.json(l);
-			});
-		});	
-	} else {
-		res.json({error:'user not logged in'});
-	}
-});
-
-/*
-other api routes:
-/api/user/:username
-/api/user/new  ?
-
-
-
- */
 
 // 404
 app.use(function (req,res,next) {

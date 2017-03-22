@@ -20,6 +20,7 @@
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
   <link rel="stylesheet" href="/css/normalize.css">
   <link rel="stylesheet" href="/css/skeleton.css">
+  <link rel="stylesheet" href="/css/common.css">
   <link rel="stylesheet" href="/css/style.css">
 
 
@@ -28,19 +29,25 @@
 
   <!-- Primary Page Layout
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  <header><div class="container header"> 	
-  	<h1>Local Tokens</h1>
-  </div>
-  </header>
-  
-  <nav class="container">
+  <nav class="topnav">
+    <div class="navtitle"><h1><a href="/">Local Tokens</a></h1></div>
+    <div class="navbuttons">
+      <button><a href="/{{#if loggedin}}logout{{else}}login{{/if}}">
+        {{#if loggedin}}Logout{{else}}Login{{/if}}
+      </a></button>
+    </div>
+  </nav>
+  <div style="clear:both;"></div>
+  <nav class="menu">
+    <div class="container main">
+      {{#if loggedin}}
     <ul>
       <li><a href="/user/dashboard">Dashboard</a></li>
-      <li><a href="/transact/send">Send Tokens</a></li>
       <li><a href="/user">Your profile</a></li>
-      <li><a href="/admin/bank">Bank</a></li>
-      <li><a href="/admin/ledger">Ledger</a></li>
+      <li class="sendtab"><a href="/transact/send">Send Tokens</a></li>
     </ul>
+    {{/if}}
+  </div>
   </nav>
 
   <div class="container">

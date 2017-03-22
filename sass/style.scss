@@ -1,13 +1,16 @@
 $basecolor: #1EAEDB;
 
-header{
+nav.menu{
 	background: linear-gradient(lighten($basecolor,40%),lighten($basecolor,50%));
-	padding-top: 1.5rem;
+	.sendtab{
+		background-color: lighten(#3ea336,35%);
+	} 
 }
 nav{
 	ul{
 		list-style-type: none;
-		margin-top: 1.5rem;	
+		padding: 1.5rem 0;
+	
 	}
 	li{
 		display:inline;
@@ -16,8 +19,21 @@ nav{
 	}
 	a{
 		text-decoration: none;
+		font-weight: bold;
 	}
-} 
+}
+.navtitle{
+	h1{
+		a{
+			color: #fff;
+			font-weight: normal;
+		}
+		a:hover{
+			color: $basecolor;
+		}
+	}
+}
+
 
 .neg {
 	td.amt{

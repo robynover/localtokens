@@ -1,5 +1,8 @@
+{{#if success}}
+	<p class="flash-success">{{success}}</p>
+{{/if}}
+
 <h2>{{greeting}}</h2>
-<!--<p><strong>Balance:</strong> {{balance}} {{pluralize balance 'token' 'tokens'}}</p>-->
 
 <div class="row">
 	<div class="three columns supercolumn">
@@ -28,6 +31,7 @@
 			{{/each}}
 
 		</table>
+		<p class="goto-text">See all transactions</p>
 
 	</div>
 </div>

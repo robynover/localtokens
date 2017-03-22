@@ -1,0 +1,40 @@
+$basecolor: #1EAEDB;
+nav.topnav{
+	background-color: #000;
+	color: white;
+	text-transform: uppercase;
+	padding: 1.5rem 8%;
+	float: left;
+	width: 84%;
+
+	h1{
+		font-size: 3rem;
+		margin: 0;
+		line-height: 4rem;
+	}
+
+	.navtitle{
+		float: left;
+	}
+	.navbuttons{
+		float: right;
+		button{
+			background-color: rgba(#efefef,.3);
+			color: #fff;
+			margin-bottom: 0;
+			a{
+				color: #fff;
+			}
+			a:hover{
+				color: $basecolor;
+			}
+		}
+	}
+}
+.flash-success{
+	border: 1px solid lighten(#90ee90,10%);
+	padding-left: 1em;
+}
+.goto-text{
+	text-align:right;
+}

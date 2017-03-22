@@ -1,0 +1,32 @@
+nav.topnav {
+  background-color: #000;
+  color: white;
+  text-transform: uppercase;
+  padding: 1.5rem 8%;
+  float: left;
+  width: 84%; }
+  nav.topnav h1 {
+    font-size: 3rem;
+    margin: 0;
+    line-height: 4rem; }
+  nav.topnav .navtitle {
+    float: left; }
+  nav.topnav .navbuttons {
+    float: right; }
+    nav.topnav .navbuttons button {
+      background-color: rgba(239, 239, 239, 0.3);
+      color: #fff;
+      margin-bottom: 0; }
+      nav.topnav .navbuttons button a {
+        color: #fff; }
+      nav.topnav .navbuttons button a:hover {
+        color: #1EAEDB; }
+
+.flash-success {
+  border: 1px solid #bcf5bc;
+  padding-left: 1em; }
+
+.goto-text {
+  text-align: right; }
+
+/*# sourceMappingURL=common.css.map */
