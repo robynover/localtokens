@@ -15,14 +15,14 @@
 			<p>Hi</p>
 		</div> --}}
 	</div>
-	<div class="nine columns">
+	<div class="nine columns dash-transactions">
 		<h4>Recent Transactions</h4>
 		<table>
 			<tr><th>id</th><th>date</th><th>amount</th><th>description</th><th>balance</th></tr>
 			{{#each ledger}}
 				<tr class="{{ifNegative signed_amt 'neg' 'pos'}}">
 					<td>{{id}}</td>
-					<td>{{created_at}}</td>
+					<td>{{formatted_date}}</td>
 					<td class="amt">{{signed_amt}}</td>
 					<td>{{description}}</td>
 					<td>{{balance}}</td>
@@ -31,7 +31,7 @@
 			{{/each}}
 
 		</table>
-		<p class="goto-text">See all transactions</p>
+		<p class="goto-text"><a href="/user/transactions">See all transactions &rarr;</a></p>
 
 	</div>
 </div>

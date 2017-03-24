@@ -32,9 +32,11 @@
   <nav class="topnav">
     <div class="navtitle"><h1><a href="/">Local Tokens</a></h1></div>
     <div class="navbuttons">
+      {{!-- <img src="/images/user.svg"> --}}
       <button><a href="/{{#if loggedin}}logout{{else}}login{{/if}}">
         {{#if loggedin}}Logout{{else}}Login{{/if}}
       </a></button>
+
     </div>
   </nav>
   <div style="clear:both;"></div>
@@ -58,5 +60,9 @@
 
 	<!-- End Document
 	  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <script src="/js/lib/jquery.min.js" ></script>
+  <script src="/js/lib/validate.js"></script>
+  <script src="/js/script.js" ></script>
+  
 	</body>
 	</html>

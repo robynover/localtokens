@@ -11,7 +11,7 @@ var User = sequelize.import('../models/user.js');
 
 
 // == API routes == //
-router.get('/api/user/transactions',function(req,res){
+router.get('/user/transactions',function(req,res){
 	if (req.user){
 		var limit = 0;
 		if (req.query.n){
@@ -26,8 +26,9 @@ router.get('/api/user/transactions',function(req,res){
 		res.json({error:'user not logged in'});
 	}
 });
-router.get('/api/user/exists',function(req,res){
-	if (req.user){
+router.get('/user/exists',function(req,res){
+	//if (req.user){
+	console.log(req.query.u);
 		if (req.query.u){
 			User.getByUsername(req.query.u).then(u=>{
 				if (u){
@@ -39,9 +40,9 @@ router.get('/api/user/exists',function(req,res){
 		} else {
 			res.json({error:'no username given'});
 		}		
-	} else {
-		res.json({error:'user not logged in'});
-	}
+	//} else {
+	//	res.json({error:'user not logged in'});
+	//}
 });
 
 module.exports = router;

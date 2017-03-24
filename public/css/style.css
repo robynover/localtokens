@@ -12,7 +12,7 @@ nav li {
   background-color: #efefef; }
 nav a {
   text-decoration: none;
-  font-weight: bold; }
+  /* font-weight: bold; */ }
 
 .navtitle h1 a {
   color: #fff;

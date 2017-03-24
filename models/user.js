@@ -6,7 +6,12 @@ var sequelize = new Sequelize(Config.pg);
 const crypto = require('crypto');
 
 //var Coin = sequelize.import('./coin.js');
-
+/*
+isIn: {
+  args: [['en', 'zh']],
+  msg: "Must be English or Chinese"
+}
+ */
 module.exports = function(sequelize, DataTypes) {
 	var User = sequelize.define('user', {
 	  id: {
@@ -18,30 +23,35 @@ module.exports = function(sequelize, DataTypes) {
 	    type: DataTypes.STRING,
 	    unique: true,
 	    validate: {
-	    	len: [3,16],
-	    	isAlphanumeric: true,
-	    	//msg: 'Username must be between 3 and 16 alphanumeric characters'
+	    	len: {
+	    		args: [3,20],
+	    		msg: 'Username must be between 3 and 20 characters'
+	    	},
+	    	isAlphanumeric: {msg: 'Username must be alphanumeric'}
 	    }
 	  },
 	  password: {
-	  	type: DataTypes.STRING(64),
-	  	validate: { 
-	  		len: [6,24],
-	  		//msg: 'Password is required and must be between 6 and 24 characters'
-	  	}
+	  	type: DataTypes.STRING(64) //,
+	  	/*validate: { 
+	  		len: {
+	  			args: [6,24],
+	  			msg: 'Password must be between 6 and 24 characters'
+	  		}
+	  	}*/
 	  },
 	  email: {
 	  	type: DataTypes.STRING(64),
 	  	validate: {
-	  		isEmail:true,
-	  		//msg: 'Email is not valid'
+	  		isEmail: {msg: 'Email is not valid'}
 	  	}
 	  },
 	  firstname:{
 	  	type: DataTypes.STRING(64),
 	  	validate: { 
-	  		len: [1,32],
-	  		//msg: 'First name is required'
+	  		len: {
+	  			args: [1,32],
+	  			msg: 'First name is required'
+	  		}
 	  	}
 	  },
 	  lastname:{
@@ -92,9 +102,12 @@ module.exports = function(sequelize, DataTypes) {
 				  { replacements: [this.id], type: sequelize.QueryTypes.SELECT }
 				);
 			},
-			getUserLedger: function(limit){
+			getUserLedger: function(limit,offset){
 				limit = parseInt(limit);
-				var q = 'SELECT ledger.*, u1.username AS sender, u2.username AS receiver, ';
+				offset = parseInt(offset);
+				var q = "SELECT to_char(ledger.created_at, 'Mon DD YYYY HH12: MI AM') AS formatted_date, ";
+				q += ' COUNT(ledger.id) OVER () AS total_entries, ';
+				q += ' ledger.*, u1.username AS sender, u2.username AS receiver, ';
 				q += ' CASE ';
     			q += " WHEN sender_id <> :id AND sender_id IS NOT NULL THEN CONCAT('from ', u1.username) ";
     			q += " WHEN sender_id IS NULL THEN 'bank issue' ";
@@ -111,8 +124,11 @@ module.exports = function(sequelize, DataTypes) {
 				if (limit > 0){
 					q += ' LIMIT :lmt';
 				}
+				if (offset > 0){
+					q += ' OFFSET :offset';
+				}
 				return sequelize.query(q,
-				  { replacements: {id:this.id,lmt:limit}, type: sequelize.QueryTypes.SELECT }
+				  { replacements: {id:this.id,lmt:limit,offset:offset}, type: sequelize.QueryTypes.SELECT }
 				);
 			}
 			 

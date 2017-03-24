@@ -51,7 +51,7 @@ router.post('/send',function(req,res){
 	    	}
 	    }).catch(err=>{
 	    	res.send('invalid username for receiver');
-	    })
+	    });
 	    
 	} else {
 	    // not logged in

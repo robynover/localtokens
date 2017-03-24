@@ -1,0 +1,35 @@
+<h2>Transactions</h2>
+<table>
+	<tr><th>id</th><th>date</th><th>amount</th><th>description</th><th>balance</th></tr>
+	{{#each ledger}}
+		<tr class="{{ifNegative signed_amt 'neg' 'pos'}}">
+			<td>{{id}}</td>
+			<td>{{formatted_date}}</td>
+			<td class="amt">{{signed_amt}}</td>
+			<td>{{description}}</td>
+			<td>{{balance}}</td>
+
+		</tr>
+	{{/each}}
+</table>
+<div class="pagenav prev">
+	{{#if prevpage}}
+		<a href="?pg={{prevpage}}">
+	{{/if}}
+	&larr; Prev
+	{{#if prevpage}}
+		</a> 
+	{{/if}}
+</div>
+
+<div class="pagenav next">
+	{{#if nextpage}}
+		<a href="?pg={{nextpage}}"> 
+	{{/if}}
+	Next &rarr;
+	{{#if nextpage}}
+		</a> 
+	{{/if}}
+</div>
+
+<p class="pagecount">Page {{page}} of {{total_pages}}</p>

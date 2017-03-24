@@ -1,4 +1,8 @@
 $basecolor: #1EAEDB;
+a{
+	text-decoration: none;
+}
+
 nav.topnav{
 	background-color: #000;
 	color: white;
@@ -37,4 +41,41 @@ nav.topnav{
 }
 .goto-text{
 	text-align:right;
+}
+.pagenav.prev{
+	float:left;
+	color: #999;
+}
+.pagenav.next{
+	float:right;
+	color: #999;
+}
+.pagenav{
+	a{
+		text-decoration: none;
+	}
+}
+.pagecount{
+    text-align: center;
+}
+
+.dash-transactions{
+	overflow:scroll;
+}
+
+.form-field{
+	display:inline;
+}
+.field-validation{
+	display:inline;
+	margin-left: 1.5rem;
+	color:#ff0000;
+}
+
+@media (max-width: 400px) {
+	nav.menu{
+		li{
+			display:block;
+		}
+	}
 }

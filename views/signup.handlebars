@@ -1,35 +1,44 @@
 <h2>Sign up</h2>
 <p>{{error}}</p>
-<form action="/signup" method="post">
-    <div>
-        <label>Username</label>
-        <input type="text" name="username"/>
+<form action="/signup" method="post" id="signup" name="signup">
+    <div class="form-field">
+        <label for="username">Username</label>
+        <input type="text" name="username" id="username"/>
     </div>
-    <div>
-        <label>Password</label>
+    <div class="field-validation" id="username-validate"></div>
+    
+
+    <div class="form-field">
+        <label for="password">Password</label>
         <input type="password" name="password"/>
     </div>
-    <div>
-        <label>Confirm Password</label>
+    <div class="field-validation"></div>
+    
+    <div  class="form-field">
+        <label for="password_confirm">Confirm Password</label>
         <input type="password" name="password_confirm"/>
     </div>
+    <div class="field-validation"></div>
 
-    <div>
-        <label>First Name</label>
+    <div class="form-field">
+        <label for="firstname">First Name</label>
         <input type="text" name="firstname"/>
     </div>
+    <div class="field-validation"></div>
 
-     <div>
-        <label>Last Name</label>
+     <div class="form-field">
+        <label for="lastname">Last Name</label>
         <input type="text" name="lastname"/>
     </div>
+    <div class="field-validation"></div>
 
-    <div>
-        <label>Email</label>
+    <div class="form-field">
+        <label for="email">Email</label>
         <input type="text" name="email"/>
     </div>
+    <div class="field-validation"></div>
 
-    <p>Terms of Service placeholder</p>
+    <p><input type="checkbox" name="tos">&nbsp;Terms of Service placeholder</p>
     <div>
         <input type="submit" value="Sign up"/>
     </div>

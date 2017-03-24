@@ -1,0 +1,22 @@
+{
+  "name": "currency",
+  "description": "local currency",
+  "main": "app.js",
+  "authors": [
+    "Robyn Overstreet"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/robynover/localtokens",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "^3.2.1",
+    "moment": "^2.18.1",
+    "validate": "validate.js#^0.11.1"
+  }
+}

@@ -13,7 +13,7 @@ var User = sequelize.import('../models/user.js');
 router.get('/',function(req,res){
 	var context = {};
 	context.msg = "Hello and welcome";
-	context.layout = "home"
+	context.layout = "home";
 	res.render('generic',context);
 });
 router.post('/login',
@@ -51,8 +51,8 @@ router.post('/signup',function(req,res){
 		lastname: req.body.lastname
 	}).then(user=>{
 		console.log(user);
-		// flash success ?
-		res.send('successfully registered!');
+		// TODO: flash message and redirect to dashboard
+		res.render('generic',{msg:'Signup successful!'});
 	}).catch(Sequelize.ValidationError, err => {
 		//console.log('----ValidationError******');
 		console.log(err);
