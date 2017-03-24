@@ -3,7 +3,6 @@ validate.validators.usernameIsUnique = function(value) {
       $.ajax({
         url: "/api/user/exists?u="+value
       }).done(function(data){
-        console.log(data);
         if (data.success === true){
           console.log('user exists -- ajax');
           resolve('already exists');
@@ -33,13 +32,6 @@ var constraints = {
       message: "must be at least 6 characters"
     }
   },
-  /*password_confirm: {
-    presence: true,
-    equality: {
-      attribute: 'password',
-      message: "passwords do not match"
-    }
-  },*/
   email: {
     email: true
   },
@@ -63,7 +55,7 @@ var usernameConstraints = {
 };
 
 var success = function(){
-  $('#username-validate').text('');
+  $('.field-validation.username').text('');
 };
 var error = function(errors){
   var msg = '';
@@ -72,7 +64,7 @@ var error = function(errors){
   } else {
     msg = errors[0];
   }
-  $('#username-validate').text(msg);
+  $('.field-validation.username').text(msg);
 };
 
 // special validation for username
@@ -80,21 +72,31 @@ var error = function(errors){
 $('input[name="username"]').blur(function(){
   validate.async({username:this.value}, usernameConstraints).then(success,error);
 });
-// Confirm password not working with validate. Doing it by hand
+
+// Confirm password not working with validate.js. Doing it by hand
 $('input[name="password_confirm"]').blur(function(){
   if (this.value === $('input[name="password"]')[0].value){
     console.log('passwords match');
-    $(this).parent().next().text('');
+    //$(this).parent().next().text('');
+    $(this).parent().parent().find('.field-validation.password_confirm').text('');
   } else {
     console.log('no match');
     //console.log($('input[name="password"]')[0].value);
-    $(this).parent().next().text('Passwords do not match');
+    //$(this).parent().next().text('Passwords do not match');
+    $(this).parent().parent().find('.field-validation.password_confirm').text('Passwords do not match');
   }
 });
 
 var form = $('#signup');
 var formValues = validate.collectFormValues(form);
 
+var fieldNames = {
+  'username': 'Username',
+  'firstname': 'First Name',
+  'lastname': 'Last Name',
+  'email': 'Email',
+  'password': 'Password'
+}
 // validation for all other inputs 
 for(var field in formValues){
   // username has its own function for validation -- exclude it
@@ -107,16 +109,37 @@ for(var field in formValues){
         var v = validate.single(this.value, constraints[field]);
         if (v){
           var msg = '';
-          if (field != 'password_confirm'){
-            msg += field + ' ';
-          }
+          ///if (field != 'password_confirm'){
+            msg += fieldNames[field] + ' ';
+          //}
           msg += v[0];
-          $(this).parent().next().text(msg);
+          //$(this).parent().next().text(msg);
+          $(this).parent().parent().find('.field-validation.'+field).text(msg);
         } else {
-          $(this).parent().next().text('');
+          //$(this).parent().next().text('');
+          $(this).parent().parent().find('.field-validation.'+field).text('');
         }
       }   
       
   });
 } // end for
+
+// one last check on submit
+$('#signup').on('submit', function(e){
+    e.preventDefault();
+    var formValues = validate.collectFormValues(form);
+    var result = validate(formValues,constraints);
+    console.log(result);
+    if (typeof result === 'object'){
+      // there are errors
+      var msg = '';
+      for (var field in result){
+        msg += result[field] + ' ';
+      }
+      $('.field-validation.submit').text(msg);
+    } else {
+      // no errors. submit
+      this.submit();
+    }
+});
 

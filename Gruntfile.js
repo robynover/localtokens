@@ -1,5 +1,7 @@
 module.exports = function(grunt) {
- 
+
+  require('load-grunt-tasks')(grunt);
+
   // Project configuration.
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
@@ -13,24 +15,58 @@ module.exports = function(grunt) {
     bower: {
       dev: {
         dest: 'public/',
-        js_dest: 'public/lib/js',
-        css_dest: 'public/css',
-        //options: {
-        //  ignorePackages: ['jquery']
-        //},
-        //packageSpecific: {
-        // 'jquery': {
-        //    files: ["dist/jquery.min.js"]
-        //  }
-        //}
+        js_dest: 'public/js/lib/',
+        css_dest: 'public/css/lib/',
+        options: {
+          keepExpandedHierarchy: false,
+          ignorePackages: ['font-awesome']
+        },
+        
+        packageSpecific: {
+          'jquery': {
+             files: ["dist/jquery.min.js"],
+             keepExpandedHierarchy: false
+           },
+           'font-awesome':{
+              files: ["css/font-awesome.min.css"]
+           },
+           skeleton: {
+            keepExpandedHierarchy: false,
+            dest: 'public/',
+            css_dest: 'public/css/lib'
+          }
+        }
+      }
+    },
+
+    sass: {
+      options: {
+        sourceMap: true
+      },
+      dist: {
+        files: {
+          'public/css/admin.css': 'sass/admin.scss',
+          'public/css/common.css': 'sass/common.scss',
+          'public/css/home.css': 'sass/home.scss',
+          'public/css/style.css': 'sass/style.scss'
+        }
+      }
+    },
+    watch: {
+      css: {
+        files: '**/*.scss',
+        tasks: ['sass']
       }
     }
   });
  
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-bower');
+  grunt.loadNpmTasks('grunt-contrib-watch');
 
-  grunt.registerTask('default', ['jshint','bower']);
+  grunt.registerTask('default', ['jshint','bower','sass']);
+  grunt.registerTask('setup', ['bower','sass']);
+  grunt.registerTask('test', ['jshint']);
 
 };
 

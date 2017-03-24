@@ -6,7 +6,7 @@ body.admin {
   body.admin header {
     background: linear-gradient(#cdeef8, #fafdfe); }
   body.admin nav.menu {
-    background-color: #e8e8e8; }
+    background-color: #e8e7e7; }
     body.admin nav.menu ul {
       list-style-type: none;
       margin: 0;
@@ -14,7 +14,7 @@ body.admin {
     body.admin nav.menu li {
       display: inline;
       padding: 1.5rem;
-      background-color: rgba(214, 214, 214, 0.5); }
+      background-color: rgba(214, 213, 213, 0.5); }
     body.admin nav.menu a {
       text-decoration: none;
       /* color: adjust-color(complement($basecolor),$red: -30); */

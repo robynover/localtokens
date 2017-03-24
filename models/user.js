@@ -31,11 +31,11 @@ module.exports = function(sequelize, DataTypes) {
 	    }
 	  },
 	  password: {
-	  	type: DataTypes.STRING(64) //,
+	  	type: DataTypes.STRING(64),
 	  	/*validate: { 
 	  		len: {
-	  			args: [6,24],
-	  			msg: 'Password must be between 6 and 24 characters'
+	  			args: [6,64],
+	  			msg: 'Password must be at least 6 characters'
 	  		}
 	  	}*/
 	  },
@@ -43,7 +43,8 @@ module.exports = function(sequelize, DataTypes) {
 	  	type: DataTypes.STRING(64),
 	  	validate: {
 	  		isEmail: {msg: 'Email is not valid'}
-	  	}
+	  	},
+	  	unique: {msg: 'Email is already in use'}
 	  },
 	  firstname:{
 	  	type: DataTypes.STRING(64),
@@ -58,6 +59,10 @@ module.exports = function(sequelize, DataTypes) {
 	  	type: DataTypes.STRING(64)
 	  },
 	  is_admin: {
+	  	type: DataTypes.BOOLEAN,
+	  	defaultValue: false
+	  },
+	  is_active: {
 	  	type: DataTypes.BOOLEAN,
 	  	defaultValue: false
 	  }

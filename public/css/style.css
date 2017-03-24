@@ -6,10 +6,12 @@ nav.menu {
 nav ul {
   list-style-type: none;
   padding: 1.5rem 0; }
+
 nav li {
   display: inline;
   padding: 1.5rem;
   background-color: #efefef; }
+
 nav a {
   text-decoration: none;
   /* font-weight: bold; */ }
@@ -17,6 +19,7 @@ nav a {
 .navtitle h1 a {
   color: #fff;
   font-weight: normal; }
+
 .navtitle h1 a:hover {
   color: #1EAEDB; }
 
@@ -24,7 +27,7 @@ nav a {
   color: red; }
 
 .column, .columns {
-  border: 1px solid #a3a3a3;
+  border: 1px solid #a3a2a2;
   padding: 1rem; }
 
 .supercolumn {
@@ -32,7 +35,7 @@ nav a {
   padding: 0; }
 
 .subcolumn {
-  border: 1px solid #a3a3a3;
+  border: 1px solid #a3a2a2;
   padding: 1rem;
   margin-bottom: 3.75rem; }
 

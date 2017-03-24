@@ -2,14 +2,9 @@
 <html lang="en">
 <head>
 
-  <!-- Basic Page Needs
-  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
   <meta charset="utf-8">
   <title>{{pagetitle}} Local Tokens</title>
-  
-
-  <!-- Mobile Specific Metas
-  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+ 
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <!-- FONT
@@ -19,7 +14,8 @@
   <!-- CSS
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
   <link rel="stylesheet" href="/css/normalize.css">
-  <link rel="stylesheet" href="/css/skeleton.css">
+  <link rel="stylesheet" href="/css/lib/skeleton.css">
+  <link rel="stylesheet" href="/css/lib/font-awesome.min.css">
   <link rel="stylesheet" href="/css/common.css">
   <link rel="stylesheet" href="/css/style.css">
 
@@ -27,12 +23,24 @@
 </head>
 <body>
 
-  <!-- Primary Page Layout
-  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
   <nav class="topnav">
     <div class="navtitle"><h1><a href="/">Local Tokens</a></h1></div>
+
     <div class="navbuttons">
       {{!-- <img src="/images/user.svg"> --}}
+      <div class="user-id">
+        <i class="fa fa-user-circle-o"></i>
+        {{#if username}}
+          <a href="/user/dashboard">
+            {{username}}
+          </a>
+        {{/if}}
+      </div>
+      {{#if loggedin}}
+      {{else}}
+        <button><a href="signup">Sign Up</a></button>
+      {{/if}}
+
       <button><a href="/{{#if loggedin}}logout{{else}}login{{/if}}">
         {{#if loggedin}}Logout{{else}}Login{{/if}}
       </a></button>
@@ -41,14 +49,14 @@
   </nav>
   <div style="clear:both;"></div>
   <nav class="menu">
-    <div class="container main">
-      {{#if loggedin}}
+    <div class="container main"> 
     <ul>
-      <li><a href="/user/dashboard">Dashboard</a></li>
-      <li><a href="/user">Your profile</a></li>
-      <li class="sendtab"><a href="/transact/send">Send Tokens</a></li>
-    </ul>
-    {{/if}}
+      {{#if loggedin}}
+        <li><a href="/user/dashboard">Dashboard</a></li>
+        <li><a href="/user">Your profile</a></li>
+        <li class="sendtab"><a href="/transact/send">Send Tokens</a></li>
+      {{/if}}
+    </ul>   
   </div>
   </nav>
 
@@ -58,7 +66,7 @@
 		
   </div>
 
-	<!-- End Document
+	<!-- JS
 	  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
   <script src="/js/lib/jquery.min.js" ></script>
   <script src="/js/lib/validate.js"></script>

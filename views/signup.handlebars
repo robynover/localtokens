@@ -3,43 +3,48 @@
 <form action="/signup" method="post" id="signup" name="signup">
     <div class="form-field">
         <label for="username">Username</label>
-        <input type="text" name="username" id="username"/>
+        <input type="text" name="username" id="username" value="{{username}}"/>
     </div>
-    <div class="field-validation" id="username-validate"></div>
+    <div class="field-validation username"></div>
     
 
     <div class="form-field">
         <label for="password">Password</label>
         <input type="password" name="password"/>
     </div>
-    <div class="field-validation"></div>
+    <div class="field-validation password"></div>
     
     <div  class="form-field">
         <label for="password_confirm">Confirm Password</label>
         <input type="password" name="password_confirm"/>
     </div>
-    <div class="field-validation"></div>
+    <div class="field-validation password_confirm"></div>
 
     <div class="form-field">
         <label for="firstname">First Name</label>
-        <input type="text" name="firstname"/>
+        <input type="text" name="firstname" value="{{firstname}}"/>
     </div>
-    <div class="field-validation"></div>
+    <div class="field-validation firstname"></div>
 
      <div class="form-field">
         <label for="lastname">Last Name</label>
-        <input type="text" name="lastname"/>
+        <input type="text" name="lastname" value="{{lastname}}"/>
     </div>
-    <div class="field-validation"></div>
+    <div class="field-validation lastname"></div>
 
     <div class="form-field">
         <label for="email">Email</label>
-        <input type="text" name="email"/>
+        <input type="text" name="email" value="{{email}}"/>
     </div>
-    <div class="field-validation"></div>
+    <div class="field-validation email"></div>
 
-    <p><input type="checkbox" name="tos">&nbsp;Terms of Service placeholder</p>
+    <div class="form-field">
+        <p><input type="checkbox" name="tos">&nbsp;Terms of Service placeholder</p>
+    </div>
+    <div class="field-validation tos"></div>
+
     <div>
         <input type="submit" value="Sign up"/>
+        <div class="field-validation submit"></div>
     </div>
 </form>

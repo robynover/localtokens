@@ -10,6 +10,8 @@ var sequelize = new Sequelize(Config.pg);
 // models
 var User = sequelize.import('../models/user.js');
 
+var striptags = require('striptags');
+
 router.get('/',function(req,res){
 	var context = {};
 	context.msg = "Hello and welcome";
@@ -34,40 +36,63 @@ router.get('/login',function(req,res){
 	res.render('login',{pagetitle:'Login', error: error, loggedin:loggedin});
 });
 
+router.get('/logout', function(req, res){
+  req.logout();
+  res.render('generic',{msg:"You've been successfully logged out."});
+});
+
 router.get('/signup',function(req,res){
 	var loggedin = false;
 	if (req.user){
 		loggedin = true;
 	}
-	res.render('signup',{pagetitle:'Signup', error: req.flash('err'), loggedin:loggedin});
+	res.render('signup',{pagetitle:'Sign Up', error: req.flash('err'), loggedin:loggedin});
 });
 
 router.post('/signup',function(req,res){
+	// set up variables to return in errors, if needed
+	var context = {};
+	context.username = striptags(req.body.username);
+	context.email = striptags(req.body.email);
+	context.firstname = striptags(req.body.firstname);
+	context.lastname = striptags(req.body.lastname);
+	context.pagetitle = 'Sign Up';
+	context.loggedin = false;
+
+	// check password before encryption,
+	//    because Model.create() function takes the encrypted version
+	try{
+		if (req.body.password.length < 6){
+			throw new Error("Password must be at least 6 characters");
+		}
+	} catch(err){
+		context.error = err.message;
+		res.render('signup',context);
+		return;
+	}
+	
 	User.create({
 		username: req.body.username,
 		password: User.encryptPassword(req.body.password),
 		email: req.body.email,
-		firstname: req.body.firstname,
-		lastname: req.body.lastname
+		firstname: striptags(req.body.firstname),
+		lastname: striptags(req.body.lastname)
 	}).then(user=>{
-		console.log(user);
-		// TODO: flash message and redirect to dashboard
-		res.render('generic',{msg:'Signup successful!'});
+		// TODO: send email verification
+		res.render('generic',{msg:'Signup successful! Check your inbox for a confirmation.'});
 	}).catch(Sequelize.ValidationError, err => {
-		//console.log('----ValidationError******');
-		console.log(err);
 		var msg = '';
 		for(var i in err.errors){
 			msg += err.errors[i].message += ', ';
 		}
 		msg = msg.substring(0,msg.length - 2);
 		
-		// flash msg
-		req.flash('err',msg);
-		res.redirect('signup');
+		context.error = msg;
+		res.render('signup',context);
 
 	}).catch(err => {
-		console.log();
+		console.log(err);
+		//res.render('signup');
 	});
 });
 

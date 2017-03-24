@@ -36,8 +36,10 @@ app.use(require('body-parser').urlencoded({extended:true}));
 
 // sessions
 var session = require('express-session');
+const MongoStore = require('connect-mongo')(session);
 app.use(session({
   secret: Config.session,
+  store: new MongoStore({ url: Config.mongo }),
   resave: false,
   saveUninitialized: true,
   name: 'sessionId',
