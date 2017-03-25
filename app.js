@@ -61,7 +61,9 @@ var sequelize = new Sequelize(Config.pg);
 var User = sequelize.import('./models/user.js');
 var Coin = sequelize.import('./models/coin.js');
 var Ledger = sequelize.import('./models/ledger.js');
-
+var Post = sequelize.import('./models/post.js');
+// mongoose model -- for message board
+//var Post = require('./models/post.js');
 
 // controllers
 var Transact = require('./controllers/transact.js');
@@ -73,6 +75,7 @@ var userRoutes = require('./routes/user.js');
 var homeRoutes = require('./routes/home.js');
 var transactRoutes = require('./routes/transact.js');
 var apiRoutes = require('./routes/api.js');
+var postRoutes = require('./routes/post.js');
 
 
 // passport
@@ -97,6 +100,9 @@ passport.use(new LocalStrategy(
 		}
 		if (!user.verifyPassword(password)) { 
 			return done(null, false, { message: 'Incorrect password.' }); 
+		}
+		if (!user.is_active){
+			return done(null, false, { message: 'Your account has not been activated. Check your email for an activation link.' }); 
 		}
 		// Success
 		return done(null, user);
@@ -124,6 +130,7 @@ app.use('/user', userRoutes);
 app.use('/', homeRoutes);
 app.use('/transact', transactRoutes);
 app.use('/api', apiRoutes);
+app.use('/messageboard', postRoutes);
 
 
 // 404

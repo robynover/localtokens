@@ -6,12 +6,7 @@ var sequelize = new Sequelize(Config.pg);
 const crypto = require('crypto');
 
 //var Coin = sequelize.import('./coin.js');
-/*
-isIn: {
-  args: [['en', 'zh']],
-  msg: "Must be English or Chinese"
-}
- */
+
 module.exports = function(sequelize, DataTypes) {
 	var User = sequelize.define('user', {
 	  id: {
@@ -85,7 +80,16 @@ module.exports = function(sequelize, DataTypes) {
 			                   .update(pw)
 			                   .digest('hex');
 			    return hash;
-			}
+			},
+			getUsersWithBalance: function(){
+				var q = 'SELECT count(users.id) AS balance,users.* ';
+				q += ' FROM coins ';
+				q += ' LEFT JOIN users on users.id = owner_id ';
+				q += ' WHERE users.id > 0 GROUP BY users.id';
+				return sequelize.query(q,
+				  { type: sequelize.QueryTypes.SELECT }
+				);
+			},
 		},
 		instanceMethods:{
 			verifyPassword: function(pw){

@@ -15,11 +15,13 @@
   <!-- FONT
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
   <link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
-
+  <link href="https://fonts.googleapis.com/css?family=Merriweather" rel="stylesheet">
+  
   <!-- CSS
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
   <link rel="stylesheet" href="/css/normalize.css">
   <link rel="stylesheet" href="/css/skeleton.css">
+  <link rel="stylesheet" href="/css/lib/font-awesome.min.css">
   <link rel="stylesheet" href="/css/common.css">
   <link rel="stylesheet" href="/css/admin.css">
 
@@ -31,16 +33,37 @@
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
   <nav class="topnav">
     <div class="navtitle"><h1>Local Tokens :: Admin</h1></div>
+    <div class="navbuttons">
+      {{!-- <img src="/images/user.svg"> --}}
+      <div class="user-id"> 
+        {{#if username}}
+          
+          <a href="/user/dashboard">
+            <i class="fa fa-user-circle-o"></i>
+            {{username}}
+          </a>
+          <!--<ul class="user-menu arrowbox">
+            <li>Your Profile</li>
+            <li>Your Account</li>
+            <li>Your Mom</li>
+          </ul>-->
+        {{/if}}
+      </div>
+
+      <button><a href="/logout">Logout</a></button>
+
+    </div>
   </nav>
   <div style="clear:both;"></div>
   
   <nav class="menu">
     <div class="container">
       <ul>
-        <li><a href="/admin/bank">Bank</a></li>
         <li><a href="/admin/ledger">Ledger</a></li>
+        <li><a href="/admin/bank">Bank</a></li>
         <li><a href="/admin/mint">Mint</a></li>
         <li><a href="/admin/bestow">Bestow</a></li>
+        <li><a href="/admin/users">Users</a></li>
       </ul>
     </div>
   </nav>
@@ -51,7 +74,11 @@
 		
   </div>
 
-	<!-- End Document
+	<!-- JS
 	  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <script src="/js/lib/jquery.min.js" ></script>
+    <script src="/js/lib/jquery.dataTables.min.js" ></script>
+    <script src="/js/script.js" ></script>
+    
 	</body>
 	</html>

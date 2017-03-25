@@ -39,16 +39,44 @@ router.get('/mint', function(req,res){
 		var context = {};
 		context.msg = "New coin created with Serial # " + c.serial_num;
 		context.layout = 'admin';
+		if (req.user){
+			context.username = req.user.username;
+		}
 		res.render('generic',context);
 	});
 });
 
 router.get('/ledger',function(req,res){
-	Ledger.getRecords().then(l=>{
+
+	var perPg = 10;
+	var pg = 0;
+	if (req.query.pg){
+		pg = parseInt(req.query.pg) - 1;
+	}
+	var offset = pg * perPg;
+
+	Ledger.getRecords(perPg,offset).then(l=>{
+		var total_entries = l[0].total_entries;
+		var total_pages = Math.ceil(l[0].total_entries / perPg);
+		pg = pg + 1;
+
 		let context = {};
 		context.pagetitle = 'Ledger';
 		context.records = l;
+		context.loggedin = true;
+		if (pg + 1 <= total_pages){
+			context.nextpage = pg + 1;
+		}
+		if (pg - 1 > 0){
+			context.prevpage = pg - 1;
+		}
+		context.page = pg;
+		context.total_entries = total_entries;
+		context.total_pages = total_pages;
 		context.layout = 'admin';
+		if (req.user){
+			context.username = req.user.username;
+		}
 		res.render('ledger',context);
 	});
 });	
@@ -59,6 +87,9 @@ router.get('/bank',function(req,res){
 		context.pagetitle = "Bank";
 		context.records = l;
 		context.layout = 'admin';
+		if (req.user){
+			context.username = req.user.username;
+		}
 		res.render('bank',context);
 	});
 });
@@ -78,6 +109,9 @@ router.get('/bestow/:userid',function(req,res){
 			}
 			var context = {};
 			context.msg = msg;
+			if (req.user){
+				context.username = req.user.username;
+			}
 			res.render('generic',{msg: msg,layout:'admin'});
 			//console.log(r);
 		}).catch(err=>{
@@ -91,8 +125,18 @@ router.get('/bestow/:userid',function(req,res){
 });
 
 router.get('/users',function(req,res){
-	User.findAll().then(users=>{
+	/*User.findAll({order: 'username DESC'}).then(users=>{
 		res.render('users',{users:users,layout:'admin'});
+	});*/
+	var context = {};
+	
+	context.layout = 'admin';
+	if (req.user){
+		context.username = req.user.username;
+	}
+	User.getUsersWithBalance().then(users=>{
+		context.users = users;
+		res.render('users',context);
 	});
 });
 

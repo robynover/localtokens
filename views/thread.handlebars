@@ -1,0 +1,43 @@
+<div class="messageboard thread">
+	<p><a href="/messageboard">&larr; Back to Main Message Board</a></p>
+	<div class="postwrap orig" id="wrap-{{_id}}">
+		<h2>{{title}}</h2>
+		<p class="postdate orig"><em>{{username}}</em> at {{datetime}}</p>
+
+		<div class="postbody orig">
+			{{body}}
+			
+		</div>
+		<p class="tools">
+				<a href="#" title="edit" class="edit" id="edit-{{_id}}"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+				<a href="#" title="delete" class="delete"><i class="fa fa-times" aria-hidden="true"></i></a>
+		</p>
+	</div>
+
+	{{#each replies}}
+		<div class="postwrap reply" id="reply-{{_id}}">
+			<p class="postdate"><em>{{username}}</em> at {{datetime}}</p>
+			<div class="postbody">
+				{{body}}	
+			</div>
+			{{!-- <p class="tools">
+				<a href="#" title="edit" class="edit" id="edit-{{_id}}"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+				<a href="#" title="delete" class="delete"><i class="fa fa-times" aria-hidden="true"></i></a>
+			</p> --}}
+		</div>
+	{{/each}}
+
+	<form method="post" action="/messageboard/reply/{{_id}}">
+		<h5>Reply</h5>
+		<textarea name="messagebody"></textarea><br/>
+		<input type="submit" />
+	</form>
+
+	<div id="editmodal">
+		<p class="modalclose"><a href="#" class="close"><i class="fa fa-times-circle-o" aria-hidden="true"></i></a></p>
+		<input type="text" name="title">
+		<textarea name="message"></textarea>
+		<input type="hidden" name="id">
+		<button>Edit</button>
+	</div>
+</div>

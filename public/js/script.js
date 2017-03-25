@@ -1,128 +1,132 @@
-validate.validators.usernameIsUnique = function(value) {
-  return new validate.Promise(function(resolve, reject) {
-      $.ajax({
-        url: "/api/user/exists?u="+value
-      }).done(function(data){
-        if (data.success === true){
-          console.log('user exists -- ajax');
-          resolve('already exists');
-        } else {
-          resolve();
-          console.log('user does not exist -- ajax');
-        }
-      });
+if (typeof validate !== 'undefined'){
+
+  validate.validators.usernameIsUnique = function(value) {
+    return new validate.Promise(function(resolve, reject) {
+        $.ajax({
+          url: "/api/user/exists?u="+value
+        }).done(function(data){
+          if (data.success === true){
+            console.log('user exists -- ajax');
+            resolve('already exists');
+          } else {
+            resolve();
+            console.log('user does not exist -- ajax');
+          }
+        });
+    });
+  };
+
+
+  var constraints = {
+    username: {
+      presence: true,
+      length: {minimum: 3,maximum: 20},
+      format: {
+        pattern: "[a-z0-9]+",
+        flags: "i",
+        message: "can only contain a-z and 0-9"
+      }
+    },
+    password: {
+      presence: true,
+      length: {
+        minimum: 6,
+        message: "must be at least 6 characters"
+      }
+    },
+    email: {
+      email: true
+    },
+    firstname:{
+      presence: true
+    }
+  };
+
+  // username gets processed separately onblur
+  var usernameConstraints = {
+    username: {
+      presence: true,
+      length: {minimum: 3,maximum: 20},
+      usernameIsUnique: true,
+      format: {
+        pattern: "[a-z0-9]+",
+        flags: "i",
+        message: "can only contain a-z and 0-9"
+      }
+    }
+  };
+
+  var success = function(){
+    $('.field-validation.username').text('');
+  };
+  var error = function(errors){
+    var msg = '';
+    if (typeof errors == 'object'){
+      msg = errors.username[0];
+    } else {
+      msg = errors[0];
+    }
+    $('.field-validation.username').text(msg);
+  };
+
+  // special validation for username
+  //   checks if user already exists
+  $('input[name="username"]').blur(function(){
+    validate.async({username:this.value}, usernameConstraints).then(success,error);
   });
-};
 
-
-var constraints = {
-  username: {
-    presence: true,
-    length: {minimum: 3,maximum: 20},
-    format: {
-      pattern: "[a-z0-9]+",
-      flags: "i",
-      message: "can only contain a-z and 0-9"
+  // Confirm password not working with validate.js. Doing it by hand
+  $('input[name="password_confirm"]').blur(function(){
+    if (this.value === $('input[name="password"]')[0].value){
+      console.log('passwords match');
+      //$(this).parent().next().text('');
+      $(this).parent().parent().find('.field-validation.password_confirm').text('');
+    } else {
+      console.log('no match');
+      //console.log($('input[name="password"]')[0].value);
+      //$(this).parent().next().text('Passwords do not match');
+      $(this).parent().parent().find('.field-validation.password_confirm').text('Passwords do not match');
     }
-  },
-  password: {
-    presence: true,
-    length: {
-      minimum: 6,
-      message: "must be at least 6 characters"
-    }
-  },
-  email: {
-    email: true
-  },
-  firstname:{
-    presence: true
-  }
-};
-
-// username gets processed separately onblur
-var usernameConstraints = {
-  username: {
-    presence: true,
-    length: {minimum: 3,maximum: 20},
-    usernameIsUnique: true,
-    format: {
-      pattern: "[a-z0-9]+",
-      flags: "i",
-      message: "can only contain a-z and 0-9"
-    }
-  }
-};
-
-var success = function(){
-  $('.field-validation.username').text('');
-};
-var error = function(errors){
-  var msg = '';
-  if (typeof errors == 'object'){
-    msg = errors.username[0];
-  } else {
-    msg = errors[0];
-  }
-  $('.field-validation.username').text(msg);
-};
-
-// special validation for username
-//   checks if user already exists
-$('input[name="username"]').blur(function(){
-  validate.async({username:this.value}, usernameConstraints).then(success,error);
-});
-
-// Confirm password not working with validate.js. Doing it by hand
-$('input[name="password_confirm"]').blur(function(){
-  if (this.value === $('input[name="password"]')[0].value){
-    console.log('passwords match');
-    //$(this).parent().next().text('');
-    $(this).parent().parent().find('.field-validation.password_confirm').text('');
-  } else {
-    console.log('no match');
-    //console.log($('input[name="password"]')[0].value);
-    //$(this).parent().next().text('Passwords do not match');
-    $(this).parent().parent().find('.field-validation.password_confirm').text('Passwords do not match');
-  }
-});
-
-var form = $('#signup');
-var formValues = validate.collectFormValues(form);
-
-var fieldNames = {
-  'username': 'Username',
-  'firstname': 'First Name',
-  'lastname': 'Last Name',
-  'email': 'Email',
-  'password': 'Password'
-}
-// validation for all other inputs 
-for(var field in formValues){
-  // username has its own function for validation -- exclude it
-  if (field == 'username'){
-    continue;
-  }
-  $('input[name="'+field+'"]').blur(function(){
-      var field = this.name;  
-      if (constraints[field]){
-        var v = validate.single(this.value, constraints[field]);
-        if (v){
-          var msg = '';
-          ///if (field != 'password_confirm'){
-            msg += fieldNames[field] + ' ';
-          //}
-          msg += v[0];
-          //$(this).parent().next().text(msg);
-          $(this).parent().parent().find('.field-validation.'+field).text(msg);
-        } else {
-          //$(this).parent().next().text('');
-          $(this).parent().parent().find('.field-validation.'+field).text('');
-        }
-      }   
-      
   });
-} // end for
+
+  var form = $('#signup');
+  var formValues = validate.collectFormValues(form);
+
+  var fieldNames = {
+    'username': 'Username',
+    'firstname': 'First Name',
+    'lastname': 'Last Name',
+    'email': 'Email',
+    'password': 'Password'
+  }
+  // validation for all other inputs 
+  for(var field in formValues){
+    // username has its own function for validation -- exclude it
+    if (field == 'username'){
+      continue;
+    }
+    $('input[name="'+field+'"]').blur(function(){
+        var field = this.name;  
+        if (constraints[field]){
+          var v = validate.single(this.value, constraints[field]);
+          if (v){
+            var msg = '';
+            ///if (field != 'password_confirm'){
+              msg += fieldNames[field] + ' ';
+            //}
+            msg += v[0];
+            //$(this).parent().next().text(msg);
+            $(this).parent().parent().find('.field-validation.'+field).text(msg);
+          } else {
+            //$(this).parent().next().text('');
+            $(this).parent().parent().find('.field-validation.'+field).text('');
+          }
+        }   
+        
+    });
+  } // end for
+
+} // end if validate
 
 // one last check on submit
 $('#signup').on('submit', function(e){
@@ -142,4 +146,64 @@ $('#signup').on('submit', function(e){
       this.submit();
     }
 });
+
+//** data tables **//
+if (document.getElementById('users-table') != null){
+  $('#users-table').DataTable();
+}
+
+/* message board */
+
+$('.tools .edit').on('click',function(e){
+  e.preventDefault();
+  //console.log('edit click');
+  $('#editmodal').css('display','block');
+  var id = this.id.split('-')[1];
+
+  // store id in hidden input for later
+  $('#editmodal input[type="hidden"]').val(id);
+  console.log(id);
+  
+  var wrapper = $('#wrap-'+id);
+  var body = wrapper.find('.postbody').html();
+  $('#editmodal textarea').text(body);
+  
+  var title = wrapper.find('h2').text();
+  $('#editmodal input[type="text"]').val(title);
+  
+});
+
+$('#editmodal a.close').on('click',function(e){
+    e.preventDefault();
+    $('#editmodal').css('display','none');
+});
+
+$('#editmodal button').on('click',function(e){
+    e.preventDefault();
+    var title = $('#editmodal input[type="text"]').val();
+    var message = $('#editmodal textarea').val();
+    
+    var id = $('#editmodal input[type="hidden"]').val();
+    
+    $.ajax({
+      method: "POST",
+      url: "/messageboard/post/edit/"+id,
+      data: { title: title, message: message}
+    })
+      .done(function( msg ) {
+        //console.log(msg);
+        var wrapper = $('#wrap-'+id);
+        // update page w/o reloaing
+        wrapper.find('.postbody').html(message);
+        // close modal
+        $('#editmodal').css('display','none');
+        
+      });
+})
+
+
+
+
+
+
 

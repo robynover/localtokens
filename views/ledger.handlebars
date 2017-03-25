@@ -4,7 +4,7 @@
 	{{#each records}}
 		<tr>
 			<td>{{id}}</td>
-			<td>{{created_at}}</td>
+			<td>{{formatted_date}}</td>
 			<td>{{amount}}</td>
 			<td>{{#if sender}}{{sender}}{{else}}BANK{{/if}}</td>
 			<td>{{receiver}}</td>
@@ -13,3 +13,25 @@
 	{{/each}}
 
 </table>
+
+<div class="pagenav prev">
+	{{#if prevpage}}
+		<a href="?pg={{prevpage}}">
+	{{/if}}
+	&larr; Prev
+	{{#if prevpage}}
+		</a> 
+	{{/if}}
+</div>
+
+<div class="pagenav next">
+	{{#if nextpage}}
+		<a href="?pg={{nextpage}}"> 
+	{{/if}}
+	Next &rarr;
+	{{#if nextpage}}
+		</a> 
+	{{/if}}
+</div>
+
+<p class="pagecount">Page {{page}} of {{total_pages}}</p>

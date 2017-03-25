@@ -1,0 +1,9 @@
+<div class="messageboard">
+	<h2>{{pagetitle}}</h2>
+	<button class="button-primary"><a href="/messageboard/new">new message</a></button>
+	{{#each posts}}
+		<h4><a href="/messageboard/thread/{{_id}}">{{title}}</a></h4>
+		<p class="postdate"><em>{{username}}</em> at {{datetime}}</p>
+		{{!-- <div class="postbody">{{body}}</div> --}}
+	{{/each}}
+</div>

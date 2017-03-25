@@ -8,10 +8,6 @@ body.admin{
 		padding: 2.5rem 5rem;
 	}
 
-	header{
-		background: linear-gradient(lighten($basecolor,40%),lighten($basecolor,50%));
-	}
-
 	nav.menu{
 		background-color: lighten(#cecece,10%);
 		ul{
@@ -29,7 +25,6 @@ body.admin{
 			
 			/* color: adjust-color(complement($basecolor),$red: -30); */
 			color: $basecolor;
-			font-weight: bold;
 		}
 	} 
 

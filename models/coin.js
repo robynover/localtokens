@@ -57,7 +57,8 @@ module.exports = function(sequelize, DataTypes) {
 				});
 			},
 			getBankLedger: function(){
-				var q = 'SELECT coins.*, username ';
+				var q = 'SELECT coins.*, username, ';
+				q += " to_char(coins.created_at, 'Mon DD YYYY HH12: MI AM') AS formatted_date ";
 				q += ' FROM coins ';
 				q += ' LEFT JOIN users ON users.id = owner_id ';
 				q += ' ORDER BY created_at DESC';
@@ -80,7 +81,6 @@ module.exports = function(sequelize, DataTypes) {
 	});
 
 	Coin.belongsTo(User,{as: 'owner'}); // creates 'ownerId' column
-	//Coin.belongsToMany(Ledger, {through: 'LedgerCoin'});
-
+	
 	return Coin;
 };
