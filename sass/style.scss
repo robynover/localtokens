@@ -2,25 +2,29 @@ $basecolor: #1EAEDB;
 
 nav.menu{
 	background: linear-gradient(lighten($basecolor,40%),lighten($basecolor,50%));
-	.sendtab{
-		background-color: lighten(#3ea336,35%);
-	} 
+	
+	a{
+		text-decoration: none;
+		color: #696969;
+		text-transform: uppercase;
+	}
+	a:hover{
+		color: $basecolor;
+	}
 }
 nav{
 	ul{
 		list-style-type: none;
 		padding: 1.5rem 0;
-	
+		font-family: 'Open Sans', sans-serif;
 	}
 	li{
 		display:inline;
 		padding: 1.5rem;
-		background-color: #efefef;
+		/* background-color: #efefef; */
+		margin-right: 1.5rem;
 	}
-	a{
-		text-decoration: none;
-		/* font-weight: bold; */
-	}
+	
 }
 .navtitle{
 	h1{
@@ -41,17 +45,20 @@ nav{
 	}
 }
 .column,.columns{
-	border: 1px solid darken(#efefef,30%);
+	border: 1px solid darken(#efefef,20%);
 	padding: 1rem;
+	border-radius: 5px;
+
 }
 .supercolumn{
 	border:none;
 	padding: 0;
 }
 .subcolumn{
-	border: 1px solid darken(#efefef,30%);
-	padding: 1rem;
+	border: 1px solid darken(#efefef,20%);
+	padding: 1rem; 
 	margin-bottom: 3.75rem;
+	border-radius: 5px;
 }
 .under-row{
 	margin-top: 3.75rem;
@@ -63,3 +70,16 @@ p.balance{
 h4.subcolumn-heading{
 	text-align: center;
 }
+.dashboard{
+	.column,.columns,.subcolumn{
+		box-shadow: #ccc 1px 1px 5px;
+	}
+	.supercolumn{
+		box-shadow: none;
+	}
+	table{
+		width: 100%;
+	}
+}
+
+

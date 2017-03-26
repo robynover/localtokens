@@ -1,7 +1,30 @@
-<form method="post" action="/messageboard/new">
-	
-	<p>Title: <input type="text" name="title" /></p>
-	Body:
-	<textarea name="messagebody"></textarea><br/>
-	<input type="submit" />
-</form>
+<div class="messageboard">
+	<h2>New Post</h2>
+	<form method="post" action="/messageboard/new" enctype="multipart/form-data" id="new-msg-form">
+		
+		<label>Title</label>
+		<input type="text" name="title" class="msgtitle"/>
+		<label>Body</label>
+		<textarea name="messagebody" class="msgbody"></textarea><br/>
+		<label>Photo</label>
+		<input type="file" name="photo"/><br>
+
+		{{!-- <label for="file-upload" class="custom-file-upload button">
+		    <i class="fa fa-upload"></i> Custom Upload
+		</label>
+		<input id="file-upload" type="file"/>
+		<div id="filename"></div> --}}
+		<input type="submit" />
+	</form>
+</div>
+<style>
+/*input[type="file"] {
+    display: none;
+}
+.custom-file-upload {
+    border: 1px solid #ccc;
+    display: inline-block;
+    padding: 6px 12px;
+    cursor: pointer;
+}*/
+</style>

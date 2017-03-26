@@ -18,6 +18,7 @@ var helmet = require('helmet');
 var exphbs  = require('express-handlebars');
 app.engine('handlebars', exphbs({
 	defaultLayout: 'main',
+	partialsDir: __dirname + '/views/partials/',
 	helpers: require("./helpers/handlebars.helpers.js").helpers
 }));
 app.set('view engine', 'handlebars');
@@ -55,27 +56,24 @@ app.use(passport.session());
 
 //DB
 var Sequelize = require('sequelize');
-var sequelize = new Sequelize(Config.pg);
+var sequelize = new Sequelize(Config.pg,{logging: false});
 
 // models
 var User = sequelize.import('./models/user.js');
-var Coin = sequelize.import('./models/coin.js');
-var Ledger = sequelize.import('./models/ledger.js');
-var Post = sequelize.import('./models/post.js');
-// mongoose model -- for message board
-//var Post = require('./models/post.js');
+// var Coin = sequelize.import('./models/coin.js');
+// var Ledger = sequelize.import('./models/ledger.js');
 
 // controllers
 var Transact = require('./controllers/transact.js');
 var Issue = require('./controllers/issue.js');
 
 // routes 
-var adminRoutes = require('./routes/admin.js');
-var userRoutes = require('./routes/user.js');
-var homeRoutes = require('./routes/home.js');
-var transactRoutes = require('./routes/transact.js');
-var apiRoutes = require('./routes/api.js');
-var postRoutes = require('./routes/post.js');
+var adminRoutes = require('./routes/admin.js')(express,sequelize);
+var userRoutes = require('./routes/user.js')(express,sequelize);
+var homeRoutes = require('./routes/home.js')(express,sequelize);
+var transactRoutes = require('./routes/transact.js')(express,sequelize);
+var apiRoutes = require('./routes/api.js')(express,sequelize);
+var postRoutes = require('./routes/post.js')(express); // post uses mongo, not sequelize
 
 
 // passport
@@ -142,7 +140,7 @@ app.use(function (req,res,next) {
 app.use(function (err, req, res, next) {
 	console.error(err.stack);
 	res.status(500);
-	res.render('500');
+	res.render('generic',{msg:err});
 });
 
 // listen

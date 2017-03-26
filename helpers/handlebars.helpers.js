@@ -1,3 +1,6 @@
+// for date formats
+var moment = require('moment');
+
 var register = function(Handlebars) {
 
     var helpers = {
@@ -14,6 +17,14 @@ var register = function(Handlebars) {
 
             } else {
                 return fclassname;
+            }
+        },
+        formatDate: function(datetime, format){
+            if (moment) {
+              return moment(datetime).format(format);
+            }
+            else {
+              return datetime;
             }
         }
     };

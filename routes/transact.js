@@ -1,74 +1,78 @@
 "use strict";
-var express = require('express');
-var router = express.Router();
+module.exports = function(express,sequelize){
 
-var Config = require('../config.js');
-//DB
-var Sequelize = require('sequelize');
-var sequelize = new Sequelize(Config.pg);
-// models
-var User = sequelize.import('../models/user.js');
-var Coin = sequelize.import('../models/coin.js');
-var Ledger = sequelize.import('../models/ledger.js');
+	//var express = require('express');
+	var router = express.Router();
 
-// controllers
-var Transact = require('../controllers/transact.js');
+	var Config = require('../config.js');
+	//DB
+	//var Sequelize = require('sequelize');
+	//var sequelize = new Sequelize(Config.pg);
+	// models
+	var User = sequelize.import('../models/user.js');
+	var Coin = sequelize.import('../models/coin.js');
+	var Ledger = sequelize.import('../models/ledger.js');
 
-// ======= TRANSACT routes ======= //
+	// controllers
+	var Transact = require('../controllers/transact.js');
 
-router.post('/send',function(req,res){
-	if (req.user) {
-	    // logged in
-	    let sender_id = req.user.id; 
-	    let receiver = req.body.receiver;
-	    let amt = parseInt(req.body.amt);
-	    if (sender_id <= 0 || amt <= 0){
-	    	res.send('invalid values for transaction');
-	    	return;
-	    }
-	    // Verify receiver username
-	    User.getIdByUsername(receiver).then(u=>{
-	    	//console.log(u);
-	    	if (u[0].id > 0){
-	    		var uid = u[0].id;
-	    		Transact(sender_id,uid,amt).then(tr=>{
-	    			//console.log(tr);
-	    			var word = "token";
-	    			if (amt > 1){
-	    				word += 's';
-	    			}
-	    			var msg = 'Successfully sent ' + amt + ' ' + word + ' to ' + receiver;
-	    			//res.render('generic',{msg:msg,loggedin:true});
-	    			req.flash('success', msg);
-	    			res.redirect('/user/dashboard');
-	    		}).catch(err=>{
-	    			res.send('Error '+ err);
-	    			console.log(err.stack);
-	    		});
+	// ======= TRANSACT routes ======= //
 
-	    	} else {
-	    		throw Error;
-	    	}
-	    }).catch(err=>{
-	    	res.send('invalid username for receiver');
-	    });
-	    
-	} else {
-	    // not logged in
-	    res.send("You must be logged in to send tokens");
-	}
-	
-});
+	router.post('/send',function(req,res){
+		if (req.user) {
+		    // logged in
+		    let sender_id = req.user.id; 
+		    let receiver = req.body.receiver;
+		    let amt = parseInt(req.body.amt);
+		    if (sender_id <= 0 || amt <= 0){
+		    	res.send('invalid values for transaction');
+		    	return;
+		    }
+		    // Verify receiver username
+		    User.getIdByUsername(receiver).then(u=>{
+		    	//console.log(u);
+		    	if (u[0].id > 0){
+		    		var uid = u[0].id;
+		    		Transact(sender_id,uid,amt).then(tr=>{
+		    			//console.log(tr);
+		    			var word = "token";
+		    			if (amt > 1){
+		    				word += 's';
+		    			}
+		    			var msg = 'Successfully sent ' + amt + ' ' + word + ' to ' + receiver;
+		    			//res.render('generic',{msg:msg,loggedin:true});
+		    			req.flash('success', msg);
+		    			res.redirect('/user/dashboard');
+		    		}).catch(err=>{
+		    			res.send('Error '+ err);
+		    			console.log(err.stack);
+		    		});
 
-router.get('/send',function(req,res){
-	if (req.user) {
-	    // logged in
-	    res.render('transact',{pagetitle:'Send'});
-	} else {
-	    // not logged in
-	    res.send("You must be logged in to send tokens");
-	}
-	
-});
+		    	} else {
+		    		throw Error;
+		    	}
+		    }).catch(err=>{
+		    	res.send('invalid username for receiver');
+		    });
+		    
+		} else {
+		    // not logged in
+		    res.send("You must be logged in to send tokens");
+		}
+		
+	});
 
-module.exports = router;
+	router.get('/send',function(req,res){
+		if (req.user) {
+		    // logged in
+		    res.render('transact',{pagetitle:'Send'});
+		} else {
+		    // not logged in
+		    res.send("You must be logged in to send tokens");
+		}
+		
+	});
+	return router;
+}
+
+//module.exports = router;

@@ -1,9 +1,17 @@
 <div class="messageboard">
+	
+	<div class="flash">{{success_msg}}</div>
 	<h2>{{pagetitle}}</h2>
-	<button class="button-primary"><a href="/messageboard/new">new message</a></button>
-	{{#each posts}}
-		<h4><a href="/messageboard/thread/{{_id}}">{{title}}</a></h4>
-		<p class="postdate"><em>{{username}}</em> at {{datetime}}</p>
-		{{!-- <div class="postbody">{{body}}</div> --}}
-	{{/each}}
+	<p class="new-msg-btn"><button class="button-primary"><a href="/messageboard/new">new message</a></button></p>
+	{{!-- <div class="row">
+		<div class="twelve columns"> --}}	
+			{{#each posts}}
+				<div class="postlistwrap">
+					<h4><a href="/messageboard/post/view/{{_id}}">{{title}}</a></h4>
+					<p class="postdate"><em>{{username}}</em> at {{formatDate datetime 'h:mm a, ddd MMM D, YYYY'}}</p>
+					{{!-- <div class="postbody">{{body}}</div> --}}
+				</div>
+			{{/each}}
+		{{!-- </div>
+	</div> --}}
 </div>

@@ -1,13 +1,10 @@
 "use strict";
 
-var Config = require('../config.js');
-var Sequelize = require('sequelize');
-var sequelize = new Sequelize(Config.pg);
-const crypto = require('crypto');
-
-//var Coin = sequelize.import('./coin.js');
-
 module.exports = function(sequelize, DataTypes) {
+
+	var Config = require('../config.js');
+	const crypto = require('crypto');
+
 	var User = sequelize.define('user', {
 	  id: {
 	  	type: DataTypes.INTEGER,

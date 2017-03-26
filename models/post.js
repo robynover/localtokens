@@ -1,5 +1,5 @@
 "use strict";
-// -- Message Board: models are mongoose, not sequelize! -- //
+// -- Message Board: models are mongoose here, not sequelize! -- //
 
 var mongoose = require('mongoose');
 
@@ -9,16 +9,23 @@ var postSchema = mongoose.Schema({
     	type:Date,
     	default:Date.now
     },
-    title: String,
-    body: String,
-    replies: [{
+    title: {
+        type: String,
+        required: true
+    },
+    body: {
+        type: String,
+        required: true
+    },
+    photo: String,
+    /*replies: [{
     	body: String,
     	username: String,
     	datetime: {
     		type:Date,
     		default:Date.now
     	}		
-    }]
+    }]*/
     
 });
 

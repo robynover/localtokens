@@ -173,6 +173,24 @@ $('.tools .edit').on('click',function(e){
   
 });
 
+$('.tools .delete').on('click',function(e){
+  e.preventDefault();
+  var reallyDelete = confirm("Really delete this post?");
+  if( reallyDelete ){
+    var id = this.id.split('-')[1];
+    $.ajax({
+      method: "POST",
+      url: "/messageboard/post/delete/"+id
+    })
+      .done(function( msg ) {
+        var url = window.location.href;
+        var domainAndPort = url.split('/')[2];
+        window.location.replace('http://' + domainAndPort + "/messageboard?del=1");
+      });
+  }
+  
+})
+
 $('#editmodal a.close').on('click',function(e){
     e.preventDefault();
     $('#editmodal').css('display','none');
@@ -199,10 +217,25 @@ $('#editmodal button').on('click',function(e){
         $('#editmodal').css('display','none');
         
       });
-})
+});
+
+$('#new-msg-form').on('submit', function(e){
+  e.preventDefault();
+  if ($('#new-msg-form .msgtitle').val().length < 1){
+    alert('Title cannot be empty');
+    return false;
+  }else if ($('#new-msg-form .msgbody').val().length < 1){
+    alert('Post body cannot be empty');
+    return false;
+  }  
+  this.submit();
+});
 
 
-
+/*$('#file-upload').on('change',function(){
+  console.log($('#file-upload').val());
+  $('#filename').text($('#file-upload').val());
+})*/
 
 
 

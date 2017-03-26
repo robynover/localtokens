@@ -2,28 +2,30 @@
 	<p><a href="/messageboard">&larr; Back to Main Message Board</a></p>
 	<div class="postwrap orig" id="wrap-{{_id}}">
 		<h2>{{title}}</h2>
-		<p class="postdate orig"><em>{{username}}</em> at {{datetime}}</p>
+		<p class="postdate orig"><em>{{username}}</em> at {{formatDate datetime 'h:mm a, ddd MMM D, YYYY'}}</p>
 
 		<div class="postbody orig">
-			{{body}}
-			
+			{{body}}	
 		</div>
+
+		{{#if photo}}
+		<div class="msgphoto">
+			<img src="{{photo}}">
+		</div>
+		{{/if}}
+
 		<p class="tools">
 				<a href="#" title="edit" class="edit" id="edit-{{_id}}"><i class="fa fa-pencil" aria-hidden="true"></i></a>
-				<a href="#" title="delete" class="delete"><i class="fa fa-times" aria-hidden="true"></i></a>
+				<a href="#" title="delete" class="delete" id="delete-{{_id}}"><i class="fa fa-times" aria-hidden="true"></i></a>
 		</p>
 	</div>
 
-	{{#each replies}}
+	{{!-- {{#each replies}}
 		<div class="postwrap reply" id="reply-{{_id}}">
 			<p class="postdate"><em>{{username}}</em> at {{datetime}}</p>
 			<div class="postbody">
 				{{body}}	
 			</div>
-			{{!-- <p class="tools">
-				<a href="#" title="edit" class="edit" id="edit-{{_id}}"><i class="fa fa-pencil" aria-hidden="true"></i></a>
-				<a href="#" title="delete" class="delete"><i class="fa fa-times" aria-hidden="true"></i></a>
-			</p> --}}
 		</div>
 	{{/each}}
 
@@ -32,7 +34,7 @@
 		<textarea name="messagebody"></textarea><br/>
 		<input type="submit" />
 	</form>
-
+ --}}
 	<div id="editmodal">
 		<p class="modalclose"><a href="#" class="close"><i class="fa fa-times-circle-o" aria-hidden="true"></i></a></p>
 		<input type="text" name="title">
