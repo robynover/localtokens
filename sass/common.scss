@@ -1,13 +1,25 @@
-$basecolor: #0FA0CE; /*#1EAEDB;*/
+$basecolor: #1EAEDB;
+.container{
+	max-width: 1200px;
+}
 p{
-	/* font-family: 'Merriweather', serif; */
 	font-family: 'Open Sans', sans-serif;
-
+	font-size: 1.7rem;
 }
 a{
 	text-decoration: none;
 }
-
+.navtitle{
+	h1{
+		a{
+			color: #fff;
+			font-weight: normal;
+		}
+		a:hover{
+			color: $basecolor;
+		}
+	}
+}
 nav.topnav{
 	background-color: #000;
 	color: white;

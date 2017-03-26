@@ -1,10 +1,19 @@
-/*#1EAEDB;*/
+.container {
+  max-width: 1200px; }
+
 p {
-  /* font-family: 'Merriweather', serif; */
-  font-family: 'Open Sans', sans-serif; }
+  font-family: 'Open Sans', sans-serif;
+  font-size: 1.7rem; }
 
 a {
   text-decoration: none; }
+
+.navtitle h1 a {
+  color: #fff;
+  font-weight: normal; }
+
+.navtitle h1 a:hover {
+  color: #1EAEDB; }
 
 nav.topnav {
   background-color: #000;
@@ -28,7 +37,7 @@ nav.topnav {
       nav.topnav .navbuttons button a {
         color: #fff; }
       nav.topnav .navbuttons button a:hover {
-        color: #0FA0CE; }
+        color: #1EAEDB; }
 
 .arrowbox {
   position: relative;
@@ -161,7 +170,7 @@ nav.topnav {
   .messageboard .tools a {
     color: #999999; }
   .messageboard .tools a:hover {
-    color: #0FA0CE; }
+    color: #1EAEDB; }
 
 .messageboard textarea {
   padding: 1rem;

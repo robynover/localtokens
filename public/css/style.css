@@ -18,13 +18,6 @@ nav li {
   /* background-color: #efefef; */
   margin-right: 1.5rem; }
 
-.navtitle h1 a {
-  color: #fff;
-  font-weight: normal; }
-
-.navtitle h1 a:hover {
-  color: #1EAEDB; }
-
 .neg td.amt {
   color: red; }
 

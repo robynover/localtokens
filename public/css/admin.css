@@ -4,7 +4,7 @@ body.admin {
     background-color: #fff;
     padding: 2.5rem 5rem; }
   body.admin nav.menu {
-    background-color: #e8e7e7; }
+    background-color: rgba(147, 213, 54, 0.5); }
     body.admin nav.menu ul {
       list-style-type: none;
       margin: 0;
@@ -15,7 +15,6 @@ body.admin {
       background-color: rgba(214, 213, 213, 0.5); }
     body.admin nav.menu a {
       text-decoration: none;
-      /* color: adjust-color(complement($basecolor),$red: -30); */
-      color: #1EAEDB; }
+      color: #333; }
 
 /*# sourceMappingURL=admin.css.map */

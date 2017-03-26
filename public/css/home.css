@@ -14,9 +14,10 @@ nav.topnav {
   nav.topnav .navbuttons {
     float: right; }
     nav.topnav .navbuttons button {
-      background-color: rgba(239, 239, 239, 0.3);
+      background-color: rgba(239, 239, 239, 0.2);
       color: #fff;
-      margin-bottom: 0; }
+      margin-bottom: 0;
+      padding: 0 15px; }
       nav.topnav .navbuttons button a {
         text-decoration: none;
         color: inherit; }
@@ -28,6 +29,8 @@ nav.topnav {
   background: linear-gradient(to bottom right, #0fa0ce, #dff6fd); }
   .hero h2 {
     font-size: 10rem;
+    /*fallback*/
+    font-size: 7vw;
     text-align: center;
     line-height: 50rem; }
 

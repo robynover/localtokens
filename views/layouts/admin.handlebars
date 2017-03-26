@@ -31,31 +31,8 @@
 
   <!-- Primary Page Layout
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  <nav class="topnav">
-    <div class="navtitle"><h1>Local Tokens :: Admin</h1></div>
-    <div class="navbuttons">
-      {{!-- <img src="/images/user.svg"> --}}
-      <div class="user-id"> 
-        {{#if username}}
-          
-          <a href="/user/dashboard">
-            <i class="fa fa-user-circle-o"></i>
-            {{username}}
-          </a>
-          <!--<ul class="user-menu arrowbox">
-            <li>Your Profile</li>
-            <li>Your Account</li>
-            <li>Your Mom</li>
-          </ul>-->
-        {{/if}}
-      </div>
-
-      <button><a href="/logout">Logout</a></button>
-
-    </div>
-  </nav>
-  <div style="clear:both;"></div>
-  
+  {{>topnav loggedin=true}}
+ 
   <nav class="menu">
     <div class="container">
       <ul>

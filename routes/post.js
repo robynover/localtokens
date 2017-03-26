@@ -29,9 +29,22 @@ module.exports = function(express){
 	  	if (fileExt == 'jpeg'){ fileExt = 'jpg';}
 	    cb(null, req.user.username + '-' + Date.now() + '.' + fileExt);
 	  }
-	})
+	});
+
+	var restrictImgType = function(req, file, cb) {
+
+	  var allowedTypes = ['image/jpeg','image/gif','image/png'];
+	  if (allowedTypes.indexOf(req.file.mimetype) !== -1){
+	  	// To accept the file pass `true`
+	  	cb(null, true);
+	  } else {
+		// To reject this file pass `false`
+	  	cb(null, false);
+	  	//cb(new Error('File type not allowed'));
+	  }
+	};
 	 
-	var upload = multer({ storage: storage, limits: {fileSize:3000000} });
+	var upload = multer({ storage: storage, limits: {fileSize:3000000, fileFilter:restrictImgType} });
 
 	// === require users to be logged in for this section=== //
 	router.all('/*',function(req,res,next){
@@ -70,26 +83,23 @@ module.exports = function(express){
 	router.post('/new',upload.single('photo'),function(req,res){
 		//console.log(req.file);
 		var photo = null;
-		var allowedTypes = ['image/jpeg','image/gif','image/png'];
 		if (req.file){
-			if (allowedTypes.indexOf(req.file.mimetype) !== -1){
-				photo = '/uploads/' + req.file.filename;
-				// save thumbnail
-				im.crop({
-				  srcPath: './public/uploads/'+ req.file.filename,
-				  dstPath: './public/uploads/thumbs/100x100/'+ req.file.filename,
-				  width: 100,
-				  height: 100
-				}, function(err, stdout, stderr){
-				  if (err) throw err;
-				  console.log('100x100 thumbnail created');
-				});
-				
-			} else {
-				var msg = "The file type is not supported. Please use .jpg, .gif, or .png";
-				res.render('generic',{msg:msg,loggedin: true});
-				return;
-			}
+			photo = '/uploads/' + req.file.filename;
+			// save thumbnail
+			im.crop({
+			  srcPath: './public/uploads/'+ req.file.filename,
+			  dstPath: './public/uploads/thumbs/100x100/'+ req.file.filename,
+			  width: 100,
+			  height: 100
+			}, function(err, stdout, stderr){
+			  if (err) throw err;
+			  console.log('100x100 thumbnail created');
+			});
+
+			im.readMetadata('./public/uploads/'+ req.file.filename, function(err, metadata){
+			  if (err) throw err;
+			  console.log("exif orientation: " + metadata.exif.orientation);
+			});
 		}
 		
 		// Save it

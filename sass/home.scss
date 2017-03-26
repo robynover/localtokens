@@ -19,9 +19,10 @@ nav.topnav{
 	.navbuttons{
 		float: right;
 		button{
-			background-color: rgba(#efefef,.3);
+			background-color: rgba(#efefef,.2);
 			color: #fff;
 			margin-bottom: 0;
+			padding: 0 15px;
 			a{
 				text-decoration: none;
 				color: inherit;
@@ -38,7 +39,8 @@ nav.topnav{
 	background: linear-gradient(to bottom right, #0fa0ce, lighten(#0fa0ce,50%));
 
 	h2{
-		font-size: 10rem;
+		font-size: 10rem; /*fallback*/
+		font-size: 7vw;
 		text-align: center;
 		line-height: 50rem;
 	}
