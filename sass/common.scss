@@ -1,13 +1,18 @@
+@import 'fonts';
+
 $basecolor: #1EAEDB;
 .container{
 	max-width: 1200px;
 }
 p{
 	font-family: 'Open Sans', sans-serif;
-	font-size: 1.7rem;
+	font-size: 1.5rem;
 }
 a{
 	text-decoration: none;
+}
+button a, .button a{
+	display:block;
 }
 .navtitle{
 	h1{
@@ -43,6 +48,7 @@ nav.topnav{
 			background-color: rgba(#efefef,.3);
 			color: #fff;
 			margin-bottom: 0;
+			padding: 0 15px;
 			a{
 				color: #fff;
 			}
@@ -52,7 +58,10 @@ nav.topnav{
 		}
 	}
 }
-
+.topnav-admin{
+	margin-right: 2rem;
+}
+/*
 .arrowbox {
 	position: relative;
 	background: #f0f0f0;
@@ -81,7 +90,7 @@ nav.topnav{
 	border-bottom-color: #333;
 	border-width: 11px;
 	margin-left: -11px;
-}
+}*/
 .user-menu{
 	background-color: #cecece;
 	list-style-type: none;
@@ -250,7 +259,7 @@ nav.topnav{
 	}
 	.postlistwrap{
 		padding: 1.5rem;
-		padding-top: .5rem;
+		height: 100px;
 	}
 	.postlistwrap:nth-child(even){
 		background-color: #ececec;
@@ -258,6 +267,31 @@ nav.topnav{
 	.new-msg-btn{
 		text-align: right;
 		font-family: inherit;
+	}
+	.new-msg-btn.bottom{
+		margin-top: 1.5rem;
+	}
+	.thumbnail{
+		width: 100px;
+		height: 100px;
+		float: left;
+		overflow: hidden;
+		margin-right: 1.5rem;
+		text-align: center;
+		line-height: 100px;
+		border: 1px solid #cecece;
+		color: #cecece;
+	}
+	.page-nav{
+		float: left;
+		width: 100%;
+		margin-bottom: 1.5rem;
+		.prev{
+			float: left;
+		}
+		.next{
+			float: right;
+		}
 	}
 }
 
@@ -270,6 +304,14 @@ table{
 		font-family: 'Open Sans', sans-serif;
 	}
 }
+
+.field-validation.success{
+	color: green;
+}
+.field-validation.error{
+	color: red;
+}
+
 
 /* media queries */
 @media (max-width: 400px) {

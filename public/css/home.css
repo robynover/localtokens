@@ -22,7 +22,7 @@ nav.topnav {
         text-decoration: none;
         color: inherit; }
       nav.topnav .navbuttons button a:hover {
-        color: #0fa0ce; }
+        color: #1EAEDB; }
 
 .hero {
   height: 50rem;
@@ -54,6 +54,6 @@ nav.topnav {
   font-size: 5rem; }
 
 section.faq {
-  background: linear-gradient(to bottom right, white, #0fa0ce); }
+  background: linear-gradient(to bottom right, white, #1EAEDB); }
 
 /*# sourceMappingURL=home.css.map */

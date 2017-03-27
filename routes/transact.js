@@ -65,7 +65,7 @@ module.exports = function(express,sequelize){
 	router.get('/send',function(req,res){
 		if (req.user) {
 		    // logged in
-		    res.render('transact',{pagetitle:'Send'});
+		    res.render('transact',{pagetitle:'Send',loggedin:true,username:req.user.username});
 		} else {
 		    // not logged in
 		    res.send("You must be logged in to send tokens");

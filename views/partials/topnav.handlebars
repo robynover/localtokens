@@ -3,6 +3,13 @@
 
   <div class="navbuttons">
     <div class="user-id">
+      {{#if is_admin}}
+        <span class="topnav-admin">
+        <a href="/admin">
+          <i class="fa fa-cog" aria-hidden="true"></i> 
+          Admin</a>
+        </span>
+      {{/if}}
       {{#if username}}
         <a href="/user/dashboard">
           <i class="fa fa-user-circle-o"></i>

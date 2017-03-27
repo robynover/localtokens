@@ -48,13 +48,24 @@ module.exports = function(sequelize, DataTypes) {
 					limit: limit
 				});
 			},
-			getBankLedger: function(){
+			getBankLedger: function(limit,offset){
+				limit = parseInt(limit);
+				offset = parseInt(offset);
 				var q = 'SELECT coins.*, username, ';
-				q += " to_char(coins.created_at, 'Mon DD YYYY HH12: MI AM') AS formatted_date ";
+				q += " to_char(coins.created_at, 'Mon DD YYYY HH12: MI AM') AS formatted_date, ";
+				q += ' COUNT(coins.id) OVER () AS total_entries ';
 				q += ' FROM coins ';
 				q += ' LEFT JOIN users ON users.id = owner_id ';
-				q += ' ORDER BY created_at DESC';
-				return sequelize.query(q, { type: sequelize.QueryTypes.SELECT});
+				q += ' ORDER BY created_at DESC ';
+				if (limit > 0){
+					q += ' LIMIT :lmt';
+				}
+				if (offset > 0){
+					q += ' OFFSET :offset';
+				}
+				return sequelize.query(q, 
+					{replacements: {lmt:limit,offset:offset}, type: sequelize.QueryTypes.SELECT}
+				);
 			}
 			
 		},

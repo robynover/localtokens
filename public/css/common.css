@@ -1,12 +1,55 @@
+/* open-sans-regular - latin */
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 400;
+  src: url("fonts/open-sans-v13-latin-regular.eot");
+  /* IE9 Compat Modes */
+  src: local("Open Sans"), local("OpenSans"), url("fonts/open-sans-v13-latin-regular.eot?#iefix") format("embedded-opentype"), url("fonts/open-sans-v13-latin-regular.woff2") format("woff2"), url("fonts/open-sans-v13-latin-regular.woff") format("woff"), url("fonts/open-sans-v13-latin-regular.ttf") format("truetype"), url("fonts/open-sans-v13-latin-regular.svg#OpenSans") format("svg");
+  /* Legacy iOS */ }
+
+/* raleway-300 - latin */
+@font-face {
+  font-family: 'Raleway';
+  font-style: normal;
+  font-weight: 300;
+  src: url("fonts/raleway-v11-latin-300.eot");
+  /* IE9 Compat Modes */
+  src: local("Raleway Light"), local("Raleway-Light"), url("fonts/raleway-v11-latin-300.eot?#iefix") format("embedded-opentype"), url("fonts/raleway-v11-latin-300.woff2") format("woff2"), url("fonts/raleway-v11-latin-300.woff") format("woff"), url("fonts/raleway-v11-latin-300.ttf") format("truetype"), url("fonts/raleway-v11-latin-300.svg#Raleway") format("svg");
+  /* Legacy iOS */ }
+
+/* raleway-regular - latin */
+@font-face {
+  font-family: 'Raleway';
+  font-style: normal;
+  font-weight: 400;
+  src: url("fonts/raleway-v11-latin-regular.eot");
+  /* IE9 Compat Modes */
+  src: local("Raleway"), local("Raleway-Regular"), url("fonts/raleway-v11-latin-regular.eot?#iefix") format("embedded-opentype"), url("fonts/raleway-v11-latin-regular.woff2") format("woff2"), url("fonts/raleway-v11-latin-regular.woff") format("woff"), url("fonts/raleway-v11-latin-regular.ttf") format("truetype"), url("fonts/raleway-v11-latin-regular.svg#Raleway") format("svg");
+  /* Legacy iOS */ }
+
+/* raleway-600 - latin */
+@font-face {
+  font-family: 'Raleway';
+  font-style: normal;
+  font-weight: 600;
+  src: url("fonts/raleway-v11-latin-600.eot");
+  /* IE9 Compat Modes */
+  src: local("Raleway SemiBold"), local("Raleway-SemiBold"), url("fonts/raleway-v11-latin-600.eot?#iefix") format("embedded-opentype"), url("fonts/raleway-v11-latin-600.woff2") format("woff2"), url("fonts/raleway-v11-latin-600.woff") format("woff"), url("fonts/raleway-v11-latin-600.ttf") format("truetype"), url("fonts/raleway-v11-latin-600.svg#Raleway") format("svg");
+  /* Legacy iOS */ }
+
 .container {
   max-width: 1200px; }
 
 p {
   font-family: 'Open Sans', sans-serif;
-  font-size: 1.7rem; }
+  font-size: 1.5rem; }
 
 a {
   text-decoration: none; }
+
+button a, .button a {
+  display: block; }
 
 .navtitle h1 a {
   color: #fff;
@@ -33,40 +76,46 @@ nav.topnav {
     nav.topnav .navbuttons button {
       background-color: rgba(239, 239, 239, 0.3);
       color: #fff;
-      margin-bottom: 0; }
+      margin-bottom: 0;
+      padding: 0 15px; }
       nav.topnav .navbuttons button a {
         color: #fff; }
       nav.topnav .navbuttons button a:hover {
         color: #1EAEDB; }
 
-.arrowbox {
-  position: relative;
-  background: #f0f0f0;
-  border: 1px solid #cecece;
-  top: 20px; }
+.topnav-admin {
+  margin-right: 2rem; }
 
+/*
+.arrowbox {
+	position: relative;
+	background: #f0f0f0;
+	border: 1px solid #cecece;
+	top: 20px;
+}
 .arrowbox:after, .arrow_box:before {
-  bottom: 100%;
-  left: 15%;
-  border: solid transparent;
-  content: " ";
-  height: 0;
-  width: 0;
-  position: absolute;
-  pointer-events: none; }
+	bottom: 100%;
+	left: 15%;
+	border: solid transparent;
+	content: " ";
+	height: 0;
+	width: 0;
+	position: absolute;
+	pointer-events: none;
+}
 
 .arrowbox:after {
-  border-color: rgba(240, 240, 240, 0);
-  border-bottom-color: #cecece;
-  border-width: 10px;
-  margin-left: -10px; }
-
+	border-color: rgba(240, 240, 240, 0);
+	border-bottom-color: #cecece;
+	border-width: 10px;
+	margin-left: -10px;
+}
 .arrowbox:before {
-  border-color: rgba(206, 206, 206, 0);
-  border-bottom-color: #333;
-  border-width: 11px;
-  margin-left: -11px; }
-
+	border-color: rgba(206, 206, 206, 0);
+	border-bottom-color: #333;
+	border-width: 11px;
+	margin-left: -11px;
+}*/
 .user-menu {
   background-color: #cecece;
   list-style-type: none;
@@ -208,7 +257,7 @@ nav.topnav {
 
 .messageboard .postlistwrap {
   padding: 1.5rem;
-  padding-top: .5rem; }
+  height: 100px; }
 
 .messageboard .postlistwrap:nth-child(even) {
   background-color: #ececec; }
@@ -217,12 +266,41 @@ nav.topnav {
   text-align: right;
   font-family: inherit; }
 
+.messageboard .new-msg-btn.bottom {
+  margin-top: 1.5rem; }
+
+.messageboard .thumbnail {
+  width: 100px;
+  height: 100px;
+  float: left;
+  overflow: hidden;
+  margin-right: 1.5rem;
+  text-align: center;
+  line-height: 100px;
+  border: 1px solid #cecece;
+  color: #cecece; }
+
+.messageboard .page-nav {
+  float: left;
+  width: 100%;
+  margin-bottom: 1.5rem; }
+  .messageboard .page-nav .prev {
+    float: left; }
+  .messageboard .page-nav .next {
+    float: right; }
+
 table {
   width: 100%; }
   table th {
     text-transform: uppercase; }
   table td {
     font-family: 'Open Sans', sans-serif; }
+
+.field-validation.success {
+  color: green; }
+
+.field-validation.error {
+  color: red; }
 
 /* media queries */
 @media (max-width: 400px) {

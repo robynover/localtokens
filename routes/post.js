@@ -14,8 +14,8 @@ module.exports = function(express){
 	// mongoose model -- for message board
 	var Post = require('../models/post.js');
 
-	// for image resize
-	var im = require('imagemagick');
+	// for image resize and orientation
+	var gm = require('gm').subClass({imageMagick: true});
 
 	// for file submission in forms
 	var multer  = require('multer');
@@ -32,7 +32,6 @@ module.exports = function(express){
 	});
 
 	var restrictImgType = function(req, file, cb) {
-
 	  var allowedTypes = ['image/jpeg','image/gif','image/png'];
 	  if (allowedTypes.indexOf(req.file.mimetype) !== -1){
 	  	// To accept the file pass `true`
@@ -44,7 +43,7 @@ module.exports = function(express){
 	  }
 	};
 	 
-	var upload = multer({ storage: storage, limits: {fileSize:3000000, fileFilter:restrictImgType} });
+	var upload = multer({ storage: storage, limits: {fileSize:4000000, fileFilter:restrictImgType} });
 
 	// === require users to be logged in for this section=== //
 	router.all('/*',function(req,res,next){
@@ -63,13 +62,63 @@ module.exports = function(express){
 		if (req.query.del){
 			context.success_msg = "Post deleted successfully";
 		}
-		Post.find().sort({datetime:-1}).exec(function(err,msgs){
-			context.posts = msgs;
-			context.pagetitle = "Community Posts";
-			context.loggedin = true;
-			context.username = req.user.username;
-			res.render('messageboard',context);
+		var limit = 20;
+		var findparams = {};
+		if (req.query.start){
+			findparams = { datetime: { $lt: req.query.start}};
+		} else if (req.query.prev){
+			findparams = { datetime: { $gt: req.query.prev}};
+		}
+		var firstDate = null;
+		var lastDate = null;
+
+		// find first and last dates so you know when to stop paging
+		var findFirst = Post.find()
+			.limit(1)
+			.sort({datetime:-1})
+			.exec((err,r)=>{
+				firstDate = r[0].datetime;
+			});
+		
+		var findLast = Post.find()
+				.limit(1)
+				.sort({datetime:1})
+				.exec((err,r)=>{
+					lastDate = r[0].datetime;
+				});
+
+		findFirst.then(()=>{
+			findLast.then(()=>{
+				Post.find(findparams)
+					.limit(limit)
+					.sort({datetime:-1})
+					.exec(function(err,msgs){
+						if (err){
+							res.render('generic',{msg:err});
+							return;
+						} 
+						if(msgs.length > 0) {
+							context.posts = msgs;
+							context.pagetitle = "Community Posts";
+							context.loggedin = true;
+							context.username = req.user.username;
+							if (msgs[msgs.length - 1].datetime.getTime() != lastDate.getTime()){
+								context.startdate = msgs[msgs.length - 1].datetime.toISOString();
+							}
+							if (msgs[0].datetime.getTime() != firstDate.getTime()){
+								context.prevdate = msgs[0].datetime.toISOString();
+							}
+							
+							res.render('messageboard',context);
+						} else {
+							res.render('generic',{msg:'No more results found.'});
+						}
+						
+					});
+			});
 		});
+
+
 		
 	});
 
@@ -81,24 +130,48 @@ module.exports = function(express){
 	});
 
 	router.post('/new',upload.single('photo'),function(req,res){
-		//console.log(req.file);
+		console.log(req.file);
 		var photo = null;
+		var thumb = null;
+
 		if (req.file){
 			photo = '/uploads/' + req.file.filename;
+			thumb = '/uploads/thumbs/100x100/' + req.file.filename;
 			// save thumbnail
-			im.crop({
-			  srcPath: './public/uploads/'+ req.file.filename,
-			  dstPath: './public/uploads/thumbs/100x100/'+ req.file.filename,
-			  width: 100,
-			  height: 100
-			}, function(err, stdout, stderr){
-			  if (err) throw err;
-			  console.log('100x100 thumbnail created');
-			});
+			// './public/uploads/'+ req.file.filename,
+			gm(req.file.path)
+			.autoOrient()
+			.write('./public/uploads/'+ req.file.filename, function (err) {
+			  if (err){
+			  	console.log(err);
+			  } else {
+			  	//console.log('upload and autoOrient success');
+			  }
+			})
+			gm(req.file.path).size(function (err, size) {
+				if (!err){
+					//console.log(size);
+			    	var orientation = size.width > size.height ? 'wide' : 'tall'
+			    	//console.log(this);
 
-			im.readMetadata('./public/uploads/'+ req.file.filename, function(err, metadata){
-			  if (err) throw err;
-			  console.log("exif orientation: " + metadata.exif.orientation);
+			    	var w = null;
+			    	var h = null;
+			    	var thumbsize = 100;
+			    	if (orientation == 'wide'){
+			    		h = thumbsize;
+			    	} else {
+			    		w = thumbsize;
+			    	}
+			    	this.resize(w,h)
+			    		.crop(thumbsize,thumbsize,0,0)
+			    		.write('./public/uploads/thumbs/100x100/'+ req.file.filename, err=>{
+			    			if (err){
+			    				console.log(err);
+			    			} else {
+			    				console.log('crop success');
+			    			}
+			    		})
+			   	}
 			});
 		}
 		
@@ -107,7 +180,8 @@ module.exports = function(express){
 			username: req.user.username,
 			title: req.body.title,
 			body: req.body.messagebody,
-			photo: photo 
+			photo: photo,
+			thumb: thumb 
 		}).save(function(err){
 			if (err){ console.log(err); }
 			//req.flash('message') = 'Posted successfully';

@@ -147,11 +147,6 @@ $('#signup').on('submit', function(e){
     }
 });
 
-//** data tables **//
-if (document.getElementById('users-table') != null){
-  $('#users-table').DataTable();
-}
-
 /* message board */
 
 $('.tools .edit').on('click',function(e){
@@ -231,11 +226,38 @@ $('#new-msg-form').on('submit', function(e){
   this.submit();
 });
 
+$('.sendtokens form #receiver').on('blur', function(){
+  var receiver = $(this).val();
+  $.ajax({
+    method: "GET",
+    url: "/api/user/exists?u="+receiver,
+  }).done(function( json ) {
+      if(json.error){
+        $('.field-validation.receiver').removeClass('success');
+        $('.field-validation.receiver').addClass('error');
+        $('.field-validation.receiver').text(json.error);
+      } else if (json.success) {
+         $('.field-validation.receiver').removeClass('error');
+        $('.field-validation.receiver').addClass('success')
+        $('.field-validation.receiver').text('user found');
 
-/*$('#file-upload').on('change',function(){
-  console.log($('#file-upload').val());
-  $('#filename').text($('#file-upload').val());
-})*/
+      }
+  });
+});
+
+$('.sendtokens form').on('submit',function(e){
+  e.preventDefault();
+  if ( $('#amt').val().length < 1){
+    alert("Please enter an amount of tokens to send");
+    return false;
+  } 
+  if  ( $('#receiver').val().length < 3){
+    alert("The receiver username is not valid");
+    return false;
+  }
+  this.submit();
+});
+
 
 
 

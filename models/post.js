@@ -18,6 +18,7 @@ var postSchema = mongoose.Schema({
         required: true
     },
     photo: String,
+    thumb: String
     /*replies: [{
     	body: String,
     	username: String,

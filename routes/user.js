@@ -23,7 +23,8 @@ module.exports = function(express,sequelize){
 		if (req.user){
 			res.redirect('/user/profile/'+req.user.username);
 		} else {
-			next();
+			//next();
+			res.redirect('/login');
 		}
 		
 	});
@@ -33,6 +34,7 @@ module.exports = function(express,sequelize){
 			User.findById(req.user.id).then(u=>{
 				var context = {};
 				context.username = u.username;
+				context.is_admin = u.is_admin;
 				context.greeting = "Welcome "+ u.username + "!";
 				u.getAcctBalance().then(b=>{
 					context.balance = b[0].count;

@@ -78,11 +78,16 @@ module.exports = function(sequelize, DataTypes) {
 			                   .digest('hex');
 			    return hash;
 			},
-			getUsersWithBalance: function(){
+			getUsersWithBalance: function(unactivated){
+
 				var q = 'SELECT count(users.id) AS balance,users.* ';
 				q += ' FROM coins ';
 				q += ' LEFT JOIN users on users.id = owner_id ';
-				q += ' WHERE users.id > 0 GROUP BY users.id';
+				q += ' WHERE users.id > 0 ';
+				if (unactivated){
+					q += ' AND is_active = false ';
+				}
+				q += ' GROUP BY users.id';
 				return sequelize.query(q,
 				  { type: sequelize.QueryTypes.SELECT }
 				);

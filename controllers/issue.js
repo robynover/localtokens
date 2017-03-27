@@ -27,7 +27,6 @@ module.exports = function(userId,amt){
 					},{transaction: t}).then(l=>{
 						var promises = [];
 						var coin_ids = [];
-						console.log(coins);
 				        for (var i=0; i< coins.length; i++){
 				        	// collect coin ids
 				        	coin_ids.push(coins[i].id);

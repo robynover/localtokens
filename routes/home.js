@@ -18,6 +18,10 @@ module.exports = function(express,sequelize){
 		var context = {};
 		context.msg = "Hello and welcome";
 		context.layout = "home";
+		if (req.user){
+			context.username = req.user.username;
+			context.loggedin = true;
+		}
 		res.render('generic',context);
 	});
 	router.post('/login',

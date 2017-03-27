@@ -30,7 +30,7 @@ module.exports = function(express,sequelize){
 	});
 	router.get('/user/exists',function(req,res){
 		//if (req.user){
-		console.log(req.query.u);
+		//console.log(req.query.u);
 			if (req.query.u){
 				User.getByUsername(req.query.u).then(u=>{
 					if (u){

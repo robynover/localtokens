@@ -1,11 +1,13 @@
 <h2>Users</h2>
+<p><a href="/admin/users">All</a> | <a href="?unact=1">Inactive</a></p>
 <table id="users-table">
 	<thead>
-		<tr><th>Username</th><th>Name</th><th>Active</th><th>Admin</th><th>Balance</th></tr>
+		<tr><th>Select</th><th>Username</th><th>Name</th><th>Active</th><th>Admin</th><th>Balance</th></tr>
 	</thead>
 	<tbody>
 {{#each users}}
 	<tr>
+		<td><input type="checkbox" value="{{id}}" name="userid"></td>
 		<td>{{username}}</td>
 		<td>{{firstname}} {{lastname}}</td>
 		<td>{{#if is_active}}
@@ -23,3 +25,5 @@
 {{/each}}
 </tbody>
 </table>
+
+<button class="button-primary" id="user-activate">Activate</button>

@@ -35,14 +35,30 @@ module.exports = function(express,sequelize){
 	});
 
 	// ======= ADMIN routes ======= //
+	
+	router.get('/',function(req,res){
+		res.redirect('/admin/ledger');
+	});
 
-	router.get('/mint', function(req,res){
+	router.get('/mint',function(req,res){
+		var context = {};
+		context.layout = 'admin';
+		if (req.user){
+			context.username = req.user.username;
+			context.loggedin = true;
+		}
+		res.render('mintform',context);
+	});
+	
+	router.post('/mint', function(req,res){
 		Coin.create({}).then(c=>{
 			var context = {};
 			context.msg = "New coin created with Serial # " + c.serial_num;
 			context.layout = 'admin';
+
 			if (req.user){
 				context.username = req.user.username;
+				context.loggedin = true;
 			}
 			res.render('generic',context);
 		});
@@ -84,63 +100,114 @@ module.exports = function(express,sequelize){
 	});	
 
 	router.get('/bank',function(req,res){
-		Coin.getBankLedger().then(l=>{
-			let context = {};
-			context.pagetitle = "Bank";
-			context.records = l;
-			context.layout = 'admin';
-			if (req.user){
-				context.username = req.user.username;
-			}
-			res.render('bank',context);
-		});
-	});
+		var perPg = 10;
+		var pg = 0;
+		if (req.query.pg){
+			pg = parseInt(req.query.pg) - 1;
+		}
+		var offset = pg * perPg;
+		var context = {};
+		// get the total num coins in the bank
+		Coin.count({ where: {owner_id: null} }).then(function(c) {
+			context.bankcount = c;
 
-	router.get('/bestow',function(req,res){
-		res.render('generic',{msg: 'Please choose a user',layout:'admin'});
-	});
-
-	router.get('/bestow/:userid',function(req,res){
-		let uid = req.params.userid;
-		let amt = 1;
-		if (uid > 0){
-			Issue(uid,amt).then(r=>{
-				var msg = 'The following coins were bestowed on user #' + uid + ':<br>';
-				for (var i = 0; i<r.length; i++){
-					msg += '<li>' + r[i].serial_num + '</li>';
+			Coin.getBankLedger(perPg,offset).then(l=>{
+				var total_entries = l[0].total_entries;
+				var total_pages = Math.ceil(l[0].total_entries / perPg);
+				pg = pg + 1;
+				
+				context.pagetitle = "Bank";
+				context.records = l;
+				context.layout = 'admin';
+				if (pg + 1 <= total_pages){
+					context.nextpage = pg + 1;
 				}
-				var context = {};
-				context.msg = msg;
+				if (pg - 1 > 0){
+					context.prevpage = pg - 1;
+				}
+				context.page = pg;
+				context.total_entries = total_entries;
+				context.total_pages = total_pages;
+
 				if (req.user){
 					context.username = req.user.username;
 				}
-				res.render('generic',{msg: msg,layout:'admin'});
-				//console.log(r);
-			}).catch(err=>{
-				console.log('ERROR');
-				console.log(err);
-				res.send('Error '+ err);
+				res.render('bank',context);
 			});
-		} else {
-			res.send("no user id");
-		}	
+
+		})
+
+	});
+
+	router.get('/bestow',function(req,res){
+		var context = {};
+		context.layout = 'admin';
+		context.loggedin = true;
+		if (req.user){
+			context.username = req.user.username;
+		}
+		res.render('bestowform',context);
+	});
+
+	router.post('/bestow',function(req,res){
+		var username = req.body.receiver;
+		var amt = 1;
+		User.getIdByUsername(username).then(u=>{
+			var uid = u[0].id;
+			if (uid > 0){
+				Issue(uid,amt).then(r=>{
+					var msg = 'The following coins were bestowed on user ' + username + ':<br>';
+					for (var i = 0; i<r.length; i++){
+						msg += '<li>' + r[i].serial_num + '</li>';
+					}
+					var context = {};
+					context.msg = msg;
+					context.layout = 'admin';
+					context.loggedin = true;
+					if (req.user){
+						context.username = req.user.username;
+					}
+					res.render('generic',context);
+					//console.log(r);
+				}).catch(err=>{
+					console.log('ERROR');
+					console.log(err);
+					res.send('Error '+ err);
+				});
+			} else {
+				res.send("no user id");
+			}
+		});	
 	});
 
 	router.get('/users',function(req,res){
-		/*User.findAll({order: 'username DESC'}).then(users=>{
-			res.render('users',{users:users,layout:'admin'});
-		});*/
 		var context = {};
-		
 		context.layout = 'admin';
 		if (req.user){
 			context.username = req.user.username;
 		}
-		User.getUsersWithBalance().then(users=>{
+		var unactivated = false;
+		if (req.query.unact){
+			unactivated = true;
+		}
+		User.getUsersWithBalance(unactivated).then(users=>{
 			context.users = users;
 			res.render('users',context);
 		});
 	});
+
+	router.post('/users/activate',function(req,res){
+		User.update(
+		    { is_active: true }, 
+		    { where: { id: req.body.userids }} 
+		).then(users=>{
+			//console.log(users);
+			res.json({ok:true});
+		}).catch(err=>{
+			res.json({ok:false});
+		})
+
+	});
+
 	return router;
 }
-//module.exports = router;
