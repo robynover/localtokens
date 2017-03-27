@@ -7,7 +7,7 @@ module.exports = function(express,sequelize){
 
 	var Config = require('../config.js');
 	//DB
-	//var Sequelize = require('sequelize');
+	var Sequelize = require('sequelize');
 	//var sequelize = new Sequelize(Config.pg);
 	// models
 	var User = sequelize.import('../models/user.js');

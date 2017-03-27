@@ -60,8 +60,9 @@ var sequelize = new Sequelize(Config.pg,{logging: false});
 
 // models
 var User = sequelize.import('./models/user.js');
-// var Coin = sequelize.import('./models/coin.js');
-// var Ledger = sequelize.import('./models/ledger.js');
+//var Coin = sequelize.import('./models/coin.js');
+//var Ledger = sequelize.import('./models/ledger.js');
+//sequelize.sync(); //<--creates join table on first run
 
 // controllers
 var Transact = require('./controllers/transact.js');
