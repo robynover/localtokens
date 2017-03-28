@@ -29,8 +29,8 @@ app.use(express.static('public'));
 app.use(helmet());
 
 // cookies
-var cookieParser = require('cookie-parser');
-app.use(cookieParser());
+//var cookieParser = require('cookie-parser');
+//app.use(cookieParser());
 
 // body parser -- for form and query string processing
 app.use(require('body-parser').urlencoded({extended:true}));
@@ -43,7 +43,7 @@ app.use(session({
   store: new MongoStore({ url: Config.mongo }),
   resave: false,
   saveUninitialized: true,
-  name: 'sessionId',
+  name: 'monster', //name of the cookie
   cookie: { 
   	secure: false,
   	maxAge: 60 * 60 * 1000, // 1 hour

@@ -134,59 +134,70 @@ module.exports = function(express){
 		var photo = null;
 		var thumb = null;
 
-		if (req.file){
-			photo = '/uploads/' + req.file.filename;
-			thumb = '/uploads/thumbs/100x100/' + req.file.filename;
-			// save thumbnail
-			// './public/uploads/'+ req.file.filename,
-			gm(req.file.path)
-			.autoOrient()
-			.write('./public/uploads/'+ req.file.filename, function (err) {
-			  if (err){
-			  	console.log(err);
-			  } else {
-			  	//console.log('upload and autoOrient success');
-			  }
-			})
-			gm(req.file.path).size(function (err, size) {
-				if (!err){
-					//console.log(size);
-			    	var orientation = size.width > size.height ? 'wide' : 'tall'
-			    	//console.log(this);
+		// creating a promise so mongo will wait to save if needed 
+		// (if there is no image, it saves right away)
 
-			    	var w = null;
-			    	var h = null;
-			    	var thumbsize = 100;
-			    	if (orientation == 'wide'){
-			    		h = thumbsize;
-			    	} else {
-			    		w = thumbsize;
-			    	}
-			    	this.resize(w,h)
-			    		.crop(thumbsize,thumbsize,0,0)
-			    		.write('./public/uploads/thumbs/100x100/'+ req.file.filename, err=>{
-			    			if (err){
-			    				console.log(err);
-			    			} else {
-			    				console.log('crop success');
-			    			}
-			    		})
-			   	}
-			});
-		}
+		var prom = new Promise((resolve,reject)=>{
+			if (req.file){
+				photo = '/uploads/' + req.file.filename;
+				thumb = '/uploads/thumbs/100x100/' + req.file.filename;
+				// save thumbnail
+				// './public/uploads/'+ req.file.filename,
+				gm(req.file.path)
+				.autoOrient()
+				.write('./public/uploads/'+ req.file.filename, function (err) {
+				  if (err){
+				  	console.log(err);
+				  } else {
+				  	//console.log('upload and autoOrient success');
+				  }
+				})
+				gm(req.file.path).size(function (err, size) {
+					if (!err){
+						//console.log(size);
+				    	var orientation = size.width > size.height ? 'wide' : 'tall'
+				    	//console.log(this);
+
+				    	var w = null;
+				    	var h = null;
+				    	var thumbsize = 100;
+				    	if (orientation == 'wide'){
+				    		h = thumbsize;
+				    	} else {
+				    		w = thumbsize;
+				    	}
+				    	this.resize(w,h)
+				    		.crop(thumbsize,thumbsize,0,0)
+				    		.write('./public/uploads/thumbs/100x100/'+ req.file.filename, err=>{
+				    			if (err){
+				    				console.log(err);
+				    			} else {
+				    				console.log('crop success');
+				    			}
+				    			resolve();
+				    		});
+				   	}
+				});
+			} else {
+				resolve();
+			}
+		}); //end promise 
 		
-		// Save it
-		new Post({
-			username: req.user.username,
-			title: req.body.title,
-			body: req.body.messagebody,
-			photo: photo,
-			thumb: thumb 
-		}).save(function(err){
-			if (err){ console.log(err); }
-			//req.flash('message') = 'Posted successfully';
-			res.redirect('/messageboard');
+		prom.then(()=>{
+			// Save it
+			new Post({
+				username: req.user.username,
+				title: req.body.title,
+				body: req.body.messagebody,
+				photo: photo,
+				thumb: thumb 
+			}).save(function(err){
+				if (err){ console.log(err); }
+				req.flash('message', 'Posted successfully');
+				res.redirect('/messageboard');
+			});
 		});
+		
 	});
 
 	// show a post

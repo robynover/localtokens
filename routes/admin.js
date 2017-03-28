@@ -72,10 +72,14 @@ module.exports = function(express,sequelize){
 			pg = parseInt(req.query.pg) - 1;
 		}
 		var offset = pg * perPg;
+		var total_entries, total_pages;
 
 		Ledger.getRecords(perPg,offset).then(l=>{
-			var total_entries = l[0].total_entries;
-			var total_pages = Math.ceil(l[0].total_entries / perPg);
+			if (l.length > 0){ // correct for empty result set
+				total_entries = l[0].total_entries;
+				total_pages = Math.ceil(l[0].total_entries / perPg);
+			}
+			
 			pg = pg + 1;
 
 			let context = {};
