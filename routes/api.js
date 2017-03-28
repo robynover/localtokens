@@ -8,8 +8,15 @@ module.exports = function(express,sequelize){
 	//DB
 	//var Sequelize = require('sequelize');
 	//var sequelize = new Sequelize(Config.pg);
+	// mongoose
+	//var mongoose = require('mongoose');
+	//mongoose.connect(Config.mongo);
+	//mongoose.Promise = require('bluebird');
+
 	// models
 	var User = sequelize.import('../models/user.js');
+	// mongoose model -- for message board
+	var Post = require('../models/post.js');
 
 
 	// == API routes == //
@@ -28,24 +35,34 @@ module.exports = function(express,sequelize){
 			res.json({error:'user not logged in'});
 		}
 	});
-	router.get('/user/exists',function(req,res){
-		//if (req.user){
-		//console.log(req.query.u);
-			if (req.query.u){
-				User.getByUsername(req.query.u).then(u=>{
-					if (u){
-						res.json({success:true,user_exisits:true});
-					} else {
-						res.json({error:'user does not exist',user_exisits:false});
-					}
-				});
-			} else {
-				res.json({error:'no username given'});
-			}		
-		//} else {
-		//	res.json({error:'user not logged in'});
-		//}
+	router.get('/user/exists',function(req,res){		
+		if (req.query.u){
+			User.getByUsername(req.query.u).then(u=>{
+				if (u){
+					res.json({success:true,user_exisits:true});
+				} else {
+					res.json({error:'user does not exist',user_exisits:false});
+				}
+			});
+		} else {
+			res.json({error:'no username given'});
+		}			
 	});
+
+	router.get('/posts/recent',function(req,res){
+		if (req.user){
+			Post.find()
+				.limit(5)
+				.sort({datetime:-1})
+				.exec((err,r)=>{
+					res.json({success:true,records:r});
+				});
+
+		} else {
+			res.json({error:'user not logged in'});
+		}
+	});
+
 	return router;
 }
 //module.exports = router;

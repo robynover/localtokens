@@ -258,7 +258,31 @@ $('.sendtokens form').on('submit',function(e){
   this.submit();
 });
 
+// message upload form
+$('#photo-upload').on('change',function(){
+  if (this.files[0].size/1000000 > 4){
+    alert('That file is too large. Please choose a file less than 4MB');
+  }
+});
 
+// load dashboard widgets
+if ( $('.dashboard').length > 0){
+  //console.log('dashboard');
+  $.ajax({
+    url: "/api/posts/recent"
+  }).done(function(data){
+    if (data.success){
+      var content = $('<ul></ul>');
+      // /messageboard/post/view/58da780bcb84f96108ddc158
+      for (var i in data.records){
+        var r = data.records[i];
+        var li = $('<li><a href="/messageboard/post/view/'+r._id+'">'+r.title+'</a></li>');
+        content.append(li);
+      }
+      $('#info3').append(content);
+    }
+  });
+}
 
 
 

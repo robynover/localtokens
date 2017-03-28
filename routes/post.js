@@ -59,6 +59,7 @@ module.exports = function(express){
 
 	router.get('/',function(req,res){
 		var context = {};
+		context.success_msg = req.flash('message');
 		if (req.query.del){
 			context.success_msg = "Post deleted successfully";
 		}
@@ -130,7 +131,7 @@ module.exports = function(express){
 	});
 
 	router.post('/new',upload.single('photo'),function(req,res){
-		console.log(req.file);
+		//console.log(req.file);
 		var photo = null;
 		var thumb = null;
 
@@ -141,43 +142,46 @@ module.exports = function(express){
 			if (req.file){
 				photo = '/uploads/' + req.file.filename;
 				thumb = '/uploads/thumbs/100x100/' + req.file.filename;
-				// save thumbnail
-				// './public/uploads/'+ req.file.filename,
+
+				// --- re-save with correct orientation & resize--- //
 				gm(req.file.path)
 				.autoOrient()
+				.resize(800)  // max 800 width
 				.write('./public/uploads/'+ req.file.filename, function (err) {
 				  if (err){
 				  	console.log(err);
+				  	resolve(); //reject()?
 				  } else {
-				  	//console.log('upload and autoOrient success');
-				  }
-				})
-				gm(req.file.path).size(function (err, size) {
-					if (!err){
-						//console.log(size);
-				    	var orientation = size.width > size.height ? 'wide' : 'tall'
-				    	//console.log(this);
+				  	// --- create thumbnail --- //
+				  	gm(req.file.path).size(function (err, size) {
+				  		if (!err){
+				  			//console.log(size);
+				  	    	var orientation = size.width > size.height ? 'wide' : 'tall'
+				  	    	//console.log(this);
 
-				    	var w = null;
-				    	var h = null;
-				    	var thumbsize = 100;
-				    	if (orientation == 'wide'){
-				    		h = thumbsize;
-				    	} else {
-				    		w = thumbsize;
-				    	}
-				    	this.resize(w,h)
-				    		.crop(thumbsize,thumbsize,0,0)
-				    		.write('./public/uploads/thumbs/100x100/'+ req.file.filename, err=>{
-				    			if (err){
-				    				console.log(err);
-				    			} else {
-				    				console.log('crop success');
-				    			}
-				    			resolve();
-				    		});
-				   	}
+				  	    	var w = null;
+				  	    	var h = null;
+				  	    	var thumbsize = 100;
+				  	    	if (orientation == 'wide'){
+				  	    		h = thumbsize;
+				  	    	} else {
+				  	    		w = thumbsize;
+				  	    	}
+				  	    	this.resize(w,h)
+				  	    		.crop(thumbsize,thumbsize,0,0)
+				  	    		.write('./public/uploads/thumbs/100x100/'+ req.file.filename, err=>{
+				  	    			if (err){
+				  	    				console.log(err);
+				  	    			} else {
+				  	    				//console.log('crop success');
+				  	    			}
+				  	    			resolve();
+				  	    		});
+				  	   	}
+				  	});
+				  }
 				});
+				
 			} else {
 				resolve();
 			}

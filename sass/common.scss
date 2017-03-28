@@ -293,8 +293,14 @@ nav.topnav{
 			float: right;
 		}
 	}
+	.flash{
+		text-align: center;
+	}
 }
-
+input[type="file"]{
+	font-family: 'Open Sans';
+    line-height: 1.5rem;
+}
 table{
 	width: 100%;
 	th{
@@ -312,6 +318,11 @@ table{
 	color: red;
 }
 
+.dashboard{
+	ul{
+		list-style-type: none;
+	}
+}
 
 /* media queries */
 @media (max-width: 400px) {

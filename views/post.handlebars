@@ -1,8 +1,9 @@
 <div class="messageboard thread">
-	<p><a href="/messageboard">&larr; Back to Main Message Board</a></p>
+	<p><a href="/messageboard">&larr; Back to All Posts</a></p>
 	<div class="postwrap orig" id="wrap-{{_id}}">
 		<h2>{{title}}</h2>
-		<p class="postdate orig"><em>{{username}}</em> at {{formatDate datetime 'h:mm a, ddd MMM D, YYYY'}}</p>
+		<p class="postdate orig"><em><a href="/user/profile/{{username}}">{{username}}</a></em> 
+			at {{formatDate datetime 'h:mm a, ddd MMM D, YYYY'}}</p>
 
 		<div class="postbody orig">
 			{{body}}	

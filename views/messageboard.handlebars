@@ -14,7 +14,8 @@
 				{{/if}}
 				</div>
 				<h4><a href="/messageboard/post/view/{{_id}}">{{title}}</a></h4>
-				<p class="postdate"><em>{{username}}</em> at {{formatDate datetime 'h:mm a, ddd MMM D, YYYY'}}</p>
+				<p class="postdate"><em><a href="/user/profile/{{username}}">{{username}}</a></em> 
+					at {{formatDate datetime 'h:mm a, ddd MMM D, YYYY'}}</p>
 				{{!-- <div class="postbody">{{body}}</div> --}}
 			</div>
 		{{/each}}
