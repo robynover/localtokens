@@ -8,18 +8,36 @@ module.exports = function(express,sequelize){
 	//DB
 	//var Sequelize = require('sequelize');
 	//var sequelize = new Sequelize(Config.pg);
-	// mongoose
-	//var mongoose = require('mongoose');
-	//mongoose.connect(Config.mongo);
-	//mongoose.Promise = require('bluebird');
+	
 
 	// models
 	var User = sequelize.import('../models/user.js');
+	var Ledger = sequelize.import('../models/ledger.js');
 	// mongoose model -- for message board
 	var Post = require('../models/post.js');
 
 
 	// == API routes == //
+	router.get('/user/transactions/count',function(req,res){
+		if (req.user){
+			Ledger.getNumUserTransactions(req.user.id).then(ledger=>{
+				res.json({success:true,count:ledger[0].count});
+			});
+		} else {
+			res.json({error:'user not logged in'});
+		}
+	});
+
+	router.get('/user/transactions/people',function(req,res){
+		if (req.user){
+			Ledger.getNumPeopleUserTransactions(req.user.id).then(p=>{
+				res.json({success:true,count:p[0].count});
+			});
+		} else {
+			res.json({error:'user not logged in'});
+		}
+	});
+
 	router.get('/user/transactions',function(req,res){
 		if (req.user){
 			var limit = 0;
@@ -62,6 +80,8 @@ module.exports = function(express,sequelize){
 			res.json({error:'user not logged in'});
 		}
 	});
+
+
 
 	return router;
 }

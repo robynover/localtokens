@@ -267,7 +267,7 @@ $('#photo-upload').on('change',function(){
 
 // load dashboard widgets
 if ( $('.dashboard').length > 0){
-  //console.log('dashboard');
+  // recent posts
   $.ajax({
     url: "/api/posts/recent"
   }).done(function(data){
@@ -282,6 +282,33 @@ if ( $('.dashboard').length > 0){
       $('#info3').append(content);
     }
   });
+
+  // num transactions
+  $.ajax({
+    url: "/api/user/transactions/count"
+  }).done(function(data){
+    console.log(data);
+    if (data){
+      $('.numtrans').text(data.count);
+      if (data.count == 1){
+        $('.tword').text('transaction');
+      }
+    }
+  });
+
+  // num ppl transacted with
+  $.ajax({
+    url: "/api/user/transactions/people"
+  }).done(function(data){
+    console.log(data);
+    if (data){
+      $('.numppl').text(data.count);
+      if (data.count == 1){
+        $('.pword').text('person');
+      }
+    }
+  });
+
 }
 
 

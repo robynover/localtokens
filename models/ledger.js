@@ -40,6 +40,28 @@ module.exports = function(sequelize, DataTypes) {
 				return sequelize.query(q,
 				  { replacements: {lmt:limit,offset:offset}, type: sequelize.QueryTypes.SELECT }
 				);
+			},
+			getNumUserTransactions: function(userid){
+				var q = 'SELECT COUNT(*) FROM ledger ';
+				q += ' WHERE sender_id = :uid OR receiver_id = :uid AND sender_id IS NOT NULL';
+				return sequelize.query(q,
+				  { replacements: {uid:userid}, type: sequelize.QueryTypes.SELECT }
+				);
+			},
+			getNumPeopleUserTransactions: function(userid){
+				var q = 'SELECT COUNT(*) FROM (';
+				q += '	SELECT ';
+				q += '	CASE  ';
+				q += '	 WHEN sender_id = :uid THEN receiver_id ';
+				q += '	 WHEN receiver_id = :uid THEN sender_id ';
+				q += '	END AS other_person ';
+				q += '	FROM ledger ';
+				q += '	WHERE sender_id = :uid OR receiver_id = :uid AND sender_id IS NOT NULL ';
+				q += '	GROUP BY other_person ';
+				q += ') AS p';
+				return sequelize.query(q,
+				  { replacements: {uid:userid}, type: sequelize.QueryTypes.SELECT }
+				);
 			}
 			
 		},

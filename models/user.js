@@ -79,13 +79,13 @@ module.exports = function(sequelize, DataTypes) {
 			    return hash;
 			},
 			getUsersWithBalance: function(unactivated){
-
-				var q = 'SELECT count(users.id) AS balance,users.* ';
-				q += ' FROM coins ';
-				q += ' LEFT JOIN users on users.id = owner_id ';
-				q += ' WHERE users.id > 0 ';
+				
+				var q = 'SELECT COUNT(coins.id) AS balance, users.* ';
+				q += ' FROM users ';
+				q += ' LEFT JOIN coins on coins.owner_id = users.id ';
+				//q += ' WHERE users.id > 0 ';
 				if (unactivated){
-					q += ' AND is_active = false ';
+					q += ' WHERE is_active = false ';
 				}
 				q += ' GROUP BY users.id';
 				return sequelize.query(q,
