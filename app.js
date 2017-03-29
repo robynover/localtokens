@@ -59,7 +59,12 @@ var Sequelize = require('sequelize');
 var sequelize = new Sequelize(Config.pg,{logging: false});
 
 // models
-var User = sequelize.import('./models/user.js');
+//var models = require('./models');
+app.set('models', require('./models'));
+var User = app.get('models').user;
+
+//var User = models.user;
+//var User = sequelize.import('./models/user.js');
 //var Coin = sequelize.import('./models/coin.js');
 //var Ledger = sequelize.import('./models/ledger.js');
 //sequelize.sync(); //<--creates join table on first run
@@ -69,11 +74,11 @@ var Transact = require('./controllers/transact.js');
 var Issue = require('./controllers/issue.js');
 
 // routes 
-var adminRoutes = require('./routes/admin.js')(express,sequelize);
-var userRoutes = require('./routes/user.js')(express,sequelize);
-var homeRoutes = require('./routes/home.js')(express,sequelize);
-var transactRoutes = require('./routes/transact.js')(express,sequelize);
-var apiRoutes = require('./routes/api.js')(express,sequelize);
+var adminRoutes = require('./routes/admin.js')(express,sequelize,app);
+var userRoutes = require('./routes/user.js')(express,sequelize,app);
+var homeRoutes = require('./routes/home.js')(express,sequelize,app);
+var transactRoutes = require('./routes/transact.js')(express,sequelize,app);
+var apiRoutes = require('./routes/api.js')(express,sequelize,app);
 var postRoutes = require('./routes/post.js')(express); // post uses mongo, not sequelize
 
 

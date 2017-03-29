@@ -8,11 +8,20 @@ var Config = require('../config.js');
 var Sequelize = require('sequelize');
 var sequelize = new Sequelize(Config.pg);
 
-var Coin = sequelize.import('../models/coin.js');
-var User = sequelize.import('../models/user.js');
-var Ledger = sequelize.import('../models/ledger.js');
+// var Coin = sequelize.import('../models/coin.js');
+// var User = sequelize.import('../models/user.js');
+// var Ledger = sequelize.import('../models/ledger.js');
 
-module.exports = function(userId,amt){
+// var models = require('../models');
+// var Coin = models.coin;
+// var User = models.user;
+// var Ledger = models.ledger;
+
+module.exports = function(userId,amt,app){
+	var User = app.get('models').user;
+	var Coin = app.get('models').coin;
+	var Ledger = app.get('models').ledger;
+
 	return sequelize.transaction(function(t){
 		// make sure the bank has that much!
 		return Coin.countBankCoins().then(ct=>{

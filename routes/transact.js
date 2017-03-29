@@ -1,5 +1,5 @@
 "use strict";
-module.exports = function(express,sequelize){
+module.exports = function(express,sequelize,app){
 
 	//var express = require('express');
 	var router = express.Router();
@@ -9,9 +9,12 @@ module.exports = function(express,sequelize){
 	//var Sequelize = require('sequelize');
 	//var sequelize = new Sequelize(Config.pg);
 	// models
-	var User = sequelize.import('../models/user.js');
-	var Coin = sequelize.import('../models/coin.js');
-	var Ledger = sequelize.import('../models/ledger.js');
+	// var User = sequelize.import('../models/user.js');
+	// var Coin = sequelize.import('../models/coin.js');
+	// var Ledger = sequelize.import('../models/ledger.js');
+	var User = app.get('models').user;
+	var Coin = app.get('models').coin;
+	var Ledger = app.get('models').ledger;
 
 	// controllers
 	var Transact = require('../controllers/transact.js');
@@ -33,7 +36,7 @@ module.exports = function(express,sequelize){
 		    	//console.log(u);
 		    	if (u[0].id > 0){
 		    		var uid = u[0].id;
-		    		Transact(sender_id,uid,amt).then(tr=>{
+		    		Transact(sender_id,uid,amt,app).then(tr=>{
 		    			//console.log(tr);
 		    			var word = "token";
 		    			if (amt > 1){

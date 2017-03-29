@@ -1,5 +1,5 @@
 "use strict";
-module.exports = function(express,sequelize){
+module.exports = function(express,sequelize,app){
 
 	//var express = require('express');
 	var router = express.Router();
@@ -9,12 +9,15 @@ module.exports = function(express,sequelize){
 	//var Sequelize = require('sequelize');
 	//var sequelize = new Sequelize(Config.pg);
 	// models
-	var User = sequelize.import('../models/user.js');
-	var Coin = sequelize.import('../models/coin.js');
-	var Ledger = sequelize.import('../models/ledger.js');
+	// var User = sequelize.import('../models/user.js');
+	// var Coin = sequelize.import('../models/coin.js');
+	// var Ledger = sequelize.import('../models/ledger.js');
+	var User = app.get('models').user;
+	var Coin = app.get('models').coin;
+	var Ledger = app.get('models').ledger;
 
 	// controllers
-	var Issue = require('../controllers/issue.js');
+	//var Issue = require('../controllers/issue.js');
 
 	// ======= USER routes ======= //
 

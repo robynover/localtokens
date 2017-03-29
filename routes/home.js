@@ -1,5 +1,5 @@
 "use strict";
-module.exports = function(express,sequelize){
+module.exports = function(express,sequelize,app){
 
 	//var express = require('express');
 	var router = express.Router();
@@ -10,7 +10,8 @@ module.exports = function(express,sequelize){
 	var Sequelize = require('sequelize');
 	//var sequelize = new Sequelize(Config.pg);
 	// models
-	var User = sequelize.import('../models/user.js');
+	//var User = sequelize.import('../models/user.js');
+	var User = app.get('models').user;
 
 	var striptags = require('striptags');
 

@@ -1,5 +1,5 @@
 "use strict";
-module.exports = function(express,sequelize){
+module.exports = function(express,sequelize,app){
 
 	//var express = require('express');
 	var router = express.Router();
@@ -11,9 +11,11 @@ module.exports = function(express,sequelize){
 	
 
 	// models
-	var User = sequelize.import('../models/user.js');
-	var Ledger = sequelize.import('../models/ledger.js');
-	// mongoose model -- for message board
+	// var User = sequelize.import('../models/user.js');
+	// var Ledger = sequelize.import('../models/ledger.js');
+	var User = app.get('models').user;
+	var Ledger = app.get('models').ledger;
+	// // mongoose model -- for message board
 	var Post = require('../models/post.js');
 
 

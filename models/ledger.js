@@ -2,14 +2,20 @@
 
 module.exports = function(sequelize, DataTypes) {
 	
-	var User = sequelize.import('./user.js');
-	var Coin = sequelize.import('./coin.js');
+	//var User = sequelize.import('./user.js');
+	//var Coin = sequelize.import('./coin.js');
 
 	var Ledger = sequelize.define('ledger', {
 	  id: {
 	  	type: DataTypes.INTEGER,
 	  	primaryKey: true,
 	  	autoIncrement: true
+	  },
+	  sender_id: {
+	  	type: DataTypes.INTEGER
+	  },
+	  receiver_id: {
+	  	type: DataTypes.INTEGER
 	  },
 	  amount: {
 	  	type: DataTypes.INTEGER
@@ -72,12 +78,7 @@ module.exports = function(sequelize, DataTypes) {
 		}
 	});
 
-	Ledger.belongsTo(User, { foreignKey: {name: 'sender_id'} }); // creates senderId col
-	Ledger.belongsTo(User, { foreignKey: {name: 'receiver_id',allowNull: false} }); // creates receiverId col
-	//Ledger.belongsTo(Coin,{foreignKey: 'coinSerialnum', targetKey: 'serialNum'}); // coinSerialnum column
-	//Ledger.belongsToMany(Coin, { through: 'LedgerCoin', foreignKey: 'ledgerId', otherKey: 'coinId'});
-	Ledger.belongsToMany(Coin,{ through: 'ledger_coin'});
-	Coin.belongsToMany(Ledger, {through: 'ledger_coin'});
+
 	return Ledger;
 
 };

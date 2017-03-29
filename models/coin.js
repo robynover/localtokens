@@ -1,7 +1,7 @@
 "use strict";
 
 module.exports = function(sequelize, DataTypes) {
-	var User = sequelize.import('./user.js');
+	//var User = sequelize.import('./user.js');
 
 	var Coin =  sequelize.define('coin', {
 		id: {
@@ -83,7 +83,7 @@ module.exports = function(sequelize, DataTypes) {
 	   
 	});
 
-	Coin.belongsTo(User,{as: 'owner'}); // creates 'ownerId' column
+	
 	
 	return Coin;
 };

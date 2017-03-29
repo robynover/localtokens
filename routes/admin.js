@@ -1,5 +1,5 @@
 "use strict";
-module.exports = function(express,sequelize){
+module.exports = function(express,sequelize,app){
 
 	//var express = require('express');
 	var router = express.Router();
@@ -9,9 +9,12 @@ module.exports = function(express,sequelize){
 	//var Sequelize = require('sequelize');
 	//var sequelize = new Sequelize(Config.pg);
 	// models
-	var User = sequelize.import('../models/user.js');
-	var Coin = sequelize.import('../models/coin.js');
-	var Ledger = sequelize.import('../models/ledger.js');
+	// var User = sequelize.import('../models/user.js');
+	// var Coin = sequelize.import('../models/coin.js');
+	// var Ledger = sequelize.import('../models/ledger.js');
+	var User = app.get('models').user;
+	var Coin = app.get('models').coin;
+	var Ledger = app.get('models').ledger;
 
 	// controllers
 	var Issue = require('../controllers/issue.js');
@@ -159,7 +162,7 @@ module.exports = function(express,sequelize){
 		User.getIdByUsername(username).then(u=>{
 			var uid = u[0].id;
 			if (uid > 0){
-				Issue(uid,amt).then(r=>{
+				Issue(uid,amt,app).then(r=>{
 					var msg = 'The following coins were bestowed on user ' + username + ':<br>';
 					for (var i = 0; i<r.length; i++){
 						msg += '<li>' + r[i].serial_num + '</li>';
