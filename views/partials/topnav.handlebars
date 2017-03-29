@@ -19,14 +19,14 @@
     </div>
     {{#if loggedin}}
     {{else}}
-      <button><a href="signup">Sign Up</a></button>
+      <a href="signup"><button>Sign Up</button></a>
     {{/if}}
 
     &nbsp;&nbsp;
 
-    <button><a href="/{{#if loggedin}}logout{{else}}login{{/if}}">
+   <a href="/{{#if loggedin}}logout{{else}}login{{/if}}"><button>
       {{#if loggedin}}Logout{{else}}Login{{/if}}
-    </a></button>
+    </button></a>
 
   </div>
 </nav>

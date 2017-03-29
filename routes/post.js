@@ -207,8 +207,11 @@ module.exports = function(express){
 	// show a post
 	router.get('/post/view/:id',function(req, res){
 		Post.findById(req.params.id, function (err, doc){
-			//var context = {messages: doc};
+			//console.log(doc);
+			// naming conflict: 'username' is name of author in doc, 
+			// but needs to be name of logged in user
 			doc.loggedin = true;
+			doc.author = doc.username;
 			doc.username = req.user.username;
 			res.render('post',doc);
 		});

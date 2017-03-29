@@ -8,7 +8,8 @@ body.admin {
     body.admin nav.menu ul {
       list-style-type: none;
       margin: 0;
-      padding: 1.5rem 0; }
+      padding: 1.5rem 0;
+      font-family: "Open Sans"; }
     body.admin nav.menu li {
       display: inline;
       padding: 1.5rem;

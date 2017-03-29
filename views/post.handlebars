@@ -2,7 +2,7 @@
 	<p><a href="/messageboard">&larr; Back to All Posts</a></p>
 	<div class="postwrap orig" id="wrap-{{_id}}">
 		<h2>{{title}}</h2>
-		<p class="postdate orig"><em><a href="/user/profile/{{username}}">{{username}}</a></em> 
+		<p class="postdate orig"><em><a href="/user/profile/{{author}}">{{author}}</a></em> 
 			at {{formatDate datetime 'h:mm a, ddd MMM D, YYYY'}}</p>
 
 		<div class="postbody orig">
@@ -15,10 +15,12 @@
 		</div>
 		{{/if}}
 
+		{{#equal username author}}
 		<p class="tools">
 				<a href="#" title="edit" class="edit" id="edit-{{_id}}"><i class="fa fa-pencil" aria-hidden="true"></i></a>
 				<a href="#" title="delete" class="delete" id="delete-{{_id}}"><i class="fa fa-times" aria-hidden="true"></i></a>
 		</p>
+		{{/equal}}
 	</div>
 	
 	<div id="editmodal">
