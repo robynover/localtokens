@@ -116,7 +116,7 @@ module.exports = function(sequelize, DataTypes) {
 			getUserLedger: function(limit,offset){
 				limit = parseInt(limit);
 				offset = parseInt(offset);
-				var q = "SELECT to_char(ledger.created_at, 'Mon DD YYYY HH12: MI AM') AS formatted_date, ";
+				var q = "SELECT to_char(ledger.created_at AT TIME ZONE 'America/New_York', 'Mon DD YYYY HH12: MI AM') AS formatted_date, ";
 				q += ' COUNT(ledger.id) OVER () AS total_entries, ';
 				q += ' ledger.*, u1.username AS sender, u2.username AS receiver, ';
 				q += ' CASE ';

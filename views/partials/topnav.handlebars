@@ -4,11 +4,11 @@
   <div class="navbuttons">
     <div class="user-id">
       {{#if is_admin}}
-        <span class="topnav-admin">
+        <div class="topnav-admin">
         <a href="/admin">
           <i class="fa fa-cog" aria-hidden="true"></i> 
           Admin</a>
-        </span>
+        </div>
       {{/if}}
       {{#if username}}
         <a href="/user/dashboard">
@@ -16,7 +16,15 @@
           {{username}}
         </a>
       {{/if}}
+      
+      <div class="alertbell">
+        <i class="fa fa-bell" aria-hidden="true"></i>
+        <span class="button-badge">&nbsp;</span> 
+      </div> 
+      <div class="dropdown arrow_box"></div>
     </div>
+
+
     {{#if loggedin}}
     {{else}}
       <a href="signup"><button>Sign Up</button></a>
@@ -29,5 +37,6 @@
     </button></a>
 
   </div>
+
 </nav>
 <div style="clear:both;"></div>

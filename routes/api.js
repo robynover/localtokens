@@ -5,16 +5,10 @@ module.exports = function(express,sequelize,app){
 	var router = express.Router();
 
 	var Config = require('../config.js');
-	//DB
-	//var Sequelize = require('sequelize');
-	//var sequelize = new Sequelize(Config.pg);
 	
-
-	// models
-	// var User = sequelize.import('../models/user.js');
-	// var Ledger = sequelize.import('../models/ledger.js');
 	var User = app.get('models').user;
 	var Ledger = app.get('models').ledger;
+	var Notification = app.get('models').notification;
 	// // mongoose model -- for message board
 	var Post = require('../models/post.js');
 
@@ -68,6 +62,44 @@ module.exports = function(express,sequelize,app){
 			res.json({error:'no username given'});
 		}			
 	});
+
+	router.get('/user/notifications',function(req,res){
+		if (req.user){
+			Notification.findAll({
+				where: {receiver_id: req.user.id},
+				limit: 3,
+				order:[['transaction_date', 'DESC']]
+			}).then(n=>{
+				if (n.length > 0){
+					var notifications = [];
+					for (var i in n){
+						if (n[i].amount == 1){
+							var amount = "1 token";
+						} else {
+							var amount = n[i].amount.toString() + " tokens";
+						}
+						var obj = {};
+						obj.date = n[i].transaction_date;
+						if (!n[i].sender_id){
+							obj.message = 'The bank issued you ' + amount;
+						} else {
+							obj.message = n[i].sender_username + ' sent you ' +amount;
+						}
+						notifications.push(obj);
+					}
+
+					res.json({success:true,notifications:notifications});
+				} else {
+					res.json({error:'no results'});
+				}
+			})
+			/*Notification.getUserNotifications(req.user.id).then(n=>{
+				
+			})*/
+		} else {
+			res.json({error:'user not logged in'});
+		}
+	})
 
 	router.get('/posts/recent',function(req,res){
 		if (req.user){

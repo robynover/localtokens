@@ -28,10 +28,6 @@ app.use(express.static('public'));
 
 app.use(helmet());
 
-// cookies
-//var cookieParser = require('cookie-parser');
-//app.use(cookieParser());
-
 // body parser -- for form and query string processing
 app.use(require('body-parser').urlencoded({extended:true}));
 
@@ -116,13 +112,7 @@ passport.use(new LocalStrategy(
   }
 ));
 
-//--- testing ----//
 
-/*Ledger.findById(22).then(ledger=>{
-	ledger.setCoins([1,2]).then(sc=>{
-		console.log(sc);
-	});
-});*/
 
 
 // -----------------------------//

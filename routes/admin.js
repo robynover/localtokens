@@ -158,33 +158,38 @@ module.exports = function(express,sequelize,app){
 
 	router.post('/bestow',function(req,res){
 		var username = req.body.receiver;
-		var amt = 1;
-		User.getIdByUsername(username).then(u=>{
-			var uid = u[0].id;
-			if (uid > 0){
-				Issue(uid,amt,app).then(r=>{
-					var msg = 'The following coins were bestowed on user ' + username + ':<br>';
-					for (var i = 0; i<r.length; i++){
-						msg += '<li>' + r[i].serial_num + '</li>';
-					}
-					var context = {};
-					context.msg = msg;
-					context.layout = 'admin';
-					context.loggedin = true;
-					if (req.user){
-						context.username = req.user.username;
-					}
-					res.render('generic',context);
-					//console.log(r);
-				}).catch(err=>{
-					console.log('ERROR');
-					console.log(err);
-					res.send('Error '+ err);
-				});
-			} else {
-				res.send("no user id");
-			}
-		});	
+		var amt = parseInt(req.body.num);
+		if (amt <= 10 && amt > 0){
+			User.getIdByUsername(username).then(u=>{
+				var uid = u[0].id;
+				if (uid > 0){
+					Issue(uid,amt,app).then(r=>{
+						var msg = 'The following coins were bestowed on user ' + username + ':<br>';
+						for (var i = 0; i<r.length; i++){
+							msg += '<li>' + r[i].serial_num + '</li>';
+						}
+						var context = {};
+						context.msg = msg;
+						context.layout = 'admin';
+						context.loggedin = true;
+						if (req.user){
+							context.username = req.user.username;
+						}
+						res.render('generic',context);
+						//console.log(r);
+					}).catch(err=>{
+						console.log('ERROR');
+						console.log(err);
+						res.send('Error '+ err);
+					});
+				} else {
+					res.send("no user id");
+				}
+			});	
+		} else {
+			res.send('You can only bestow 10 tokens max at one time');
+		}
+		
 	});
 
 	router.get('/users',function(req,res){

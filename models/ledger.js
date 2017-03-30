@@ -28,12 +28,11 @@ module.exports = function(sequelize, DataTypes) {
 			getRecords: function(limit,offset){
 				limit = parseInt(limit);
 				offset = parseInt(offset);
+				// heads up! time zone is hard-coded here
 				var q = 'SELECT ledger.*, sender.username AS sender, receiver.username AS receiver, ';
-				q += " to_char(ledger.created_at, 'Mon DD YYYY HH12: MI AM') AS formatted_date, ";
+				q += " to_char(ledger.created_at AT TIME ZONE 'America/New_York', 'Mon DD YYYY HH12: MI AM') AS formatted_date, ";
 				q += ' COUNT(ledger.id) OVER () AS total_entries ';
 				q += ' FROM ledger ';
-				//q += ' LEFT JOIN ledger_coin ON ledger_id = ledger.id '; 
-				//q += ' LEFT JOIN coins ON coin_id=coins.id '; 
 				q += ' LEFT JOIN users AS sender ON sender.id = "sender_id" ';
 				q += ' LEFT JOIN users as receiver ON receiver.id = "receiver_id" ';
 				q += ' ORDER BY created_at DESC ';

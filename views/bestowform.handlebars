@@ -1,11 +1,16 @@
 <div class="bestow">
     <form action="/admin/bestow" method="post">
-        <div>
-            <label>Bestow 1 token on</label>
+        <div class="bestow-on">
+            <label>Bestow on</label>
             <input type="text" name="receiver" placeholder="username" id="receiver"/>
         </div>
         <div class="field-validation receiver"></div>
         
+        <div>
+            <label>Number of Tokens (10 max)</label>
+            <input type="number" name="num" id="num"/>
+        </div>
+
         <div>
             <input type="submit" value="Bestow!"/>
         </div>

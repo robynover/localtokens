@@ -92,40 +92,85 @@ nav.topnav {
         color: #fff; }
       nav.topnav .navbuttons button a:hover {
         color: #1EAEDB; }
+  nav.topnav .dropdown {
+    position: absolute;
+    color: #333;
+    margin-top: 1rem;
+    background-color: #fff;
+    box-shadow: #ccc 1px 1px 5px;
+    z-index: 1;
+    right: 9.5%;
+    padding: 0 1rem;
+    display: none; }
+    nav.topnav .dropdown ul {
+      padding: 1rem 0;
+      margin: 0; }
+    nav.topnav .dropdown li {
+      display: block;
+      padding: 0;
+      text-transform: none;
+      line-height: 2rem; }
 
 .topnav-admin {
+  display: inline-block;
   margin-right: 2rem; }
 
-/*
-.arrowbox {
-	position: relative;
-	background: #f0f0f0;
-	border: 1px solid #cecece;
-	top: 20px;
-}
-.arrowbox:after, .arrow_box:before {
-	bottom: 100%;
-	left: 15%;
-	border: solid transparent;
-	content: " ";
-	height: 0;
-	width: 0;
-	position: absolute;
-	pointer-events: none;
-}
+.user-id {
+  margin-right: 1.5rem;
+  float: left;
+  height: 4rem;
+  line-height: 4rem; }
 
-.arrowbox:after {
-	border-color: rgba(240, 240, 240, 0);
-	border-bottom-color: #cecece;
-	border-width: 10px;
-	margin-left: -10px;
-}
-.arrowbox:before {
-	border-color: rgba(206, 206, 206, 0);
-	border-bottom-color: #333;
-	border-width: 11px;
-	margin-left: -11px;
-}*/
+.subcolumn.notification {
+  display: none;
+  border: 1px solid #1EAEDB; }
+
+.alertbell {
+  display: inline-block;
+  position: relative;
+  padding: 2px 5px;
+  margin-left: 1.5rem;
+  cursor: pointer; }
+
+.button-badge {
+  background-color: #fa3e3e;
+  border-radius: 50%;
+  color: white;
+  padding: 0.2rem 0.5rem;
+  font-size: 1rem;
+  line-height: 1rem;
+  position: absolute;
+  top: 0.8rem;
+  right: 0;
+  display: none; }
+
+.arrow_box {
+  position: relative;
+  background: #fff;
+  border: 1px solid #bcbcbc; }
+
+.arrow_box:after, .arrow_box:before {
+  bottom: 100%;
+  left: 50%;
+  border: solid transparent;
+  content: " ";
+  height: 0;
+  width: 0;
+  position: absolute;
+  pointer-events: none; }
+
+.arrow_box:after {
+  border-color: rgba(255, 255, 255, 0);
+  border-bottom-color: #fff;
+  border-width: 10px;
+  margin-left: -10px; }
+
+.arrow_box:before {
+  border-color: rgba(188, 188, 188, 0);
+  border-bottom-color: #bcbcbc;
+  border-width: 11px;
+  margin-left: -11px; }
+
 .user-menu {
   background-color: #cecece;
   list-style-type: none;
@@ -166,12 +211,6 @@ nav.topnav {
   display: inline;
   margin-left: 1.5rem;
   color: #ff0000; }
-
-.user-id {
-  margin-right: 1.5rem;
-  float: left;
-  height: 4rem;
-  line-height: 4rem; }
 
 /* dataTables plugin */
 .dataTables_filter {
@@ -323,7 +362,7 @@ table {
   list-style-type: none; }
 
 /* media queries */
-@media (max-width: 400px) {
+@media (max-width: 719px) {
   nav.menu li {
     display: block; } }
 

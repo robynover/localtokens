@@ -17,5 +17,7 @@ body.admin {
     body.admin nav.menu a {
       text-decoration: none;
       color: #333; }
+  body.admin .bestow-on {
+    display: inline; }
 
 /*# sourceMappingURL=admin.css.map */

@@ -52,7 +52,7 @@ module.exports = function(sequelize, DataTypes) {
 				limit = parseInt(limit);
 				offset = parseInt(offset);
 				var q = 'SELECT coins.*, username, ';
-				q += " to_char(coins.created_at, 'Mon DD YYYY HH12: MI AM') AS formatted_date, ";
+				q += " to_char(coins.created_at  AT TIME ZONE 'America/New_York', 'Mon DD YYYY HH12: MI AM') AS formatted_date, ";
 				q += ' COUNT(coins.id) OVER () AS total_entries ';
 				q += ' FROM coins ';
 				q += ' LEFT JOIN users ON users.id = owner_id ';

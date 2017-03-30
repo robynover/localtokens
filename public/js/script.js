@@ -287,7 +287,7 @@ if ( $('.dashboard').length > 0){
   $.ajax({
     url: "/api/user/transactions/count"
   }).done(function(data){
-    console.log(data);
+    //console.log(data);
     if (data){
       $('.numtrans').text(data.count);
       if (data.count == 1){
@@ -300,7 +300,7 @@ if ( $('.dashboard').length > 0){
   $.ajax({
     url: "/api/user/transactions/people"
   }).done(function(data){
-    console.log(data);
+    //console.log(data);
     if (data){
       $('.numppl').text(data.count);
       if (data.count == 1){
@@ -311,5 +311,52 @@ if ( $('.dashboard').length > 0){
 
 }
 
+// notifications
+$.ajax({
+  url:"/api/user/notifications"
+}).done(function(data){
+  console.log(data);
+  if (data.success){
+    //if (!readCookie('alertseen')){
+      $('.button-badge').show();
+    //}
+    
+    var container = $('<ul>');
+    for (var i in data.notifications){
+      var li = $('<li>');
+      li.text(data.notifications[i].message);
+      li.append('<br>');
+      li.append('on ' + moment(data.notifications[i].date).format("M/D [at] h:mm a"));
+      container.append(li);
+    }
+    $('nav.topnav .dropdown').html(container);
+    
+  } else if (data.error == 'no results'){
+    $('nav.topnav .dropdown').html('<li>No new notifications</li>');
+  }
+});
 
+$('.alertbell').mousedown(function(){
+    $('nav.topnav .dropdown').toggle();
+});
+$('.alertbell').mouseup(function(){
+    $('.button-badge').hide();
+    // set cookie to indicate that it's been seen
+    // var date = new Date();
+    // date.setTime(date.getTime() + (60*60*1000));
+    // document.cookie = "alertseen=true; expires="+date+"; path=/";
+    // 
+    // mark alerts for deletion in db??
+});
+
+function readCookie(name) {
+    var nameEQ = name + "=";
+    var ca = document.cookie.split(';');
+    for(var i=0;i < ca.length;i++) {
+        var c = ca[i];
+        while (c.charAt(0)==' ') c = c.substring(1,c.length);
+        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+    }
+    return null;
+}
 

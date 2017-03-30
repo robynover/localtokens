@@ -17,6 +17,8 @@ models.forEach(function(model) {
 
 // describe relationships
 (function(m) {
+
+
   m.ledger.belongsTo(m.user, { foreignKey: {name: 'sender_id'} }); // creates senderId col
   m.ledger.belongsTo(m.user, { foreignKey: {name: 'receiver_id',allowNull: false} }); // creates receiverId col
   m.ledger.belongsToMany(m.coin,{ through: 'ledger_coin'});
@@ -25,6 +27,31 @@ models.forEach(function(model) {
   m.notification.belongsTo(m.user,{as: 'receiver'}); //receiver_id col
   m.notification.belongsTo(m.user,{as: 'sender'}); //sender_id col
   m.notification.belongsTo(m.ledger,{as: 'ledger'}); //ledger_id col
+
+  // trigger/hook
+  m.ledger.afterCreate('notify',function(ledger, options) {
+    return m.user.findById(ledger.sender_id,{
+      //attributes: ['username']
+    }).then(u=>{
+        var obj = {
+          receiver_id:ledger.receiver_id,
+          sender_id: ledger.sender_id,
+          transaction_date: ledger.created_at,
+          ledger_id: ledger.id,
+          amount: ledger.amount
+        }
+        if (u){ //if it had a sender_id, get the user attached to it
+            obj.sender_username = u.username;
+        }
+
+        return m.notification.create(obj,
+        {
+          transaction: options.transaction
+        });
+    });
+
+    
+  });
 })(module.exports);
 
 // export connection
