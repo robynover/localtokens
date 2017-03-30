@@ -74,16 +74,13 @@ if (typeof validate !== 'undefined'){
     validate.async({username:this.value}, usernameConstraints).then(success,error);
   });
 
-  // Confirm password not working with validate.js. Doing it by hand
+  // Confirm-password not working with validate.js. Doing it by hand
   $('input[name="password_confirm"]').blur(function(){
     if (this.value === $('input[name="password"]')[0].value){
       console.log('passwords match');
-      //$(this).parent().next().text('');
       $(this).parent().parent().find('.field-validation.password_confirm').text('');
     } else {
       console.log('no match');
-      //console.log($('input[name="password"]')[0].value);
-      //$(this).parent().next().text('Passwords do not match');
       $(this).parent().parent().find('.field-validation.password_confirm').text('Passwords do not match');
     }
   });
@@ -114,10 +111,10 @@ if (typeof validate !== 'undefined'){
               msg += fieldNames[field] + ' ';
             //}
             msg += v[0];
-            //$(this).parent().next().text(msg);
+            
             $(this).parent().parent().find('.field-validation.'+field).text(msg);
           } else {
-            //$(this).parent().next().text('');
+            
             $(this).parent().parent().find('.field-validation.'+field).text('');
           }
         }   
@@ -125,26 +122,27 @@ if (typeof validate !== 'undefined'){
     });
   } // end for
 
+  // one last check on submit
+  $('#signup').on('submit', function(e){
+      e.preventDefault();
+      var formValues = validate.collectFormValues(form);
+      var result = validate(formValues,constraints);
+      console.log(result);
+      if (typeof result === 'object'){
+        // there are errors
+        var msg = '';
+        for (var field in result){
+          msg += result[field] + ' ';
+        }
+        $('.field-validation.submit').text(msg);
+      } else {
+        // no errors. submit
+        this.submit();
+      }
+  });
+
 } // end if validate
 
-// one last check on submit
-$('#signup').on('submit', function(e){
-    e.preventDefault();
-    var formValues = validate.collectFormValues(form);
-    var result = validate(formValues,constraints);
-    console.log(result);
-    if (typeof result === 'object'){
-      // there are errors
-      var msg = '';
-      for (var field in result){
-        msg += result[field] + ' ';
-      }
-      $('.field-validation.submit').text(msg);
-    } else {
-      // no errors. submit
-      this.submit();
-    }
-});
 
 /* message board */
 
@@ -225,6 +223,14 @@ $('#new-msg-form').on('submit', function(e){
   this.submit();
 });
 
+// message upload form
+$('#photo-upload').on('change',function(){
+  if (this.files[0].size/1000000 > 4){
+    alert('That file is too large. Please choose a file less than 4MB');
+  }
+});
+
+/* send tokens */
 $('.sendtokens form #receiver').on('blur', function(){
   var receiver = $(this).val();
   $.ajax({
@@ -257,12 +263,7 @@ $('.sendtokens form').on('submit',function(e){
   this.submit();
 });
 
-// message upload form
-$('#photo-upload').on('change',function(){
-  if (this.files[0].size/1000000 > 4){
-    alert('That file is too large. Please choose a file less than 4MB');
-  }
-});
+
 
 // load dashboard widgets
 if ( $('.dashboard').length > 0){
@@ -282,7 +283,7 @@ if ( $('.dashboard').length > 0){
     }
   });
 
-  // num transactions
+  // number of transactions
   $.ajax({
     url: "/api/user/transactions/count"
   }).done(function(data){
@@ -310,11 +311,13 @@ if ( $('.dashboard').length > 0){
 
 }
 
-var lastSeen = 55;
+// notifications //
+
+var lastSeen;
 var cb = function(p){
   lastSeen = p;
 }
-// notifications
+
 $.ajax({
   url:"/api/user/notifications"
 }).done(function(data){

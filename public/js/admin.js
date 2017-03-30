@@ -6,7 +6,7 @@ $('#user-activate').on('click',function(){
 			users.push(parseInt($(checkboxes[i]).val()));
 		}
 	}
-	console.log(users);
+
 	if (users.length > 0){
 		$.ajax({
 			method: 'POST',

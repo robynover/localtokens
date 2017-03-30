@@ -161,7 +161,7 @@ module.exports = function(express){
 				  	gm(req.file.path).size(function (err, size) {
 				  		if (!err){
 				  			//console.log(size);
-				  	    	var orientation = size.width > size.height ? 'wide' : 'tall'
+				  	    	var orientation = size.width > size.height ? 'wide' : 'tall';
 				  	    	//console.log(this);
 
 				  	    	var w = null;
@@ -230,17 +230,15 @@ module.exports = function(express){
 			} else {
 				res.json({success:true});
 			}
-		})
-	})
+		});
+	});
 
 	router.post('/post/edit/:id',function(req,res,next){
 		Post.findById(req.params.id, function (err, doc){
-			console.log("DOC---------");
-			console.log(doc);
+			
 			if (err){
-				console.log("ERR--------------");
 				console.log(err);
-				res.render('500');
+				res.render('500',{msg:err});
 				return;
 			}
 			if (req.body.title){
@@ -266,6 +264,4 @@ module.exports = function(express){
 		});
 	});
 	return router;
-}
-
-//module.exports = router;
+};

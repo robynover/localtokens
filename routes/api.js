@@ -76,10 +76,11 @@ module.exports = function(express,sequelize,app){
 					// store the time of the most recent record
 					var last_seen = n[0].transaction_date.getTime();
 					for (var i in n){
+						var amount;
 						if (n[i].amount == 1){
-							var amount = "1 token";
+							amount = "1 token";
 						} else {
-							var amount = n[i].amount.toString() + " tokens";
+							amount = n[i].amount.toString() + " tokens";
 						}
 						var obj = {};
 						obj.date = n[i].transaction_date;
@@ -95,14 +96,14 @@ module.exports = function(express,sequelize,app){
 				} else {
 					res.json({error:'no results'});
 				}
-			})
+			});
 			/*Notification.getUserNotifications(req.user.id).then(n=>{
 				
 			})*/
 		} else {
 			res.json({error:'user not logged in'});
 		}
-	})
+	});
 
 	router.get('/posts/recent',function(req,res){
 		if (req.user){
@@ -121,5 +122,4 @@ module.exports = function(express,sequelize,app){
 
 
 	return router;
-}
-//module.exports = router;
+};

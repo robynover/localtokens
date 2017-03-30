@@ -73,7 +73,7 @@ module.exports = function(express,sequelize,app){
 		    	loggedin:true,
 		    	username:req.user.username,
 		    	is_admin: req.user.is_admin
-		    }
+		    };
 		    res.render('transact',context);
 		} else {
 		    // not logged in
@@ -82,6 +82,4 @@ module.exports = function(express,sequelize,app){
 		
 	});
 	return router;
-}
-
-//module.exports = router;
+};

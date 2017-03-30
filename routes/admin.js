@@ -142,7 +142,7 @@ module.exports = function(express,sequelize,app){
 				res.render('bank',context);
 			});
 
-		})
+		});
 
 	});
 
@@ -217,9 +217,9 @@ module.exports = function(express,sequelize,app){
 			res.json({ok:true});
 		}).catch(err=>{
 			res.json({ok:false});
-		})
+		});
 
 	});
 
 	return router;
-}
+};

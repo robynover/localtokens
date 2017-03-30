@@ -105,5 +105,4 @@ module.exports = function(express,sequelize,app){
 	});
 
 	return router;
-}
-//module.exports = router;
+};

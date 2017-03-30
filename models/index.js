@@ -39,7 +39,7 @@ models.forEach(function(model) {
           transaction_date: ledger.created_at,
           ledger_id: ledger.id,
           amount: ledger.amount
-        }
+        };
         if (u){ //if it had a sender_id, get the user attached to it
             obj.sender_username = u.username;
         }
