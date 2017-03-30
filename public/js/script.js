@@ -6,7 +6,6 @@ if (typeof validate !== 'undefined'){
           url: "/api/user/exists?u="+value
         }).done(function(data){
           if (data.success === true){
-            console.log('user exists -- ajax');
             resolve('already exists');
           } else {
             resolve();
@@ -311,19 +310,24 @@ if ( $('.dashboard').length > 0){
 
 }
 
+var lastSeen = 55;
+var cb = function(p){
+  lastSeen = p;
+}
 // notifications
 $.ajax({
   url:"/api/user/notifications"
 }).done(function(data){
-  //console.log(data);
+
   if (data.success){
+     
     // if there is a new record, show the badge 
-    //  and set new cookie to indicate that it's been seen
-    if (data.last_seen > parseInt(readCookie('last_notify')) ){
+    if (parseInt(data.last_seen) > parseInt(readCookie('last_notify')) ){
+      console.log('new info');
       $('.button-badge').show();
-      var expiry = new Date();
-      expiry.setTime(date.getTime() + (30 * 24 * 60 * 60 * 1000));
-      document.cookie = "last_notify:"+data.last_seen+"; expires="+expiry+"; path=/";
+     
+      //pass data in to callback so it can set lastSeen var
+      cb(data.last_seen);  
     }
     
     var container = $('<ul>');
@@ -341,15 +345,15 @@ $.ajax({
   }
 });
 
-$('.alertbell').mousedown(function(){
+$('.alertbell').on('mousedown',null, lastSeen, function(e){
     $('nav.topnav .dropdown').toggle();
-});
-$('.alertbell').mouseup(function(){
     $('.button-badge').hide();
- 
-    // 
-    // mark alerts for deletion in db??
+    console.log(e.data);
+    // set cookie
+    createCookie('last_notify',lastSeen,30);
+
 });
+
 
 function readCookie(name) {
     var nameEQ = name + "=";
@@ -360,5 +364,14 @@ function readCookie(name) {
         if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
     }
     return null;
+}
+function createCookie(name,value,days) {
+    var expires = "";
+    if (days) {
+        var date = new Date();
+        date.setTime(date.getTime() + (days*24*60*60*1000));
+        expires = "; expires=" + date.toUTCString();
+    }
+    document.cookie = name + "=" + value + expires + "; path=/";
 }
 
