@@ -17,11 +17,11 @@ module.exports = function(express,sequelize,app){
 
 	router.get('/',function(req,res){
 		var context = {};
-		context.msg = "Hello and welcome";
 		context.layout = "home";
 		if (req.user){
 			context.username = req.user.username;
 			context.loggedin = true;
+			context.is_admin = req.user.is_admin;
 		}
 		res.render('generic',context);
 	});

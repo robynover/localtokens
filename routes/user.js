@@ -66,8 +66,10 @@ module.exports = function(express,sequelize,app){
 						var context = {};
 						context.pagetitle = u.username;
 						context.balance = ct[0].count;
-						context.username = u.username;
+						context.profile_user = u.username;
 						context.loggedin = true;
+						context.username = req.user.username;
+						context.is_admin = req.user.is_admin;
 						res.render('profile',context);
 						
 					});

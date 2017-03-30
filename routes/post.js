@@ -106,6 +106,7 @@ module.exports = function(express){
 							context.pagetitle = "Community Posts";
 							context.loggedin = true;
 							context.username = req.user.username;
+							context.is_admin = req.user.is_admin;
 							if (msgs[msgs.length - 1].datetime.getTime() != lastDate.getTime()){
 								context.startdate = msgs[msgs.length - 1].datetime.toISOString();
 							}
@@ -130,6 +131,7 @@ module.exports = function(express){
 		var context = {};
 		context.loggedin = true;
 		context.username = req.user.username;
+		context.is_admin = req.user.is_admin;
 		res.render('messageform',context);
 	});
 
@@ -216,6 +218,7 @@ module.exports = function(express){
 			doc.loggedin = true;
 			doc.author = doc.username;
 			doc.username = req.user.username;
+			doc.is_admin = req.user.is_admin;
 			res.render('post',doc);
 		});
 	});
