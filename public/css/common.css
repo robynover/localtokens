@@ -99,9 +99,10 @@ nav.topnav {
     background-color: #fff;
     box-shadow: #ccc 1px 1px 5px;
     z-index: 1;
-    right: 9.5%;
     padding: 0 1rem;
-    display: none; }
+    display: none;
+    width: 24rem;
+    left: -12rem; }
     nav.topnav .dropdown ul {
       padding: 1rem 0;
       margin: 0; }

@@ -104,6 +104,11 @@ module.exports = function(express,sequelize,app){
 					context.page = pg;
 					context.total_entries = total_entries;
 					context.total_pages = total_pages;
+					context.loggedin = true;
+					context.username = req.user.username;
+					if (req.user.is_admin){
+						context.is_admin = true;
+					}
 					res.render('transactions',context);
 				});
 			});
