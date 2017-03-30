@@ -315,11 +315,16 @@ if ( $('.dashboard').length > 0){
 $.ajax({
   url:"/api/user/notifications"
 }).done(function(data){
-  console.log(data);
+  //console.log(data);
   if (data.success){
-    //if (!readCookie('alertseen')){
+    // if there is a new record, show the badge 
+    //  and set new cookie to indicate that it's been seen
+    if (data.last_seen > parseInt(readCookie('last_notify')) ){
       $('.button-badge').show();
-    //}
+      var expiry = new Date();
+      expiry.setTime(date.getTime() + (30 * 24 * 60 * 60 * 1000));
+      document.cookie = "last_notify:"+data.last_seen+"; expires="+expiry+"; path=/";
+    }
     
     var container = $('<ul>');
     for (var i in data.notifications){
@@ -341,10 +346,7 @@ $('.alertbell').mousedown(function(){
 });
 $('.alertbell').mouseup(function(){
     $('.button-badge').hide();
-    // set cookie to indicate that it's been seen
-    // var date = new Date();
-    // date.setTime(date.getTime() + (60*60*1000));
-    // document.cookie = "alertseen=true; expires="+date+"; path=/";
+ 
     // 
     // mark alerts for deletion in db??
 });

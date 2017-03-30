@@ -1,4 +1,5 @@
 "use strict";
+
 module.exports = function(express){
 
 	//var express = require('express');
@@ -77,6 +78,7 @@ module.exports = function(express){
 		var findFirst = Post.find()
 			.limit(1)
 			.sort({datetime:-1})
+			.lean()
 			.exec((err,r)=>{
 				firstDate = r[0].datetime;
 			});
@@ -84,6 +86,7 @@ module.exports = function(express){
 		var findLast = Post.find()
 				.limit(1)
 				.sort({datetime:1})
+				.lean()
 				.exec((err,r)=>{
 					lastDate = r[0].datetime;
 				});

@@ -72,6 +72,9 @@ module.exports = function(express,sequelize,app){
 			}).then(n=>{
 				if (n.length > 0){
 					var notifications = [];
+					
+					// store the time of the most recent record
+					var last_seen = n[0].transaction_date.getTime();
 					for (var i in n){
 						if (n[i].amount == 1){
 							var amount = "1 token";
@@ -88,7 +91,7 @@ module.exports = function(express,sequelize,app){
 						notifications.push(obj);
 					}
 
-					res.json({success:true,notifications:notifications});
+					res.json({success:true,notifications:notifications,last_seen:last_seen});
 				} else {
 					res.json({error:'no results'});
 				}
