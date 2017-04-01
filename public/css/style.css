@@ -1,16 +1,22 @@
 nav.menu {
-  background: linear-gradient(#cdeef8, #fafdfe); }
+  /*background: linear-gradient(lighten($basecolor,40%),lighten($basecolor,50%));*/
+  background: rgba(242, 242, 242, 0.7);
+  box-shadow: 0 2px 3px #e6e5e5;
+  border-bottom: 1px solid #d6d6d6; }
   nav.menu a {
     text-decoration: none;
     color: #696969;
     text-transform: uppercase; }
   nav.menu a:hover {
     color: #1EAEDB; }
+  nav.menu li {
+    padding-left: 0; }
 
 nav ul {
   list-style-type: none;
   padding: 1.5rem 0;
-  font-family: 'Open Sans', sans-serif; }
+  font-family: 'Open Sans', sans-serif;
+  margin: 0; }
 
 nav li {
   display: inline;
@@ -22,7 +28,8 @@ nav li {
   color: red; }
 
 .column, .columns {
-  border: 1px solid #bcbcbc;
+  /* border: 1px solid darken(#efefef,20%); */
+  border: 1px solid #d6d6d6;
   padding: 1rem;
   border-radius: 5px; }
 
@@ -31,7 +38,7 @@ nav li {
   padding: 0; }
 
 .subcolumn {
-  border: 1px solid #bcbcbc;
+  border: 1px solid #d6d6d6;
   padding: 1rem;
   margin-bottom: 3.75rem;
   border-radius: 5px; }
@@ -45,6 +52,10 @@ p.balance {
 
 h4.subcolumn-heading {
   text-align: center; }
+
+h2 {
+  margin-bottom: 3.8rem;
+  margin-top: 4rem; }
 
 .dashboard .column, .dashboard .columns, .dashboard .subcolumn {
   box-shadow: #ccc 1px 1px 5px; }

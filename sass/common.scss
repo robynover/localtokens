@@ -247,6 +247,9 @@ nav.topnav{
 	}
 }
 .messageboard{
+	h2{
+		margin-bottom: 0;
+	}
 	h4{
 		margin-bottom: 0;
 		margin-top: 1.5rem;
@@ -271,9 +274,11 @@ nav.topnav{
 	    height: 200px;
 	    line-height: 1.3;
 	    width: 660px;
+	    font-family: "Open Sans", sans-serif;
 	}
 	input[type="text"]{
 		width: 660px;
+		font-family: "Open Sans", sans-serif;
 	}
 	#editmodal{
 		display:none;
@@ -311,7 +316,7 @@ nav.topnav{
 		height: 100px;
 	}
 	.postlistwrap:nth-child(even){
-		background-color: #ececec;
+		background: rgba(242,242,242,0.7);
 	}
 	.new-msg-btn{
 		text-align: right;

@@ -279,7 +279,7 @@ if ( $('.dashboard').length > 0){
         var li = $('<li><a href="/messageboard/post/view/'+r._id+'">'+r.title+'</a></li>');
         content.append(li);
       }
-      $('#info3').append(content);
+      $('#info3 .dashboard-posts').append(content);
     }
   });
 

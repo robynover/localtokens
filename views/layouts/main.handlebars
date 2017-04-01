@@ -3,7 +3,7 @@
 <head>
 
   <meta charset="utf-8">
-  <title>{{pagetitle}} Local Tokens</title>
+  <title>{{pagetitle}}{{#if pagetitle}} | {{/if}}Local Tokens</title>
  
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -31,7 +31,7 @@
       {{#if loggedin}}
         <li><a href="/user/dashboard">Dashboard</a></li>
         <li><a href="/user">Your profile</a></li>
-        <li class="sendtab"><a href="/transact/send">Send Tokens</a></li>
+        <li><a href="/transact/send">Send Tokens</a></li>
         <li><a href="/messageboard">Community</a></li>
       {{/if}}
     </ul>   

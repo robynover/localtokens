@@ -1,7 +1,10 @@
 $basecolor: #1EAEDB;
 
 nav.menu{
-	background: linear-gradient(lighten($basecolor,40%),lighten($basecolor,50%));
+	/*background: linear-gradient(lighten($basecolor,40%),lighten($basecolor,50%));*/
+	background: rgba(242,242,242,0.7);
+	box-shadow: 0 2px 3px lighten(#ccc,10%);
+	border-bottom: 1px solid rgb(214, 214, 214);
 	
 	a{
 		text-decoration: none;
@@ -11,12 +14,16 @@ nav.menu{
 	a:hover{
 		color: $basecolor;
 	}
+	li{
+		padding-left: 0;
+	}
 }
 nav{
 	ul{
 		list-style-type: none;
 		padding: 1.5rem 0;
 		font-family: 'Open Sans', sans-serif;
+		margin: 0;
 	}
 	li{
 		display:inline;
@@ -35,7 +42,8 @@ nav{
 	}
 }
 .column,.columns{
-	border: 1px solid darken(#efefef,20%);
+	/* border: 1px solid darken(#efefef,20%); */
+	border: 1px solid rgba(214, 214, 214, 1);
 	padding: 1rem;
 	border-radius: 5px;
 
@@ -45,7 +53,7 @@ nav{
 	padding: 0;
 }
 .subcolumn{
-	border: 1px solid darken(#efefef,20%);
+	border: 1px solid rgba(214, 214, 214, 1);
 	padding: 1rem; 
 	margin-bottom: 3.75rem;
 	border-radius: 5px;
@@ -60,6 +68,10 @@ p.balance{
 h4.subcolumn-heading{
 	text-align: center;
 }
+h2{
+	margin-bottom: 3.8rem;
+	margin-top: 4rem;
+}
 .dashboard{
 	.column,.columns,.subcolumn{
 		box-shadow: #ccc 1px 1px 5px;
@@ -70,6 +82,7 @@ h4.subcolumn-heading{
 	table{
 		width: 100%;
 	}
+	
 }
 
 

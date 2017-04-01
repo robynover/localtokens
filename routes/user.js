@@ -37,6 +37,7 @@ module.exports = function(express,sequelize,app){
 						context.ledger = l;
 						context.loggedin = true;
 						context.success = req.flash('success');
+						context.pagetitle = "Dashboard";
 						res.render('dashboard',context);
 					});
 				});
