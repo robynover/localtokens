@@ -20,4 +20,9 @@ body.admin {
   body.admin .bestow-on {
     display: inline; }
 
+/* media queries */
+@media (max-width: 719px) {
+  body.admin nav.menu li {
+    display: block; } }
+
 /*# sourceMappingURL=admin.css.map */

@@ -326,7 +326,6 @@ $.ajax({
      
     // if there is a new record, show the badge 
     if (parseInt(data.last_seen) > parseInt(readCookie('last_notify')) ){
-      console.log('new info');
       $('.button-badge').show(); 
     }
     //pass data in to callback so it can set lastSeen var

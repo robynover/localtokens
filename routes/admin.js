@@ -19,13 +19,12 @@ module.exports = function(express,sequelize,app){
 					next();
 				} else {
 					res.status(401);
-					res.send('You are not authorized to view this page');
+					res.render('generic',{msg:'You are not authorized to view this page'});
 				}	
 			});
 		} else {
-			//res.send(401, 'Unauthorized');
 			res.status(401);
-			res.send('You are not authorized to view this page');
+			res.render('generic',{msg:'You are not authorized to view this page'});
 		}	
 	});
 
@@ -172,14 +171,17 @@ module.exports = function(express,sequelize,app){
 					}).catch(err=>{
 						console.log('ERROR');
 						console.log(err);
-						res.send('Error '+ err);
+						res.status(500);
+						res.render('generic',{msg:err});
 					});
 				} else {
-					res.send("no user id");
+					res.status(422);
+					res.render('generic',{msg:'No user id supplied'});
 				}
 			});	
 		} else {
-			res.send('You can only bestow 10 tokens max at one time');
+			res.status(422);
+			res.render('generic',{msg:'You can only bestow 10 tokens max at one time'});
 		}
 		
 	});

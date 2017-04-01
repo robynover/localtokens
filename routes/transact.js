@@ -20,7 +20,8 @@ module.exports = function(express,sequelize,app){
 		    let receiver = req.body.receiver;
 		    let amt = parseInt(req.body.amt);
 		    if (sender_id <= 0 || amt <= 0){
-		    	res.send('invalid values for transaction');
+		    	res.status(422);
+		    	res.render('generic',{msg:'Invalid values for transaction'});
 		    	return;
 		    }
 		    // Verify receiver username
@@ -35,24 +36,26 @@ module.exports = function(express,sequelize,app){
 		    				word += 's';
 		    			}
 		    			var msg = 'Successfully sent ' + amt + ' ' + word + ' to ' + receiver;
-		    			//res.render('generic',{msg:msg,loggedin:true});
 		    			req.flash('success', msg);
 		    			res.redirect('/user/dashboard');
 		    		}).catch(err=>{
-		    			res.send('Error '+ err);
-		    			console.log(err.stack);
+		    			//console.log(err.stack);
+		    			res.status(422);
+		    			res.render('generic',{msg:err});
 		    		});
 
 		    	} else {
 		    		throw Error;
 		    	}
 		    }).catch(err=>{
-		    	res.send('invalid username for receiver');
+		    	res.status(422);
+		    	res.render('generic',{msg:'Invalid username for receiver'});
 		    });
 		    
 		} else {
 		    // not logged in
-		    res.send("You must be logged in to send tokens");
+		    res.status(401);
+			res.render('generic',{msg:'You must be logged in to send tokens'});
 		}
 		
 	});
@@ -69,7 +72,8 @@ module.exports = function(express,sequelize,app){
 		    res.render('transact',context);
 		} else {
 		    // not logged in
-		    res.send("You must be logged in to send tokens");
+		    res.status(401);
+			res.render('generic',{msg:'You must be logged in to send tokens'});
 		}
 		
 	});

@@ -83,17 +83,24 @@ module.exports = function(express,sequelize,app){
 			var uid = req.user.id;
 			User.findById(req.user.id).then(u=>{
 				u.getUserLedger(perPg,offset).then(l=>{
-					var total_entries = l[0].total_entries;
-					var total_pages = Math.ceil(l[0].total_entries / perPg);
-					pg = pg + 1;
+					/*if (l.length < 1){
+						throw new Error('There are currently no records in the ledger');
+					} */
 					var context = {};
-					context.ledger = l;
-					context.loggedin = true;
-					if (pg + 1 <= total_pages){
-						context.nextpage = pg + 1;
-					}
-					if (pg - 1 > 0){
-						context.prevpage = pg - 1;
+					var total_entries = 0;
+					var total_pages = 0;
+					if (l.length > 0){
+						total_entries = l[0].total_entries;
+						total_pages = Math.ceil(l[0].total_entries / perPg);
+						pg = pg + 1;
+						context.ledger = l;
+						if (pg + 1 <= total_pages){
+							context.nextpage = pg + 1;
+						}
+						if (pg - 1 > 0){
+							context.prevpage = pg - 1;
+						}
+						
 					}
 					context.page = pg;
 					context.total_entries = total_entries;
@@ -104,6 +111,10 @@ module.exports = function(express,sequelize,app){
 						context.is_admin = true;
 					}
 					res.render('transactions',context);
+				})
+				.catch(err=>{
+					//res.status(422);
+					res.render('generic',{msg:err});
 				});
 			});
 			

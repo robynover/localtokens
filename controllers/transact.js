@@ -14,7 +14,7 @@ module.exports = function(sender,receiver,amt,app,sequelize){
       } else {
         // Create ledger record
         return Ledger.create({
-          receiver_id: 2,
+          receiver_id: receiver,
           sender_id: sender,
           amount: amt
         },

@@ -4,7 +4,7 @@ module.exports = function(express,sequelize,app){
 	//var express = require('express');
 	var router = express.Router();
 	var passport = require('passport');
-
+	var Sequelize = require('sequelize'); // called staticly in validation
 	var User = app.get('models').user;
 
 	var striptags = require('striptags');

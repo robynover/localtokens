@@ -80,7 +80,14 @@ module.exports = function(express){
 			.sort({datetime:-1})
 			.lean()
 			.exec((err,r)=>{
-				firstDate = r[0].datetime;
+				if (err){
+					res.render('generic',{msg:err});
+				}
+				if (r[0]){
+					console.log(r);
+					firstDate = r[0].datetime;
+				}
+				
 			});
 		
 		var findLast = Post.find()
@@ -88,7 +95,14 @@ module.exports = function(express){
 				.sort({datetime:1})
 				.lean()
 				.exec((err,r)=>{
-					lastDate = r[0].datetime;
+					if (err){
+						res.render('generic',{msg:err});
+					}
+					if (r[0]){
+						console.log(r);
+						lastDate = r[0].datetime;
+					}
+					
 				});
 
 		findFirst.then(()=>{
@@ -244,7 +258,12 @@ module.exports = function(express){
 			
 			if (err){
 				console.log(err);
+				res.status(500);
 				res.render('500',{msg:err});
+				return;
+			}
+			if (!doc){
+				res.json({success:false});
 				return;
 			}
 			if (req.body.title){
