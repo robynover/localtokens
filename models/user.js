@@ -2,7 +2,8 @@
 
 module.exports = function(sequelize, DataTypes) {
 
-	var Config = require('../config.js');
+	var Config = require('../config.js')[process.env.NODE_ENV];
+
 	const crypto = require('crypto');
 
 	var User = sequelize.define('user', {

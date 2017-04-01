@@ -313,7 +313,7 @@ if ( $('.dashboard').length > 0){
 
 // notifications //
 
-var lastSeen;
+var lastSeen = 1;
 var cb = function(p){
   lastSeen = p;
 }
@@ -327,11 +327,10 @@ $.ajax({
     // if there is a new record, show the badge 
     if (parseInt(data.last_seen) > parseInt(readCookie('last_notify')) ){
       console.log('new info');
-      $('.button-badge').show();
-     
-      //pass data in to callback so it can set lastSeen var
-      cb(data.last_seen);  
+      $('.button-badge').show(); 
     }
+    //pass data in to callback so it can set lastSeen var
+    cb(data.last_seen); 
     
     var container = $('<ul>');
     for (var i in data.notifications){

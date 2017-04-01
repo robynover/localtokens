@@ -3,8 +3,6 @@ module.exports = function(express,sequelize,app){
 
 	//var express = require('express');
 	var router = express.Router();
-
-	var Config = require('../config.js');
 	
 	var User = app.get('models').user;
 	var Ledger = app.get('models').ledger;

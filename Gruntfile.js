@@ -57,15 +57,24 @@ module.exports = function(grunt) {
         files: '**/*.scss',
         tasks: ['sass']
       }
+    },
+    uglify: {
+      dist:{
+        files: {
+          //'public/js/script.min.js':'public/js/script.js'
+        }
+      }
     }
+
   });
  
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-bower');
   grunt.loadNpmTasks('grunt-contrib-watch');
+  grunt.loadNpmTasks('grunt-contrib-uglify');
 
   grunt.registerTask('default', ['jshint','bower','sass']);
-  grunt.registerTask('setup', ['bower','sass']);
+  grunt.registerTask('setup', ['bower','sass','uglify']);
   grunt.registerTask('test', ['jshint']);
 
 };

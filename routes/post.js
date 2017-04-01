@@ -5,7 +5,7 @@ module.exports = function(express){
 	//var express = require('express');
 	var router = express.Router();
 
-	var Config = require('../config.js');
+	var Config = require('../config.js')[process.env.NODE_ENV];
 	//DB
 	// mongoose
 	var mongoose = require('mongoose');
@@ -210,21 +210,27 @@ module.exports = function(express){
 	});
 
 	// show a post
-	router.get('/post/view/:id',function(req, res){
+	router.get('/post/view/:id',function(req, res, next){
 		Post.findById(req.params.id, function (err, doc){
 			//console.log(doc);
 			// naming conflict: 'username' is name of author in doc, 
 			// but needs to be name of logged in user
-			doc.loggedin = true;
-			doc.author = doc.username;
-			doc.username = req.user.username;
-			doc.is_admin = req.user.is_admin;
-			res.render('post',doc);
+			if (doc){
+				doc.loggedin = true;
+				doc.author = doc.username;
+				doc.username = req.user.username;
+				doc.is_admin = req.user.is_admin;
+				res.render('post',doc);
+			} else {
+				next();
+			}
+
 		});
 	});
 
 	router.post('/post/delete/:id',function(req,res){
 		Post.findByIdAndRemove(req.params.id,function(err){
+			//console.log(err);
 			if (err){
 				res.json({success:false});
 			} else {
@@ -254,12 +260,11 @@ module.exports = function(express){
 		  			console.log(err);
 		  			res.json({success:false});
 		  		} else {
-		  			console.log("saved");
-		  			console.log(doc);
+		  			//console.log("saved");
+		  			//console.log(doc);
 		  			res.json({success:true});
 		  		}
 		  	});
-		  	//res.send("Saved reply");
 		  	
 		});
 	});

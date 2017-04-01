@@ -3,15 +3,7 @@ module.exports = function(express,sequelize,app){
 
 	//var express = require('express');
 	var router = express.Router();
-
-	var Config = require('../config.js');
-	//DB
-	//var Sequelize = require('sequelize');
-	//var sequelize = new Sequelize(Config.pg);
-	// models
-	// var User = sequelize.import('../models/user.js');
-	// var Coin = sequelize.import('../models/coin.js');
-	// var Ledger = sequelize.import('../models/ledger.js');
+	
 	var User = app.get('models').user;
 	var Coin = app.get('models').coin;
 	var Ledger = app.get('models').ledger;
@@ -22,7 +14,7 @@ module.exports = function(express,sequelize,app){
 	// ======= USER routes ======= //
 
 	router.get('/',function(req,res,next){
-		console.log(req.user);
+		//console.log(req.user);
 		if (req.user){
 			res.redirect('/user/profile/'+req.user.username);
 		} else {

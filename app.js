@@ -8,7 +8,7 @@ var crypto = require('crypto');
 app.set('port', process.env.PORT || 3000);
 
 // config
-var Config = require('./config.js');
+var Config = require('./config.js')[app.get('env')];
 
 var passport = require('passport');
 var flash = require('connect-flash');
@@ -52,11 +52,10 @@ app.use(passport.session());
 
 //DB
 var Sequelize = require('sequelize');
-var sequelize = new Sequelize(Config.pg,{logging: false});
+var sequelize = new Sequelize(Config.pg,{logging: false,timezone:'-04:00'});
 
 // models
-//var models = require('./models');
-app.set('models', require('./models'));
+app.set('models', require('./models')(sequelize));
 var User = app.get('models').user;
 
 //var User = models.user;
@@ -144,3 +143,4 @@ app.listen(app.get('port'), function(){
 	console.log( 'Express started on http://localhost:' +
     app.get('port') + '; press Ctrl-C to terminate.' );
 });
+module.exports = app;

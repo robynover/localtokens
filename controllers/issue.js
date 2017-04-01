@@ -1,23 +1,6 @@
 "use strict";
 
-// config
-var Config = require('../config.js');
-
-// issue new coin from bank to user
-
-var Sequelize = require('sequelize');
-var sequelize = new Sequelize(Config.pg);
-
-// var Coin = sequelize.import('../models/coin.js');
-// var User = sequelize.import('../models/user.js');
-// var Ledger = sequelize.import('../models/ledger.js');
-
-// var models = require('../models');
-// var Coin = models.coin;
-// var User = models.user;
-// var Ledger = models.ledger;
-
-module.exports = function(userId,amt,app){
+module.exports = function(userId,amt,app,sequelize){
 	var User = app.get('models').user;
 	var Coin = app.get('models').coin;
 	var Ledger = app.get('models').ledger;

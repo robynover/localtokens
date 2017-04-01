@@ -1,22 +1,22 @@
 "use strict";
 
-var Sequelize = require("sequelize");
-var Config = require('../config.js');
-var sequelize = new Sequelize(Config.pg); //,{logging: false}
-
-// load models
-var models = [
-  'coin',
-  'ledger',
-  'notification',
-  'user'
-];
-models.forEach(function(model) {
-  module.exports[model] = sequelize.import(__dirname + '/' + model);
-});
+module.exports = function(sequelize){
+  // load models
+  var models = [
+    'coin',
+    'ledger',
+    'notification',
+    'user'
+  ];
+  var m = {};
+  models.forEach(function(model) {
+    //module.exports[model] = sequelize.import(__dirname + '/' + model);
+    
+    m[model] = sequelize.import(__dirname + '/' + model);
+  });
 
 // describe relationships
-(function(m) {
+//(function(m) {
 
 
   m.ledger.belongsTo(m.user, { foreignKey: {name: 'sender_id'} }); // creates senderId col
@@ -52,7 +52,8 @@ models.forEach(function(model) {
 
     
   });
-})(module.exports);
-
+  return m;
+//})(module.exports);
+};
 // export connection
-module.exports.sequelize = sequelize;
+//module.exports.sequelize = sequelize;

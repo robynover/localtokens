@@ -5,12 +5,6 @@ module.exports = function(express,sequelize,app){
 	var router = express.Router();
 	var passport = require('passport');
 
-	var Config = require('../config.js');
-	//DB
-	var Sequelize = require('sequelize');
-	//var sequelize = new Sequelize(Config.pg);
-	// models
-	//var User = sequelize.import('../models/user.js');
 	var User = app.get('models').user;
 
 	var striptags = require('striptags');

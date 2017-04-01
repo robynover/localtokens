@@ -5,3 +5,4 @@ bower_components/*
 NOTES.txt
 .gitignore
 .sass-cache/*
+test/*
