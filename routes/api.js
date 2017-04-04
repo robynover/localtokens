@@ -51,9 +51,9 @@ module.exports = function(express,sequelize,app){
 		if (req.query.u){
 			User.getByUsername(req.query.u).then(u=>{
 				if (u){
-					res.json({success:true,user_exisits:true});
+					res.json({success:true,user_exists:true});
 				} else {
-					res.json({error:'user does not exist',user_exisits:false});
+					res.json({error:'user does not exist',user_exists:false});
 				}
 			});
 		} else {

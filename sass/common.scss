@@ -378,6 +378,31 @@ table{
 	}
 }
 
+.profile{
+	.column.profile-pic{
+		position: relative;
+		border-radius: 0;
+		overflow: hidden;
+		img{
+			border: 1px solid rgba(242,242,242,1);
+			border-radius: 5px;
+			width:350px;
+		}	
+	}
+	.column,.columns{
+		border:none;
+	}
+	.profile-bal{
+		background-color: lighten(#ff0000,20%);
+		position: absolute;
+		padding: 1rem;
+		font-size: 3rem;
+		margin-top: -5rem;
+		right: -1px;
+		line-height: 4rem;
+	}
+}
+
 
 /* media queries */
 @media (max-width: 719px) {

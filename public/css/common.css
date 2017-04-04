@@ -367,6 +367,27 @@ table {
 .dashboard ul {
   list-style-type: none; }
 
+.profile .column.profile-pic {
+  position: relative;
+  border-radius: 0;
+  overflow: hidden; }
+  .profile .column.profile-pic img {
+    border: 1px solid #f2f2f2;
+    border-radius: 5px;
+    width: 350px; }
+
+.profile .column, .profile .columns {
+  border: none; }
+
+.profile .profile-bal {
+  background-color: #ff6666;
+  position: absolute;
+  padding: 1rem;
+  font-size: 3rem;
+  margin-top: -5rem;
+  right: -1px;
+  line-height: 4rem; }
+
 /* media queries */
 @media (max-width: 719px) {
   nav.menu li {

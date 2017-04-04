@@ -1,20 +1,45 @@
-<h2>{{profile_user}}</h2>
-<p><strong>Balance:</strong> {{balance}} {{pluralize balance 'token' 'tokens'}}</p>
+<div class="profile">
+	<h2>{{profile_user}}</h2>
+	<div class="row">
+		<div class="one-third column profile-pic">
+			<img src="/images/avatar.png">
+			<div class="profile-bal">
+				{{balance}}
+			</div>
+		</div>
+		<div class="two-thirds column">
+			<p><strong>Balance:</strong> {{balance}} {{pluralize balance 'token' 'tokens'}}</p>
+			<p>&nbsp;</p>
+			<p>This is placeholder text lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam ultricies convallis fermentum. Aenean et dui tincidunt, elementum magna at, laoreet turpis.</p>
+			<p>&nbsp;</p>
 
-{{!-- {{#if ledger}}
-<h3>Transaction Ledger</h3>
-<table>
-	<tr><th>id</th><th>date</th><th>amount</th><th>description</th><th>balance</th></tr>
-	{{#each ledger}}
-		<tr class="{{ifNegative signed_amt 'neg' 'pos'}}">
-			<td>{{id}}</td>
-			<td>{{created_at}}</td>
-			<td class="amt">{{signed_amt}}</td>
-			<td>{{description}}</td>
-			<td>{{balance}}</td>
-			
-		</tr>
-	{{/each}}
+			<div class="row">
+				<div class="column one-half">
+					<h4>Offering</h4>
+					<ul>
+						<li>Web Help</li>
+						<li>Vegan Cupcakes</li>
+						<li>Bike Loan</li>
+						<li>Gardening</li>
+					</ul>
+				</div>
+				<div class="column one-half">
+					<h4>Seeking</h4>
+					<ul>
+						<li>Cat-sitting</li>
+						<li>Apartment cleaning</li>
+						<li>Area Rug</li>
+						
+					</ul>
+				</div>
+			</div>
 
-</table>
-{{/if}} --}}
+		</div>
+	</div>
+
+	
+
+
+
+
+</div>
