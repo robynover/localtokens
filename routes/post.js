@@ -16,7 +16,7 @@ module.exports = function(express){
 	var Post = require('../models/post.js');
 
 	// for image resize and orientation
-	var gm = require('gm').subClass({imageMagick: true});
+	//var gm = require('gm').subClass({imageMagick: true});
 
 	// for file submission in forms
 	var multer  = require('multer');
@@ -84,7 +84,7 @@ module.exports = function(express){
 					res.render('generic',{msg:err});
 				}
 				if (r[0]){
-					console.log(r);
+					//console.log(r);
 					firstDate = r[0].datetime;
 				}
 				
@@ -99,7 +99,7 @@ module.exports = function(express){
 						res.render('generic',{msg:err});
 					}
 					if (r[0]){
-						console.log(r);
+						//console.log(r);
 						lastDate = r[0].datetime;
 					}
 					
@@ -154,52 +154,30 @@ module.exports = function(express){
 		var photo = null;
 		var thumb = null;
 
+		var post = new Post({
+			username: req.user.username,
+			title: req.body.title,
+			body: req.body.messagebody,
+			photo: photo,
+			thumb: thumb 
+		})
+
 		// creating a promise so mongo will wait to save if needed 
 		// (if there is no image, it saves right away)
 
 		var prom = new Promise((resolve,reject)=>{
 			if (req.file){
-				photo = '/uploads/' + req.file.filename;
-				thumb = '/uploads/thumbs/100x100/' + req.file.filename;
-
-				// --- re-save with correct orientation & resize--- //
-				gm(req.file.path)
-				.autoOrient()
-				.resize(800)  // max 800 width
-				.write('./public/uploads/'+ req.file.filename, function (err) {
-				  if (err){
-				  	console.log(err);
-				  	resolve(); //reject()?
-				  } else {
-				  	// --- create thumbnail --- //
-				  	gm(req.file.path).size(function (err, size) {
-				  		if (!err){
-				  			//console.log(size);
-				  	    	var orientation = size.width > size.height ? 'wide' : 'tall';
-				  	    	//console.log(this);
-
-				  	    	var w = null;
-				  	    	var h = null;
-				  	    	var thumbsize = 100;
-				  	    	if (orientation == 'wide'){
-				  	    		h = thumbsize;
-				  	    	} else {
-				  	    		w = thumbsize;
-				  	    	}
-				  	    	this.resize(w,h)
-				  	    		.crop(thumbsize,thumbsize,0,0)
-				  	    		.write('./public/uploads/thumbs/100x100/'+ req.file.filename, err=>{
-				  	    			if (err){
-				  	    				console.log(err);
-				  	    			} else {
-				  	    				//console.log('crop success');
-				  	    			}
-				  	    			resolve();
-				  	    		});
-				  	   	}
-				  	});
-				  }
-				});
+				post.photo = '/uploads/' + req.file.filename;
+				post.thumb = '/uploads/thumbs/100x100/' + req.file.filename;
+				var options = {
+					srcPath: './'+req.file.path,
+					destPath: './public/uploads/',
+					destName: req.file.filename,
+					thumbPath: './public/uploads/thumbs/100x100/'
+				};
+				post.convertPhotos(options,function(){
+					resolve();
+				})
 				
 			} else {
 				resolve();
@@ -208,13 +186,7 @@ module.exports = function(express){
 		
 		prom.then(()=>{
 			// Save it
-			new Post({
-				username: req.user.username,
-				title: req.body.title,
-				body: req.body.messagebody,
-				photo: photo,
-				thumb: thumb 
-			}).save(function(err){
+			post.save(function(err){
 				if (err){ console.log(err); }
 				req.flash('message', 'Posted successfully');
 				res.redirect('/messageboard');
@@ -272,7 +244,7 @@ module.exports = function(express){
 		  	
 		  	doc.body = req.body.message;
 
-		  	console.log(req.body.message);
+		  	//console.log(req.body.message);
 
 		  	doc.save(function(err,doc){
 		  		if (err){
