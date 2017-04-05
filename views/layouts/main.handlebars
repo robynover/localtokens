@@ -29,10 +29,10 @@
     <div class="container main"> 
     <ul>
       {{#if loggedin}}
-        <li><a href="/user/dashboard">Dashboard</a></li>
-        <li><a href="/user">Your profile</a></li>
-        <li><a href="/transact/send">Send Tokens</a></li>
-        <li><a href="/messageboard">Community</a></li>
+        <li {{#equal pagetitle "Dashboard"}}class="active"{{/equal}}><a href="/user/dashboard">Dashboard</a></li>
+        <li {{#equal page "profile"}}class="active"{{/equal}}><a href="/user">Your profile</a></li>
+        <li {{#equal pagetitle "Send Tokens"}}class="active"{{/equal}}><a href="/transact/send">Send Tokens</a></li>
+        <li {{#equal pagetitle "Community Posts"}}class="active"{{/equal}}><a href="/messageboard">Community</a></li>
       {{/if}}
     </ul>   
   </div>
@@ -43,6 +43,8 @@
     {{{body}}}
 		
   </div>
+  <p>&nbsp;</p>
+  <!--<footer>footer</footer>-->
 
 	<!-- JS
 	  –––––––––––––––––––––––––––––––––––––––––––––––––– -->

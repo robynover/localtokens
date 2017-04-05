@@ -2,26 +2,26 @@
 <p>{{error}}</p>
 <form action="/signup" method="post" id="signup" name="signup">
     <div class="form-field">
-        <label for="username">Username</label>
+        <label for="username">Username *</label>
         <input type="text" name="username" id="username" value="{{username}}"/>
     </div>
     <div class="field-validation username"></div>
     
 
     <div class="form-field">
-        <label for="password">Password</label>
+        <label for="password">Password *</label>
         <input type="password" name="password"/>
     </div>
     <div class="field-validation password"></div>
     
     <div  class="form-field">
-        <label for="password_confirm">Confirm Password</label>
+        <label for="password_confirm">Confirm Password *</label>
         <input type="password" name="password_confirm"/>
     </div>
     <div class="field-validation password_confirm"></div>
 
     <div class="form-field">
-        <label for="firstname">First Name</label>
+        <label for="firstname">First Name *</label>
         <input type="text" name="firstname" value="{{firstname}}"/>
     </div>
     <div class="field-validation firstname"></div>
@@ -33,7 +33,7 @@
     <div class="field-validation lastname"></div>
 
     <div class="form-field">
-        <label for="email">Email</label>
+        <label for="email">Email * </label>
         <input type="text" name="email" value="{{email}}"/>
     </div>
     <div class="field-validation email"></div>

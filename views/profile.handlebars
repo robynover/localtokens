@@ -1,4 +1,4 @@
-<div class="profile">
+<div class="profile" id="{{profile_user}}">
 	<h2>{{profile_user}}</h2>
 	<div class="row">
 		<div class="one-third column profile-pic">
@@ -16,21 +16,40 @@
 			<div class="row">
 				<div class="column one-half">
 					<h4>Offering</h4>
-					<ul>
-						<li>Web Help</li>
+					
+					<ul class="offering">
+						{{!-- <li>Web Help</li>
 						<li>Vegan Cupcakes</li>
 						<li>Bike Loan</li>
-						<li>Gardening</li>
+						<li>Gardening</li> --}}
+					
 					</ul>
+					{{#equal profile_user username}}
+					<div class="add-item">
+						<input type="text">&nbsp;
+						<a href="#" id="offering">
+							<i class="fa fa-plus-circle fa-lg" aria-hidden="true"></i>
+						</a>
+					</div>
+					{{/equal}}
 				</div>
 				<div class="column one-half">
 					<h4>Seeking</h4>
-					<ul>
-						<li>Cat-sitting</li>
+					<ul class="seeking">
+						{{!-- <li>Cat-sitting</li>
 						<li>Apartment cleaning</li>
-						<li>Area Rug</li>
+						<li>Area Rug</li> --}}
 						
 					</ul>
+					{{#equal profile_user username}}
+					<div class="add-item">
+						<input type="text">&nbsp;
+						<a href="#" id="seeking">
+							<i class="fa fa-plus-circle fa-lg" aria-hidden="true"></i>
+						</a>	
+					</div>
+					{{/equal}}
+
 				</div>
 			</div>
 

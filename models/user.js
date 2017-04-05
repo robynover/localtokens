@@ -143,6 +143,17 @@ module.exports = function(sequelize, DataTypes) {
 				  { replacements: {id:this.id,lmt:limit,offset:offset}, type: sequelize.QueryTypes.SELECT }
 				);
 			}
+			/*,
+			getUserOffering: function(){
+				return Item.find({
+					where:{user_id:this.id,offering_seeking:'offering'}
+				})
+			},
+			getUserSeeking: function(){
+				return Item.find({
+					where:{user_id:this.id,offering_seeking:'seeking'}
+				})
+			}*/
 			 
 		}
 	});

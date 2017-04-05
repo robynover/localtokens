@@ -6,12 +6,11 @@ module.exports = function(sequelize){
     'coin',
     'ledger',
     'notification',
-    'user'
+    'user',
+    'item'
   ];
   var m = {};
-  models.forEach(function(model) {
-    //module.exports[model] = sequelize.import(__dirname + '/' + model);
-    
+  models.forEach(function(model) {    
     m[model] = sequelize.import(__dirname + '/' + model);
   });
 
@@ -27,6 +26,7 @@ module.exports = function(sequelize){
   m.notification.belongsTo(m.user,{as: 'receiver'}); //receiver_id col
   m.notification.belongsTo(m.user,{as: 'sender'}); //sender_id col
   m.notification.belongsTo(m.ledger,{as: 'ledger'}); //ledger_id col
+  m.item.belongsTo(m.user,{as:'user'}); //user_id
 
   // trigger/hook
   m.ledger.afterCreate('notify',function(ledger, options) {

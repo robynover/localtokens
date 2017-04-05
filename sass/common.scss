@@ -403,6 +403,20 @@ table{
 	}
 }
 
+ul.offering, ul.seeking{
+	font-family: "Open Sans", sans-serif;
+}
+ul.offering li .fa-times, ul.seeking li .fa-times{
+	display: inline-block;
+	visibility: hidden;
+}
+ul.offering li:hover .fa-times, ul.seeking li:hover .fa-times{
+	display: inline-block;
+	visibility: visible;
+}
+.add-item input{
+	font-family: "Open Sans", sans-serif;
+}
 
 /* media queries */
 @media (max-width: 719px) {

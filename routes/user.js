@@ -58,6 +58,7 @@ module.exports = function(express,sequelize,app){
 					u.getAcctBalance().then(ct=>{
 						var context = {};
 						context.pagetitle = u.username;
+						context.page = 'profile';
 						context.balance = ct[0].count;
 						context.profile_user = u.username;
 						context.loggedin = true;

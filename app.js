@@ -57,11 +57,18 @@ var sequelize = new Sequelize(Config.pg,{logging: false,timezone:'-04:00'});
 // models
 app.set('models', require('./models')(sequelize));
 var User = app.get('models').user;
+//var Item = app.get('models').item;
 
-//var User = models.user;
-//var User = sequelize.import('./models/user.js');
-//var Coin = sequelize.import('./models/coin.js');
-//var Ledger = sequelize.import('./models/ledger.js');
+//Item.sync();
+/*Item.create({
+	offering_seeking:'offering',
+	description:'French lessons',
+	user_id: 1
+}).then(u=>{
+  	console.log(u);
+  });*/
+
+
 //sequelize.sync(); //<--creates join table on first run
 
 // controllers

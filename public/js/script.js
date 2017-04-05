@@ -376,3 +376,78 @@ function createCookie(name,value,days) {
     document.cookie = name + "=" + value + expires + "; path=/";
 }
 
+/* user profile */
+if($('.profile').length > 0){
+  var username = $('.profile').attr('id');
+  var deleteBtn = '&nbsp;<a href="#" class="del"><i class="fa fa-times" aria-hidden="true"></i></a>';
+  $.ajax({
+    url: '/api/user/' + username + '/offering'
+  })
+    .done(function(data){
+      if (data.success){
+        data.items.forEach(function(it){
+          $('ul.offering').append('<li id="item-'+it.id+'">' + it.description + deleteBtn + '</li>');
+          
+        });
+        registerDeleteBtn('offering');
+      }
+    });
+
+    $.ajax({
+      url: '/api/user/' + username + '/seeking'
+    })
+      .done(function(data){
+        if (data.success){
+          data.items.forEach(function(it){
+            $('ul.seeking').append('<li id="item-'+it.id+'">' + it.description + deleteBtn + '</li>');
+            
+          });
+          registerDeleteBtn('seeking');
+        }
+      });
+
+    $('.add-item a').on('click',function(e){
+      e.preventDefault();
+      var type = this.id;
+      var item = $(this).parent().find('input').val();
+      console.log(item);
+      $.ajax({
+        url: '/api/user/item/add',
+        method: 'POST',
+        data: { type: type, description: item}
+      }).done(function(data){
+        if (data.success){
+          $('ul.'+type).append('<li id=item-'+data.id+'>' + item + deleteBtn + '</li>');
+          $('#'+type).parent().find('input').val('');
+        } else {
+          console.log('could not add item');
+        }
+      });
+
+    });
+
+    var registerDeleteBtn = function(ulclass){
+      $('.' + ulclass ).on('click','a.del',function(e){
+        e.preventDefault();
+        console.log($(this).parent().attr('id'));
+        var id = $(this).parent().attr('id').split('-')[1];
+        var li = $(this).parent();
+        console.log(id);
+        $.ajax({
+          method: "POST",
+          url: '/api/item/' + id + '/delete'
+        }).done(function(data){
+          if (data.success){
+            li.remove();
+          } else {
+            console.log(data);
+          }
+        })
+
+      });
+    };
+    
+}
+
+
+

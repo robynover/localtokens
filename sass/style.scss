@@ -16,6 +16,7 @@ nav.menu{
 	}
 	li{
 		padding-left: 0;
+		padding-right: 0;
 	}
 }
 nav{
@@ -29,7 +30,7 @@ nav{
 		display:inline;
 		padding: 1.5rem;
 		/* background-color: #efefef; */
-		margin-right: 1.5rem;
+		margin-right: 3rem;
 	}
 	
 }
@@ -85,4 +86,9 @@ h2{
 	
 }
 
-
+footer{
+	background: rgba(242, 242, 242, 1);
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}

@@ -7,6 +7,7 @@ module.exports = function(express,sequelize,app){
 	var User = app.get('models').user;
 	var Ledger = app.get('models').ledger;
 	var Notification = app.get('models').notification;
+	var Item = app.get('models').item;
 	// // mongoose model -- for message board
 	var Post = require('../models/post.js');
 
@@ -102,6 +103,76 @@ module.exports = function(express,sequelize,app){
 			res.json({error:'user not logged in'});
 		}
 	});
+
+	router.get('/user/:username/offering',function(req,res){
+		if (req.user){
+			User.getIdByUsername(req.params.username)
+				.then(function(u){
+					Item.findAll({
+						attributes: ['id','description'],
+						where:{user_id:u[0].id,offering_seeking:'offering'}
+					}).then(it=>{
+						res.json({success:true,items:it});
+					});
+				});
+			
+
+		} else {
+			res.json({error:'user not logged in'});
+		}
+	});
+
+	router.get('/user/:username/seeking',function(req,res){
+		if (req.user){
+			User.getIdByUsername(req.params.username)
+				.then(function(u){
+					Item.findAll({
+						attributes: ['id','description'],
+						where:{user_id:u[0].id,offering_seeking:'seeking'}
+					}).then(it=>{
+						res.json({success:true,items:it});
+					});
+				});
+			
+
+		} else {
+			res.json({error:'user not logged in'});
+		}
+	});
+
+	router.post('/user/item/add',function(req,res){
+		if (req.user){
+			Item.create({
+				offering_seeking:req.body.type,
+				description:req.body.description,
+				user_id: req.user.id
+			}).then(u=>{
+			  	//console.log(u);
+			  	res.json({success:true,id:u.id});
+			   });
+
+		} else {
+			res.json({error:'user not logged in'});
+		}
+	});
+
+	router.post('/item/:id/delete',function(req,res){
+		//make sure this item belongs to this user
+		// find out which user this item belongs to & check against logged in user
+		Item.findOne({id:req.params.id})
+			.then(item=>{
+				if(item.user_id == req.user.id){
+					Item.destroy({
+						where: {id:req.params.id}
+					})
+						.then(function(){
+							res.json({success:true});
+						});
+				} else {
+					res.json({success:false});
+				}
+			})
+	})
 
 	router.get('/posts/recent',function(req,res){
 		if (req.user){
