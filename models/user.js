@@ -88,7 +88,7 @@ module.exports = function(sequelize, DataTypes) {
 				if (unactivated){
 					q += ' WHERE is_active = false ';
 				}
-				q += ' GROUP BY users.id';
+				q += ' GROUP BY users.id ORDER BY users.username';
 				return sequelize.query(q,
 				  { type: sequelize.QueryTypes.SELECT }
 				);

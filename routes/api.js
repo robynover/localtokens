@@ -142,15 +142,18 @@ module.exports = function(express,sequelize,app){
 
 	router.post('/user/item/add',function(req,res){
 		if (req.user){
-			Item.create({
-				offering_seeking:req.body.type,
-				description:req.body.description,
-				user_id: req.user.id
-			}).then(u=>{
-			  	//console.log(u);
-			  	res.json({success:true,id:u.id});
-			   });
-
+			if (req.body.type && req.body.description){
+				Item.create({
+					offering_seeking:req.body.type,
+					description:req.body.description,
+					user_id: req.user.id
+				}).then(u=>{
+				  	//console.log(u);
+				  	res.json({success:true,id:u.id});
+				   });
+			} else {
+				res.json({error:'no input given'});
+			}
 		} else {
 			res.json({error:'user not logged in'});
 		}

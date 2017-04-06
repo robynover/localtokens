@@ -215,14 +215,26 @@ module.exports = function(express){
 	});
 
 	router.post('/post/delete/:id',function(req,res){
-		Post.findByIdAndRemove(req.params.id,function(err){
-			//console.log(err);
-			if (err){
-				res.json({success:false});
+		// make sure the post belongs to this user
+		Post.findById(req.params.id,function(err,found){
+			if (found){
+				if (found.username == req.user.username){
+					Post.findByIdAndRemove(req.params.id,function(err){
+						if (err){
+							res.json({success:false});
+						} else {
+							res.json({success:true});
+						}
+					});
+				} else {
+					res.json({success:false});
+				}
 			} else {
-				res.json({success:true});
+				res.json({success:false});
 			}
+			
 		});
+		
 	});
 
 	router.post('/post/edit/:id',function(req,res,next){
@@ -235,6 +247,11 @@ module.exports = function(express){
 				return;
 			}
 			if (!doc){
+				res.json({success:false});
+				return;
+			}
+
+			if (doc.username != req.user.username){
 				res.json({success:false});
 				return;
 			}

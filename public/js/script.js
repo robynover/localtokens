@@ -410,20 +410,20 @@ if($('.profile').length > 0){
       e.preventDefault();
       var type = this.id;
       var item = $(this).parent().find('input').val();
-      console.log(item);
-      $.ajax({
-        url: '/api/user/item/add',
-        method: 'POST',
-        data: { type: type, description: item}
-      }).done(function(data){
-        if (data.success){
-          $('ul.'+type).append('<li id=item-'+data.id+'>' + item + deleteBtn + '</li>');
-          $('#'+type).parent().find('input').val('');
-        } else {
-          console.log('could not add item');
-        }
-      });
-
+      if (item){
+        $.ajax({
+          url: '/api/user/item/add',
+          method: 'POST',
+          data: { type: type, description: item}
+        }).done(function(data){
+          if (data.success){
+            $('ul.'+type).append('<li id=item-'+data.id+'>' + item + deleteBtn + '</li>');
+            $('#'+type).parent().find('input').val('');
+          } else {
+            console.log('could not add item');
+          }
+        });
+      }
     });
 
     var registerDeleteBtn = function(ulclass){
