@@ -42,7 +42,7 @@ app.use(session({
   name: 'monster', //name of the cookie
   cookie: { 
   	secure: false,
-  	maxAge: 60 * 60 * 1000, // 1 hour
+  	maxAge: 3 * 60 * 60 * 1000, // 3 hours
   	httpOnly: true
   }
 }));

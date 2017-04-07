@@ -181,9 +181,11 @@ nav.topnav {
   z-index: 1;
   color: #333; }
 
-.flash-success {
-  border: 1px solid #bcf5bc;
-  padding-left: 1em; }
+.flash-success, .flash {
+  text-align: center;
+  background-color: #ffffe0;
+  /* border: 1px solid darken(#ffffe0,20%); */
+  margin-top: 1rem; }
 
 .goto-text {
   text-align: right; }
@@ -370,7 +372,9 @@ table {
 .profile .column.profile-pic {
   position: relative;
   border-radius: 0;
-  overflow: hidden; }
+  overflow: hidden;
+  padding: 0;
+  padding-top: 1rem; }
   .profile .column.profile-pic img {
     border: 1px solid #f2f2f2;
     border-radius: 5px;
@@ -387,6 +391,40 @@ table {
   margin-top: -5rem;
   right: -1px;
   line-height: 4rem; }
+
+.profile h2 {
+  margin-bottom: 0; }
+
+.profile .edit-profile i, .profile .edit-photo i {
+  cursor: pointer; }
+
+.profile #editmodal {
+  display: none;
+  position: absolute;
+  top: 25%;
+  height: 50%;
+  background-color: #fff;
+  box-shadow: 1px -1px 5px #cecece;
+  width: 50%;
+  left: 25%;
+  border: 1px solid #bbb;
+  padding: 1.5rem; }
+  .profile #editmodal textarea {
+    width: 100%;
+    height: 18rem; }
+  .profile #editmodal .modalclose {
+    text-align: right;
+    margin: 0; }
+  .profile #editmodal a.close {
+    color: #666666; }
+
+.profile #user-photo-upload {
+  background: rgba(255, 255, 255, 0.8);
+  position: absolute;
+  margin-top: -21rem;
+  padding: 1rem;
+  width: 100%;
+  display: none; }
 
 ul.offering, ul.seeking {
   font-family: "Open Sans", sans-serif; }

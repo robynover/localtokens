@@ -1,17 +1,29 @@
 <div class="profile" id="{{profile_user}}">
 	<h2>{{profile_user}}</h2>
+	<p><strong>Balance:</strong> {{balance}} {{pluralize balance 'token' 'tokens'}}</p>
 	<div class="row">
 		<div class="one-third column profile-pic">
-			<img src="/images/avatar.png">
+			<img id="profile-photo" src="/images/avatar.png">
 			<div class="profile-bal">
 				{{balance}}
 			</div>
+			{{#equal profile_user username}}
+			<p class="edit-photo"><i class="fa fa-pencil" aria-hidden="true"></i></p>
+
+			<div id="user-photo-upload">
+				<input type="file" name="profilephoto" id="user-photo-file"><br>
+				<p>File must be less than 4MB</p>
+				<button>Upload</button>
+			</div>
+
+			{{/equal}}
 		</div>
 		<div class="two-thirds column">
-			<p><strong>Balance:</strong> {{balance}} {{pluralize balance 'token' 'tokens'}}</p>
-			<p>&nbsp;</p>
-			<p>This is placeholder text lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam ultricies convallis fermentum. Aenean et dui tincidunt, elementum magna at, laoreet turpis.</p>
-			<p>&nbsp;</p>
+				
+			<div class="profile-text" id="{{user_id}}"></div>
+			{{#equal profile_user username}}
+			<p class="edit-profile"><i class="fa fa-pencil" aria-hidden="true"></i></p>
+			{{/equal}}
 
 			<div class="row">
 				<div class="column one-half">
@@ -50,9 +62,12 @@
 		</div>
 	</div>
 
-	
-
-
-
-
+	{{#equal profile_user username}}
+	<div id="editmodal">
+		<p class="modalclose"><a href="#" class="close"><i class="fa fa-times-circle-o" aria-hidden="true"></i></a></p>
+		<textarea name="message"></textarea>
+		<input type="hidden" name="id">
+		<button>Edit</button>
+	</div>
+	{{/equal}}
 </div>

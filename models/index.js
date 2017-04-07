@@ -7,7 +7,8 @@ module.exports = function(sequelize){
     'ledger',
     'notification',
     'user',
-    'item'
+    'item',
+    'userinfo'
   ];
   var m = {};
   models.forEach(function(model) {    
@@ -27,6 +28,9 @@ module.exports = function(sequelize){
   m.notification.belongsTo(m.user,{as: 'sender'}); //sender_id col
   m.notification.belongsTo(m.ledger,{as: 'ledger'}); //ledger_id col
   m.item.belongsTo(m.user,{as:'user'}); //user_id
+  m.userinfo.belongsTo(m.user,{as:'user'}); // user_id in userinfo table
+
+  //m.userinfo.sync();
 
   // trigger/hook
   m.ledger.afterCreate('notify',function(ledger, options) {

@@ -9,7 +9,6 @@ if (typeof validate !== 'undefined'){
             resolve('already exists');
           } else {
             resolve();
-            console.log('user does not exist -- ajax');
           }
         });
     });
@@ -77,10 +76,8 @@ if (typeof validate !== 'undefined'){
   // Confirm-password not working with validate.js. Doing it by hand
   $('input[name="password_confirm"]').blur(function(){
     if (this.value === $('input[name="password"]')[0].value){
-      console.log('passwords match');
       $(this).parent().parent().find('.field-validation.password_confirm').text('');
     } else {
-      console.log('no match');
       $(this).parent().parent().find('.field-validation.password_confirm').text('Passwords do not match');
     }
   });
@@ -107,14 +104,11 @@ if (typeof validate !== 'undefined'){
           var v = validate.single(this.value, constraints[field]);
           if (v){
             var msg = '';
-            ///if (field != 'password_confirm'){
-              msg += fieldNames[field] + ' ';
-            //}
+            msg += fieldNames[field] + ' ';
             msg += v[0];
             
             $(this).parent().parent().find('.field-validation.'+field).text(msg);
-          } else {
-            
+          } else {    
             $(this).parent().parent().find('.field-validation.'+field).text('');
           }
         }   
@@ -127,7 +121,6 @@ if (typeof validate !== 'undefined'){
       e.preventDefault();
       var formValues = validate.collectFormValues(form);
       var result = validate(formValues,constraints);
-      console.log(result);
       if (typeof result === 'object'){
         // there are errors
         var msg = '';
@@ -145,125 +138,129 @@ if (typeof validate !== 'undefined'){
 
 
 /* message board */
+if ($('.messageboard').length > 0){
 
-$('.tools .edit').on('click',function(e){
-  e.preventDefault();
-  //console.log('edit click');
-  $('#editmodal').css('display','block');
-  var id = this.id.split('-')[1];
-
-  // store id in hidden input for later
-  $('#editmodal input[type="hidden"]').val(id);
-  console.log(id);
-  
-  var wrapper = $('#wrap-'+id);
-  var body = wrapper.find('.postbody').html();
-  $('#editmodal textarea').text(body);
-  
-  var title = wrapper.find('h2').text();
-  $('#editmodal input[type="text"]').val(title);
-  
-});
-
-$('.tools .delete').on('click',function(e){
-  e.preventDefault();
-  var reallyDelete = confirm("Really delete this post?");
-  if( reallyDelete ){
+  $('.tools .edit').on('click',function(e){
+    e.preventDefault();
+    //console.log('edit click');
+    $('#editmodal').css('display','block');
     var id = this.id.split('-')[1];
-    $.ajax({
-      method: "POST",
-      url: "/messageboard/post/delete/"+id
-    })
-      .done(function( msg ) {
-        var url = window.location.href;
-        var domainAndPort = url.split('/')[2];
-        window.location.replace('http://' + domainAndPort + "/messageboard?del=1");
-      });
-  }
-  
-})
 
+    // store id in hidden input for later
+    $('#editmodal input[type="hidden"]').val(id);
+    console.log(id);
+    
+    var wrapper = $('#wrap-'+id);
+    var body = wrapper.find('.postbody').html();
+    $('#editmodal textarea').text(body);
+    
+    var title = wrapper.find('h2').text();
+    $('#editmodal input[type="text"]').val(title);
+    
+  });
+
+  $('.tools .delete').on('click',function(e){
+    e.preventDefault();
+    var reallyDelete = confirm("Really delete this post?");
+    if( reallyDelete ){
+      var id = this.id.split('-')[1];
+      $.ajax({
+        method: "POST",
+        url: "/messageboard/post/delete/"+id
+      })
+        .done(function( msg ) {
+          var url = window.location.href;
+          var domainAndPort = url.split('/')[2];
+          window.location.replace('http://' + domainAndPort + "/messageboard?del=1");
+        });
+    }
+    
+  });
+
+  $('.messageboard #editmodal button').on('click',function(e){
+      e.preventDefault();
+      var title = $('#editmodal input[type="text"]').val();
+      var message = $('#editmodal textarea').val();
+      
+      var id = $('#editmodal input[type="hidden"]').val();
+      
+      $.ajax({
+        method: "POST",
+        url: "/messageboard/post/edit/"+id,
+        data: { title: title, message: message}
+      })
+        .done(function( msg ) {
+          //console.log(msg);
+          var wrapper = $('#wrap-'+id);
+          // update page w/o reloaing
+          wrapper.find('.postbody').html(message);
+          // close modal
+          $('#editmodal').css('display','none');
+          
+        });
+  });
+
+  $('#new-msg-form').on('submit', function(e){
+    e.preventDefault();
+    if ($('#new-msg-form .msgtitle').val().length < 1){
+      alert('Title cannot be empty');
+      return false;
+    }else if ($('#new-msg-form .msgbody').val().length < 1){
+      alert('Post body cannot be empty');
+      return false;
+    }  
+    this.submit();
+  });
+
+  // message upload form
+  $('#photo-upload').on('change',function(){
+    if (this.files[0].size/1000000 > 4){
+      alert('That file is too large. Please choose a file less than 4MB');
+    }
+  });
+
+} // end if messageboard
+
+//edit modal -- used for message board and profile
 $('#editmodal a.close').on('click',function(e){
     e.preventDefault();
     $('#editmodal').css('display','none');
 });
 
-$('#editmodal button').on('click',function(e){
-    e.preventDefault();
-    var title = $('#editmodal input[type="text"]').val();
-    var message = $('#editmodal textarea').val();
-    
-    var id = $('#editmodal input[type="hidden"]').val();
-    
-    $.ajax({
-      method: "POST",
-      url: "/messageboard/post/edit/"+id,
-      data: { title: title, message: message}
-    })
-      .done(function( msg ) {
-        //console.log(msg);
-        var wrapper = $('#wrap-'+id);
-        // update page w/o reloaing
-        wrapper.find('.postbody').html(message);
-        // close modal
-        $('#editmodal').css('display','none');
-        
-      });
-});
-
-$('#new-msg-form').on('submit', function(e){
-  e.preventDefault();
-  if ($('#new-msg-form .msgtitle').val().length < 1){
-    alert('Title cannot be empty');
-    return false;
-  }else if ($('#new-msg-form .msgbody').val().length < 1){
-    alert('Post body cannot be empty');
-    return false;
-  }  
-  this.submit();
-});
-
-// message upload form
-$('#photo-upload').on('change',function(){
-  if (this.files[0].size/1000000 > 4){
-    alert('That file is too large. Please choose a file less than 4MB');
-  }
-});
-
 /* send tokens */
-$('.sendtokens form #receiver').on('blur', function(){
-  var receiver = $(this).val();
-  $.ajax({
-    method: "GET",
-    url: "/api/user/exists?u="+receiver,
-  }).done(function( json ) {
-      if(json.error){
-        $('.field-validation.receiver').removeClass('success');
-        $('.field-validation.receiver').addClass('error');
-        $('.field-validation.receiver').text(json.error);
-      } else if (json.success) {
-         $('.field-validation.receiver').removeClass('error');
-        $('.field-validation.receiver').addClass('success')
-        $('.field-validation.receiver').text('user found');
+if ($('.sendtokens').length > 0){
+  $('.sendtokens form #receiver').on('blur', function(){
+    var receiver = $(this).val();
+    $.ajax({
+      method: "GET",
+      url: "/api/user/exists?u="+receiver,
+    }).done(function( json ) {
+        if(json.error){
+          $('.field-validation.receiver').removeClass('success');
+          $('.field-validation.receiver').addClass('error');
+          $('.field-validation.receiver').text(json.error);
+        } else if (json.success) {
+           $('.field-validation.receiver').removeClass('error');
+          $('.field-validation.receiver').addClass('success')
+          $('.field-validation.receiver').text('user found');
 
-      }
+        }
+    });
   });
-});
 
-$('.sendtokens form').on('submit',function(e){
-  e.preventDefault();
-  if ( $('#amt').val().length < 1){
-    alert("Please enter an amount of tokens to send");
-    return false;
-  } 
-  if  ( $('#receiver').val().length < 3){
-    alert("The receiver username is not valid");
-    return false;
-  }
-  this.submit();
-});
-
-
+  $('.sendtokens form').on('submit',function(e){
+    e.preventDefault();
+    if ( $('#amt').val().length < 1){
+      alert("Please enter an amount of tokens to send");
+      return false;
+    } 
+    if  ( $('#receiver').val().length < 3){
+      alert("The receiver username is not valid");
+      return false;
+    }
+    this.submit();
+  });
+} // end if send tokens
 
 // load dashboard widgets
 if ( $('.dashboard').length > 0){
@@ -378,8 +375,24 @@ function createCookie(name,value,days) {
 
 /* user profile */
 if($('.profile').length > 0){
+  var user_id = $('.profile-text').attr('id');
   var username = $('.profile').attr('id');
   var deleteBtn = '&nbsp;<a href="#" class="del"><i class="fa fa-times" aria-hidden="true"></i></a>';
+
+  // load photo
+  var loadProfilePhoto = function(){
+    $.ajax({
+      url:'/api/user/' + user_id +'/photo',
+      method: 'GET'
+    }).done(function(data){
+      if (data.success){
+        //load photo
+        $('#profile-photo').attr('src',data.photo);
+      }
+    });
+  }
+  loadProfilePhoto();
+
   $.ajax({
     url: '/api/user/' + username + '/offering'
   })
@@ -446,7 +459,80 @@ if($('.profile').length > 0){
 
       });
     };
+
+    // fill in profile
     
+    $.ajax({
+      url: '/api/user/' + user_id + '/profile'
+    }).done(function(data){
+      if (data.success){
+        $('.profile-text').html(data.profile);
+      } else {
+        $('.profile-text').html('');
+      }
+    })
+
+    $('.edit-profile i').on('click',function(e){
+      e.preventDefault();
+      $('#editmodal').css('display','block');
+      var txt = $('.profile-text').html();
+      $('#editmodal textarea').text(txt);
+    });
+
+    $('.profile #editmodal button').on('click',function(e){
+        e.preventDefault();
+        var txt = $('#editmodal textarea').val();
+        $.ajax({
+          url: '/api/user/profile/edit',
+          method: 'POST',
+          data: { profile_text: txt }
+        }).done(function(data){
+          if (data.success){
+            $('#editmodal').css('display','none');
+            $('.profile-text').html(txt);
+          }
+
+        });
+    });
+
+    // profile photo upload
+    $('#user-photo-upload button').on('click',function(e){
+        e.preventDefault();
+        // start spinner
+        $(this).html('<i class="fa fa-circle-o-notch fa-spin fa-fw"></i>');
+        var data = new FormData();
+        var file = $('#user-photo-file').get(0).files[0];
+        data.append('photo',file);
+        //console.log(file);
+        
+        var reader = new FileReader();
+        reader.readAsText(file, 'UTF-8');
+        reader.onload = function(event){
+            //console.log(event);
+            var result = event.target.result;
+            var fileName = file.name; 
+            //console.log(result);
+            $.ajax({
+                url:'/api/user/photo',
+                method:'POST',
+                contentType: false,
+                processData: false,
+                data: data
+            }).done(function(data){
+                //console.log(data);
+                loadProfilePhoto();
+                $('#user-photo-upload').hide();
+                //remove spinner
+                $('#user-photo-upload button').html('Upload');
+            })
+        };
+    });
+
+    //toggle photo upload form
+    $('.edit-photo i.fa-pencil').on('click',function(){
+      $('#user-photo-upload').toggle();
+    })
+  
 }
 
 

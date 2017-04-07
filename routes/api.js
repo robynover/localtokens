@@ -8,8 +8,37 @@ module.exports = function(express,sequelize,app){
 	var Ledger = app.get('models').ledger;
 	var Notification = app.get('models').notification;
 	var Item = app.get('models').item;
+	var UserInfo = app.get('models').userinfo;
 	// // mongoose model -- for message board
 	var Post = require('../models/post.js');
+
+	// for file submission in forms
+	var multer  = require('multer');
+	//var upload = multer({dest: 'uploads/'});
+	var storage = multer.diskStorage({
+	  destination: function (req, file, cb) {
+	    cb(null, './public/uploads/user');
+	  },
+	  filename: function (req, file, cb) {
+	  	var fileExt = file.mimetype.split('/')[1];
+	  	if (fileExt == 'jpeg'){ fileExt = 'jpg';}
+	    cb(null, req.user.username + '-' + Date.now() + '.' + fileExt);
+	  }
+	});
+
+	var restrictImgType = function(req, file, cb) {
+	  var allowedTypes = ['image/jpeg','image/gif','image/png'];
+	  if (allowedTypes.indexOf(req.file.mimetype) !== -1){
+	  	// To accept the file pass `true`
+	  	cb(null, true);
+	  } else {
+		// To reject this file pass `false`
+	  	cb(null, false);
+	  	//cb(new Error('File type not allowed'));
+	  }
+	};
+	 
+	var upload = multer({ storage: storage, limits: {fileSize:4000000, fileFilter:restrictImgType} });
 
 
 	// == API routes == //
@@ -176,6 +205,106 @@ module.exports = function(express,sequelize,app){
 				}
 			})
 	})
+
+	router.post('/user/profile/edit',function(req,res){
+		// user can only edit their own profile
+		UserInfo.findOne({
+			where:{user_id:req.user.id}
+		})
+		.then(info=>{ // if it exists, edit it
+			//console.log(info);
+			if (!info){ // if it doesn't exist yet
+				UserInfo.create({
+					profile_text: req.body.profile_text,
+					user_id: req.user.id
+				})
+					.then(function(){
+						res.json({success:true,status:'new'});
+						return(null);
+					});
+			} else {
+				info.profile_text = req.body.profile_text;
+				info.save()
+					.then(function(){
+						res.json({success:true,status:'edit'});
+						return(null);
+					});
+				
+			}
+		})
+		.catch(err=>{
+			res.json({success:false});
+		});		
+		
+	});
+
+	router.get('/user/:id/profile',function(req,res){
+		UserInfo.findOne({
+			where:{user_id:req.params.id}
+			})
+			.then(info=>{
+				//console.log(info);
+				if (info){
+					res.json({
+						success: true,
+						profile: info.profile_text
+					})
+				} else {
+					res.json({success:false});
+				}
+			});
+	});
+
+	router.post('/user/photo',upload.single('photo'),function(req,res){
+		console.log(req.file.filename);
+		console.log(req.file.path);
+		UserInfo.findOne({
+			where:{user_id:req.user.id}
+		}).then(info=>{
+
+			UserInfo.sizePhoto(req.file.path,function(){
+				if (!info){ // if it doesn't exist yet
+					UserInfo.create({
+						profile_photo: '/uploads/user/'+req.file.filename,
+						user_id: req.user.id
+					})
+						.then(function(){
+							res.json({success:true,status:'new'});
+							return(null);
+						});
+				} else {
+					info.profile_photo = '/uploads/user/'+req.file.filename;
+					info.save()
+						.then(function(){
+							res.json({success:true,status:'edit'});
+							return(null);
+						});
+					
+				}
+			});
+
+			
+		}).catch(err=>{
+			res.json({success:false,msg:err});
+		});
+	});
+
+	router.get('/user/:id/photo',function(req,res){
+		if (req.user){
+			UserInfo.findOne({
+				where:{user_id:req.params.id}
+			}).then(info=>{
+				if (info && info.profile_photo){
+					res.json({success:true,photo:info.profile_photo});
+				} else {
+					res.json({success:false});
+				}
+				
+			})
+		} else {
+			res.json({error:'user not logged in'});
+		}
+	});
 
 	router.get('/posts/recent',function(req,res){
 		if (req.user){

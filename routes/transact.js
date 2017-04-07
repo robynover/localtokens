@@ -29,7 +29,7 @@ module.exports = function(express,sequelize,app){
 		    	//console.log(u);
 		    	if (u[0].id > 0){
 		    		var uid = u[0].id;
-		    		Transact(sender_id,uid,amt,app,sequelize).then(tr=>{
+		    		return Transact(sender_id,uid,amt,app,sequelize).then(tr=>{
 		    			//console.log(tr);
 		    			var word = "token";
 		    			if (amt > 1){

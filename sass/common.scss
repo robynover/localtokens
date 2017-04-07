@@ -155,9 +155,11 @@ nav.topnav{
     color:#333;
 }
 
-.flash-success{
-	border: 1px solid lighten(#90ee90,10%);
-	padding-left: 1em;
+.flash-success, .flash{
+	text-align: center;
+	background-color: #ffffe0;
+	/* border: 1px solid darken(#ffffe0,20%); */
+	margin-top: 1rem;
 }
 .goto-text{
 	text-align:right;
@@ -383,6 +385,8 @@ table{
 		position: relative;
 		border-radius: 0;
 		overflow: hidden;
+		padding: 0;
+		padding-top: 1rem;
 		img{
 			border: 1px solid rgba(242,242,242,1);
 			border-radius: 5px;
@@ -400,6 +404,44 @@ table{
 		margin-top: -5rem;
 		right: -1px;
 		line-height: 4rem;
+	}
+	h2{
+		margin-bottom: 0;
+	}
+	.edit-profile i,.edit-photo i{
+		cursor: pointer;
+	}
+	#editmodal{
+		display:none;
+		position: absolute;
+	    top: 25%;
+	    height: 50%;
+	    background-color: #fff;
+	    box-shadow: 1px -1px 5px #cecece;
+	    width: 50%;
+	    left: 25%;
+	    border: 1px solid #bbb;
+	    padding: 1.5rem;
+	    textarea{
+	    	width: 100%;
+	    	height: 18rem;
+	    }
+	    
+	    .modalclose{
+	    	text-align: right;
+    		margin: 0;
+	    }
+	    a.close{
+	    	color:lighten(#333,20%);
+	    }
+	}
+	#user-photo-upload{
+		background: rgba(255,255,255,0.8);
+    	position: absolute;
+    	margin-top: -21rem;
+    	padding: 1rem;
+    	width: 100%;
+    	display: none;
 	}
 }
 

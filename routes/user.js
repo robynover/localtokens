@@ -64,6 +64,7 @@ module.exports = function(express,sequelize,app){
 						context.loggedin = true;
 						context.username = req.user.username;
 						context.is_admin = req.user.is_admin;
+						context.user_id = u.id;
 						res.render('profile',context);
 						
 					});
