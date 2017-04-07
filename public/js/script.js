@@ -535,5 +535,12 @@ if($('.profile').length > 0){
   
 }
 
+/*ledger notes*/
+$('table.transactions').on('click','.note-icon',function(){
+  //show note
+  var id = this.id.split('-')[1];
+  $('#note-'+id).toggle();
+})
+
 
 

@@ -1,9 +1,12 @@
 "use strict";
 
-module.exports = function(sender,receiver,amt,app,sequelize){
+module.exports = function(sender,receiver,amt,note,app,sequelize){
   var User = app.get('models').user;
   var Coin = app.get('models').coin;
   var Ledger = app.get('models').ledger;
+  var Note = app.get('models').ledgernote;
+
+  var ln = Ledger.belongsTo(Note,{as:'note'});
 
   return sequelize.transaction(function(t){
     // first check if sender has enough coins
@@ -16,9 +19,11 @@ module.exports = function(sender,receiver,amt,app,sequelize){
         return Ledger.create({
           receiver_id: receiver,
           sender_id: sender,
-          amount: amt
+          amount: amt,
+          note: {note:note}
         },
         {
+          include: [ln],
           transaction: t,
         }).then(l=>{
           //console.log(l);

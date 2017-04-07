@@ -103,10 +103,10 @@ passport.use(new LocalStrategy(
   function(username, password, done) {
   	User.getByUsername(username).then(user=>{
 		if (!user) { 
-			return done(null, false, { message: 'Incorrect username.' }); 
+			return done(null, false, { message: 'Incorrect username or password.' }); 
 		}
 		if (!user.verifyPassword(password)) { 
-			return done(null, false, { message: 'Incorrect password.' }); 
+			return done(null, false, { message: 'Incorrect username or password.' }); 
 		}
 		if (!user.is_active){
 			return done(null, false, { message: 'Your account has not been activated. Check your email for an activation link.' }); 

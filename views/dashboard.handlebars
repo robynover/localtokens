@@ -15,10 +15,16 @@
 		</div>
 		<div class="nine columns dash-transactions">
 			<h4>Recent Transactions</h4>
-			<table>
-				<tr><th>date</th><th>amount</th><th>description</th><th>balance</th></tr>
+			<table class="dashboard-transactions transactions">
+				<tr><th></th><th>date</th><th>amount</th><th>description</th><th>balance</th></tr>
 				{{#each ledger}}
 					<tr class="{{ifNegative signed_amt 'neg' 'pos'}}">
+						<td>
+							{{#if note}}
+							&nbsp;<i class="fa fa-file-text-o note-icon" aria-hidden="true" id="icon-{{id}}"></i>
+							<div class="noteview" id="note-{{id}}">{{note}}</div>
+							{{/if}}
+						</td>
 						<td>{{formatted_date}}</td>
 						<td class="amt">{{signed_amt}}</td>
 						<td>{{description}}</td>

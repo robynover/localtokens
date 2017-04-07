@@ -66,8 +66,15 @@ module.exports = function(sequelize, DataTypes) {
 				return User.findOne({
 					where:{username:username}
 				});
+				/*username = username.toLowerCase();
+				var q = "SELECT * FROM users WHERE lower(username) = ?";
+				return sequelize.query(q,
+				  { replacements: [username], type: sequelize.QueryTypes.SELECT }
+				);*/
 			},
 			getIdByUsername: function(username){
+				//username = username.toLowerCase();
+				//var q = "SELECT id FROM users WHERE lower(username) = ?";
 				var q = "SELECT id FROM users WHERE username = ?";
 				return sequelize.query(q,
 				  { replacements: [username], type: sequelize.QueryTypes.SELECT }
@@ -119,7 +126,7 @@ module.exports = function(sequelize, DataTypes) {
 				offset = parseInt(offset);
 				var q = "SELECT to_char(ledger.created_at AT TIME ZONE 'America/New_York', 'Mon DD YYYY HH12: MI AM') AS formatted_date, ";
 				q += ' COUNT(ledger.id) OVER () AS total_entries, ';
-				q += ' ledger.*, u1.username AS sender, u2.username AS receiver, ';
+				q += ' ledger.*, ledgernotes.note, u1.username AS sender, u2.username AS receiver, ';
 				q += ' CASE ';
     			q += " WHEN sender_id <> :id AND sender_id IS NOT NULL THEN CONCAT('from ', u1.username) ";
     			q += " WHEN sender_id IS NULL THEN 'bank issue' ";
@@ -131,6 +138,7 @@ module.exports = function(sequelize, DataTypes) {
 				q += 'FROM ledger ';
 				q += 'LEFT JOIN users AS u1 ON u1.id = sender_id ';
 				q += 'LEFT JOIN users AS u2 ON u2.id = receiver_id ';
+				q += 'LEFT JOIN ledgernotes ON ledger.note_id = ledgernotes.id ';
 				q += 'WHERE sender_id = :id OR receiver_id = :id ';
 				q += 'ORDER BY created_at DESC';
 				if (limit > 0){

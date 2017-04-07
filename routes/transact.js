@@ -19,6 +19,7 @@ module.exports = function(express,sequelize,app){
 		    let sender_id = req.user.id; 
 		    let receiver = req.body.receiver;
 		    let amt = parseInt(req.body.amt);
+		    let note = req.body.note;
 		    if (sender_id <= 0 || amt <= 0){
 		    	res.status(422);
 		    	res.render('generic',{msg:'Invalid values for transaction'});
@@ -29,7 +30,7 @@ module.exports = function(express,sequelize,app){
 		    	//console.log(u);
 		    	if (u[0].id > 0){
 		    		var uid = u[0].id;
-		    		return Transact(sender_id,uid,amt,app,sequelize).then(tr=>{
+		    		return Transact(sender_id,uid,amt,note,app,sequelize).then(tr=>{
 		    			//console.log(tr);
 		    			var word = "token";
 		    			if (amt > 1){

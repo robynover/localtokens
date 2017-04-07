@@ -8,7 +8,8 @@ module.exports = function(sequelize){
     'notification',
     'user',
     'item',
-    'userinfo'
+    'userinfo',
+    'ledgernote'
   ];
   var m = {};
   models.forEach(function(model) {    
@@ -29,8 +30,29 @@ module.exports = function(sequelize){
   m.notification.belongsTo(m.ledger,{as: 'ledger'}); //ledger_id col
   m.item.belongsTo(m.user,{as:'user'}); //user_id
   m.userinfo.belongsTo(m.user,{as:'user'}); // user_id in userinfo table
+  m.ledger.belongsTo(m.ledgernote,{as:'note'}); //note_id in ledger table 
 
-  //m.userinfo.sync();
+  //m.ledgernote.sync();
+  //m.ledger.sync();
+
+  /*m.ledgernote.create({
+    note:'Test Hello Again'
+  }).then(n=>{
+    m.ledger.findById(36).then(l=>{ 
+      l.setNote(n.id);
+    });
+  });*/
+
+/*m.ledger.create({
+          receiver_id: 1,
+          sender_id: 2,
+          amount: 1,
+          note: {note:"Testing create"}
+        },
+        {
+          include:[ln]
+        });*/
+
 
   // trigger/hook
   m.ledger.afterCreate('notify',function(ledger, options) {

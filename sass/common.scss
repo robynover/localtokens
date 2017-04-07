@@ -460,6 +460,18 @@ ul.offering li:hover .fa-times, ul.seeking li:hover .fa-times{
 	font-family: "Open Sans", sans-serif;
 }
 
+.noteview{
+	display: none;
+	position:absolute;
+	background-color: #efefef;
+	padding: 1rem;
+	box-shadow: 2px 2px 2px #ccc;
+	border: 1px solid #ccc;
+}
+.note-icon{
+	cursor: pointer;
+}
+
 /* media queries */
 @media (max-width: 719px) {
 	nav.menu{
