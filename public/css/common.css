@@ -426,6 +426,12 @@ table {
   width: 100%;
   display: none; }
 
+.profile .profile-text {
+  font-family: "Open Sans",sans-serif; }
+
+textarea {
+  font-family: "Open Sans",sans-serif; }
+
 ul.offering, ul.seeking {
   font-family: "Open Sans", sans-serif; }
 

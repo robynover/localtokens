@@ -346,10 +346,17 @@ $.ajax({
 $('.alertbell').on('mousedown',null, lastSeen, function(e){
     $('nav.topnav .dropdown').toggle();
     $('.button-badge').hide();
-    console.log(e.data);
     // set cookie
     createCookie('last_notify',lastSeen,30);
+});
 
+// hide alerts when clicked elsewhere
+$(document).on('click',function(e){
+  if ($('nav.topnav .dropdown').is(':visible') 
+    && !$(e.target).hasClass('dropdown')
+    && !$(e.target).hasClass('fa-bell')){
+      $('nav.topnav .dropdown').hide();
+  }
 });
 
 
@@ -419,11 +426,7 @@ if($('.profile').length > 0){
         }
       });
 
-    $('.add-item a').on('click',function(e){
-      e.preventDefault();
-      var type = this.id;
-      var item = $(this).parent().find('input').val();
-      if (item){
+    function addItem(type,item){
         $.ajax({
           url: '/api/user/item/add',
           method: 'POST',
@@ -436,8 +439,24 @@ if($('.profile').length > 0){
             console.log('could not add item');
           }
         });
-      }
+    }
+
+    $('.add-item a').on('click',function(e){
+      e.preventDefault();
+      var type = this.id;
+      var item = $(this).parent().find('input').val();
+      addItem(type,item)
+      
     });
+
+    // allow adding items with enter key
+    $('.add-item input').on('keyup',function(e){
+      if(e.keyCode == 13){ //enter
+        var type = $(this).parent().find('a').attr('id');
+        var item = $(this).val();
+        addItem(type,item);
+      }
+    })
 
     var registerDeleteBtn = function(ulclass){
       $('.' + ulclass ).on('click','a.del',function(e){
@@ -540,7 +559,19 @@ $('table.transactions').on('click','.note-icon',function(){
   //show note
   var id = this.id.split('-')[1];
   $('#note-'+id).toggle();
-})
+
+  
+});
+
+// listen for click elsewhere
+if ($('table.transactions').length > 0){
+  $(document).on('click',function(e){
+    if ($('.noteview').is(':visible') && !$(e.target).hasClass('note-icon')){
+      $('.noteview').hide();
+    }
+  });
+}
+
 
 
 
