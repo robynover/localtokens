@@ -4,9 +4,9 @@ module.exports = function(express,sequelize,app){
 	//var express = require('express');
 	var router = express.Router();
 
-	var User = app.get('models').user;
-	var Coin = app.get('models').coin;
-	var Ledger = app.get('models').ledger;
+	var User = app.get('models').User;
+	var Coin = app.get('models').Coin;
+	var Ledger = app.get('models').Ledger;
 
 	// controllers
 	var Transact = require('../controllers/transact.js');

@@ -19,6 +19,9 @@ module.exports = function(sequelize, DataTypes) {
 		underscored: true,
 		freezeTableName: true,
 		classMethods: {
+			associate: function(models){
+				UserInfo.belongsTo(models.user,{as:'user'});
+			},
 			sizePhoto: function(filepath,callback){
 				gm(filepath)
 				.autoOrient()

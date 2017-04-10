@@ -51,26 +51,18 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 //DB
-var Sequelize = require('sequelize');
-var sequelize = new Sequelize(Config.pg,{logging: false,timezone:'-04:00'});
+/*var Sequelize = require('sequelize');
+var sequelize = new Sequelize(Config.pg,{logging: false,timezone:'-04:00'});*/
 
 // models
-app.set('models', require('./models')(sequelize));
+app.set('models',require('./models'))
 var User = app.get('models').user;
-//var Item = app.get('models').item;
-
-//Item.sync();
-/*Item.create({
-	offering_seeking:'offering',
-	description:'French lessons',
-	user_id: 1
-}).then(u=>{
-  	console.log(u);
-  });*/
 
 
-//sequelize.sync(); //<--creates join table on first run
 
+
+var sequelize = app.get('models').sequelize;
+sequelize.sync(); //{force:true}
 // controllers
 var Transact = require('./controllers/transact.js');
 var Issue = require('./controllers/issue.js');

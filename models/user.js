@@ -62,6 +62,9 @@ module.exports = function(sequelize, DataTypes) {
 	},{
 		underscored: true,
 		classMethods:{
+			/*associate: function(models){
+				User.hasMany(models.Ledger)
+			},*/
 			getByUsername: function(username){
 				return User.findOne({
 					where:{username:username}
@@ -138,7 +141,7 @@ module.exports = function(sequelize, DataTypes) {
 				q += 'FROM ledger ';
 				q += 'LEFT JOIN users AS u1 ON u1.id = sender_id ';
 				q += 'LEFT JOIN users AS u2 ON u2.id = receiver_id ';
-				q += 'LEFT JOIN ledgernotes ON ledger.note_id = ledgernotes.id ';
+				q += 'LEFT JOIN ledgernotes ON ledger.id = ledgernotes.ledger_id ';
 				q += 'WHERE sender_id = :id OR receiver_id = :id ';
 				q += 'ORDER BY created_at DESC';
 				if (limit > 0){

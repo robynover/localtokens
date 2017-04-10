@@ -20,6 +20,17 @@ module.exports = function(sequelize, DataTypes) {
 		underscored: true,
 		timestamps: false,
 		classMethods:{
+			associate: function(models){
+				Notification.belongsTo(models.user,{
+					as: 'receiver'
+				});
+				Notification.belongsTo(models.user,{
+					as: 'sender'
+				});
+				Notification.belongsTo(models.ledger,{
+					as: 'ledger'
+				});
+			},
 			getUserNotifications: function(user_id){
 				var q = "SELECT notifications.*, users.username AS sender FROM notifications ";
 				q += " LEFT JOIN users ON users.id = sender_id "; 

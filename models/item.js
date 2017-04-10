@@ -14,7 +14,14 @@ module.exports = function(sequelize, DataTypes) {
 		}
 		
 	},{
-		underscored: true
+		underscored: true,
+		classMethods: {
+			associate: function(models){
+				Item.belongsTo(models.user,{
+					as:'user'
+				});
+			}
+		}
 	});
 
 	return Item;

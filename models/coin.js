@@ -1,7 +1,6 @@
 "use strict";
 
 module.exports = function(sequelize, DataTypes) {
-	//var User = sequelize.import('./user.js');
 
 	var Coin =  sequelize.define('coin', {
 		id: {
@@ -26,6 +25,14 @@ module.exports = function(sequelize, DataTypes) {
 	},{
 		underscored: true,
 		classMethods:{
+			associate: function(models){
+				Coin.belongsToMany(models.ledger, {
+					through: 'ledger_coin'
+				});
+				Coin.belongsTo(models.user,{
+					as: 'owner'
+				});
+			},
 			countUserCoins: function(userId) {
 				return Coin.count({
 					where:{owner_id:userId}

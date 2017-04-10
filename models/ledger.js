@@ -1,9 +1,6 @@
 "use strict";
 
 module.exports = function(sequelize, DataTypes) {
-	
-	//var User = sequelize.import('./user.js');
-	//var Coin = sequelize.import('./coin.js');
 
 	var Ledger = sequelize.define('ledger', {
 	  id: {
@@ -25,6 +22,25 @@ module.exports = function(sequelize, DataTypes) {
 		underscored: true,
 		freezeTableName: true,
 		classMethods:{
+			associate: function(models) {
+				Ledger.belongsTo(models.user, { 
+					foreignKey: {
+						name: 'sender_id'
+					} 
+				});
+				Ledger.belongsTo(models.user, { 
+					foreignKey: {
+						name: 'receiver_id',
+						allowNull: false
+					} 
+				});
+				Ledger.belongsToMany(models.coin,{ 
+					through: 'ledger_coin'
+				});
+				Ledger.hasOne(models.ledgernote,{
+					as:'note'
+				});
+			},
 			getRecords: function(limit,offset){
 				limit = parseInt(limit);
 				offset = parseInt(offset);
@@ -69,12 +85,31 @@ module.exports = function(sequelize, DataTypes) {
 				);
 			}
 			
-		},
-		instanceMethods:{
-			associateCoins: function(coins){
-				//var q = "INSERT INTO ledger_coin (ledger_id,coin_id) VALUES ()"
+		}/*,
+		hooks: {
+			afterCreate: function(ledger, options) {
+			    return m.user.findById(ledger.sender_id,{
+			      //attributes: ['username']
+			    }).then(u=>{
+			        var obj = {
+			          receiver_id:ledger.receiver_id,
+			          sender_id: ledger.sender_id,
+			          transaction_date: ledger.created_at,
+			          ledger_id: ledger.id,
+			          amount: ledger.amount
+			        };
+			        if (u){ //if it had a sender_id, get the user attached to it
+			            obj.sender_username = u.username;
+			        }
+
+			        return m.notification.create(obj,
+			        {
+			          transaction: options.transaction
+			        });
+			    });
 			}
-		}
+		}*/
+		
 	});
 
 
