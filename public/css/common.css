@@ -291,7 +291,7 @@ nav.topnav {
   display: none;
   position: absolute;
   top: 25%;
-  height: 50%;
+  /*height: 50%;*/
   background-color: #fff;
   box-shadow: 1px -1px 5px #cecece;
   width: 50%;

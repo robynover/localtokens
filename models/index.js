@@ -34,7 +34,7 @@ Object.keys(db).forEach(function(modelName) {
 
 // trigger/hook
 db.ledger.afterCreate('notify',function(ledger, options) {
-  return db.user.findById(Ledger.sender_id,{
+  return db.user.findById(db.ledger.sender_id,{
     //attributes: ['username']
   }).then(u=>{
       var obj = {

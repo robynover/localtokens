@@ -85,30 +85,7 @@ module.exports = function(sequelize, DataTypes) {
 				);
 			}
 			
-		}/*,
-		hooks: {
-			afterCreate: function(ledger, options) {
-			    return m.user.findById(ledger.sender_id,{
-			      //attributes: ['username']
-			    }).then(u=>{
-			        var obj = {
-			          receiver_id:ledger.receiver_id,
-			          sender_id: ledger.sender_id,
-			          transaction_date: ledger.created_at,
-			          ledger_id: ledger.id,
-			          amount: ledger.amount
-			        };
-			        if (u){ //if it had a sender_id, get the user attached to it
-			            obj.sender_username = u.username;
-			        }
-
-			        return m.notification.create(obj,
-			        {
-			          transaction: options.transaction
-			        });
-			    });
-			}
-		}*/
+		}
 		
 	});
 

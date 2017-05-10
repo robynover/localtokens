@@ -6,7 +6,7 @@ module.exports = function(sender,receiver,amt,note,app,sequelize){
   var Ledger = app.get('models').ledger;
   var Note = app.get('models').ledgernote;
 
-  var ln = Ledger.belongsTo(Note,{as:'note'});
+  var ln = Ledger.hasOne(Note,{as:'note'});
 
   return sequelize.transaction(function(t){
     // first check if sender has enough coins
