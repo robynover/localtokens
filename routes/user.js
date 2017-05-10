@@ -1,81 +1,25 @@
 "use strict";
-module.exports = function(express,sequelize,app){
+var striptags = require('striptags');
+var Sequelize = require('sequelize');
+var passport = require('passport');
 
-	//var express = require('express');
+module.exports = function(express,app){
+
 	var router = express.Router();
 	
 	var User = app.get('models').user;
-	var Coin = app.get('models').coin;
 	var Ledger = app.get('models').ledger;
+	var Post = require('../models/mongoose/post.js');
 
-	// controllers
-	//var Issue = require('../controllers/issue.js');
-
-	// ======= USER routes ======= //
-
-	router.get('/',function(req,res,next){
-		//console.log(req.user);
+	router.get('/',(req,res)=>{
 		if (req.user){
 			res.redirect('/user/profile/'+req.user.username);
 		} else {
-			//next();
-			res.redirect('/login');
-		}
-		
-	});
-
-	router.get('/dashboard',function(req,res){
-		if (req.user){
-			User.findById(req.user.id).then(u=>{
-				var context = {};
-				context.username = u.username;
-				context.is_admin = u.is_admin;
-				context.greeting = "Welcome "+ u.username + "!";
-				u.getAcctBalance().then(b=>{
-					context.balance = b[0].count;
-					u.getUserLedger(6).then(l=>{
-						context.ledger = l;
-						context.loggedin = true;
-						context.success = req.flash('success');
-						context.pagetitle = "Dashboard";
-						res.render('dashboard',context);
-					});
-				});
-				
-			});	
-		} else {
-			res.redirect('/login');
+			res.redirect('/signin');
 		}
 	});
 
-	router.get('/profile/:username',function(req,res,next){
-		if (req.user){
-			User.getByUsername(req.params.username).then(u=>{
-				if (!u){
-					// go to 404
-					next();
-				} else{
-					u.getAcctBalance().then(ct=>{
-						var context = {};
-						context.pagetitle = u.username;
-						context.page = 'profile';
-						context.balance = ct[0].count;
-						context.profile_user = u.username;
-						context.loggedin = true;
-						context.username = req.user.username;
-						context.is_admin = req.user.is_admin;
-						context.user_id = u.id;
-						res.render('profile',context);
-						
-					});
-				}	
-			});
-		} else {
-			res.redirect('/login');
-		}
-	});
-
-	router.get('/transactions',function(req,res,next){
+	router.get('/ledger',(req,res)=>{
 		if (req.user){
 			var perPg = 10;
 			var pg = 0;
@@ -83,47 +27,109 @@ module.exports = function(express,sequelize,app){
 				pg = parseInt(req.query.pg) - 1;
 			}
 			var offset = pg * perPg;
-			var uid = req.user.id;
-			User.findById(req.user.id).then(u=>{
-				u.getUserLedger(perPg,offset).then(l=>{
-					/*if (l.length < 1){
-						throw new Error('There are currently no records in the ledger');
-					} */
-					var context = {};
-					var total_entries = 0;
-					var total_pages = 0;
-					if (l.length > 0){
-						total_entries = l[0].total_entries;
-						total_pages = Math.ceil(l[0].total_entries / perPg);
-						pg = pg + 1;
-						context.ledger = l;
-						if (pg + 1 <= total_pages){
-							context.nextpage = pg + 1;
-						}
-						if (pg - 1 > 0){
-							context.prevpage = pg - 1;
-						}
-						
-					}
-					context.page = pg;
-					context.total_entries = total_entries;
-					context.total_pages = total_pages;
-					context.loggedin = true;
-					context.username = req.user.username;
-					if (req.user.is_admin){
-						context.is_admin = true;
-					}
-					res.render('transactions',context);
+			
+			User.findById(req.user.id)
+				.then(user=>{
+					user.getLedgerWithBalance(perPg,offset)
+						.then(ledger=>{
+							var context = {};
+							var total_entries = 0;
+							var total_pages = 0;
+							if(ledger.length > 0){
+								total_entries = ledger[0].total_entries;
+								total_pages = Math.ceil(ledger[0].total_entries / perPg);
+								pg = pg + 1;
+								context.ledger = ledger;
+								if (pg + 1 <= total_pages){
+									context.nextpage = pg + 1;
+								}
+								if (pg - 1 > 0){
+									context.prevpage = pg - 1;
+								}
+							}
+							context.page = pg;
+							context.total_entries = total_entries;
+							context.total_pages = total_pages;
+							context.loggedin = true;
+							context.username = req.user.username;
+							res.render('ledger-user',context);
+						});
 				})
 				.catch(err=>{
-					//res.status(422);
+					res.status(422);
 					res.render('generic',{msg:err});
 				});
-			});
-			
 		} else {
-			res.redirect('/login');
+			res.redirect('/signin');
 		}
 	});
+
+	router.get('/dashboard',(req,res)=>{
+		if (req.user){
+			var context = {};
+			context.loggedin = true;
+			context.username = req.user.username;
+			context.is_admin = req.user.is_admin;
+
+			Ledger.getUserExchangeRatio(req.user.id)
+				.then(result=>{
+					
+					for (var i in result){
+						if (result[i].action == 'spent'){
+							context.spent = result[i].count;
+						} else if (result[i].action == 'gained'){
+							context.gained = result[i].count;
+						}
+					}
+					User.findById(req.user.id)
+						.then(user=>{
+							user.getSimpleLedger(5)
+								.then(ledger=>{
+									context.ledger = ledger;
+									res.render('dashboard',context);
+								});
+						});
+					
+				})
+				.catch(err=>{
+					res.status(422);
+					res.render('generic',{msg:err});
+				});
+
+		} else {
+			res.redirect('/signin');
+		}
+	});
+
+	router.get('/profile/:username',(req,res)=>{
+		if (req.user){
+			var context = {};
+			context.loggedin = true;
+			context.username = req.user.username;
+			context.is_admin = req.user.is_admin;
+			
+			User.getByUsername(req.params.username)
+				.then(user=>{
+					context.user = user;
+					Ledger.getUserExchangeRatio(user.id)
+						.then(result=>{
+							for (var i in result){
+								if (result[i].action == 'spent'){
+									context.spent = result[i].count;
+								} else if (result[i].action == 'gained'){
+									context.gained = result[i].count;
+								}
+							}
+							res.render('profile',context);
+						})
+					
+				});
+				
+		} else {
+			res.redirect('/signin');
+		}
+	});
+
+
 	return router;
-};
+}

@@ -1,0 +1,42 @@
+<div class="messageboard">
+	<h2>New Post</h2>
+	<form method="post" action="/community/posts/new" enctype="multipart/form-data" id="new-msg-form">
+		<label>Type</label>
+		<input type="radio" name="type" value="offering" checked> Offering <br>
+		<input type="radio" name="type" value="seeking"> Seeking
+		<label>Title</label>
+		<input type="text" name="title" class="msgtitle"/>
+		<label>Body</label>
+		<textarea name="messagebody" class="msgbody"></textarea><br/>
+
+		<label>Contact Info</label>
+		<p>Please provide a way to contact you. The method is up to you.<br>
+		You can use your phone number, email, an online form, twitter handle, etc</p>
+		<input type="text" name="contact" class="contactinput" />
+
+		<label>Photo</label>
+		<input type="file" name="photo" id="photo-upload"><br>
+		<p>File must be less than 4MB</p>
+
+		<input type="submit" />
+	</form>
+</div>
+
+<script>
+	$('#new-msg-form').on('submit', function(e){
+	  e.preventDefault();
+	  if ($('#new-msg-form .msgtitle').val().length < 1){
+	    alert('Title cannot be empty');
+	    return false;
+	  } else if ($('#new-msg-form .msgbody').val().length < 1){
+	    alert('Body cannot be empty');
+	    return false;
+	  } else if ($('#new-msg-form .contactinput').val().length < 1){
+	  	alert('Contact info cannot be empty');
+	  	return false;
+	  } 
+	  this.submit();
+	});
+
+
+</script>

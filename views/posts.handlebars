@@ -1,0 +1,38 @@
+<div class="messageboard">
+	<div class="flash">{{success_msg}}</div>
+	<h2>{{pagetitle}}</h2>
+
+	
+	<p class="new-msg-btn"><button class="button-primary"><a href="/community/posts/new">new post</a></button></p>
+		<ul class="type-tabs">
+			<li  {{#equal type "offering"}}class="active"{{/equal}}><a href="/community/posts?type=offering">Offers</a></li>
+			<li {{#equal type "seeking"}}class="active"{{/equal}}><a href="/community/posts?type=seeking">Needs</a></li>
+		</ul>
+		{{#each posts}}
+			<div class="postlistwrap">
+				<div class="thumbnail">
+				{{#if thumb}}
+					<img src="{{thumb}}" alt="{{title}} thumbnail">
+				{{else}}
+					<i class="fa fa-thumb-tack fa-2x" aria-hidden="true"></i>
+				{{/if}}
+				</div>
+				<h4><a href="/community/post/{{_id}}">{{title}}</a></h4>
+				<p class="postdate"><em><a href="/user/profile/{{username}}">{{username}}</a></em> 
+					at {{formatDate datetime 'h:mm a, ddd MMM D, YYYY'}}</p>
+				{{!-- <div class="postbody">{{body}}</div> --}}
+			</div>
+		{{/each}}
+
+	<div class="page-nav">
+		<div class="prev">
+		    {{#if prevdate}}<a href="?prev={{prevdate}}">{{/if}}&larr; Prev{{#if prevdate}}</a>{{/if}}
+		</div>
+		<div class="next"> 
+		    {{#if startdate}}<a href="?start={{startdate}}">{{/if}}Next &rarr;{{#if startdate}}</a>{{/if}}
+		</div>
+	</div>
+	
+	<p class="new-msg-btn bottom"><button class="button-primary"><a href="/community/posts/new">new post</a></button></p>
+
+</div>

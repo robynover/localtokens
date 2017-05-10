@@ -8,7 +8,7 @@ var crypto = require('crypto');
 app.set('port', process.env.PORT || 3000);
 
 // config
-var Config = require('./config.js')[app.get('env')];
+var config = require('./config/config.js')[app.get('env')];
 
 var passport = require('passport');
 var flash = require('connect-flash');
@@ -19,13 +19,14 @@ var exphbs  = require('express-handlebars');
 app.engine('handlebars', exphbs({
 	defaultLayout: 'main',
 	partialsDir: __dirname + '/views/partials/',
-	helpers: require("./helpers/handlebars.helpers.js").helpers
+	helpers: require("./views/helpers/handlebars.helpers.js").helpers
 }));
 app.set('view engine', 'handlebars');
 
 // set up the public directory to serve static files
 app.use(express.static('public'));
 
+// helmet for security in headers
 app.use(helmet());
 
 // body parser -- for form and query string processing
@@ -35,11 +36,11 @@ app.use(require('body-parser').urlencoded({extended:true}));
 var session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
 app.use(session({
-  secret: Config.session,
-  store: new MongoStore({ url: Config.mongo }),
+  secret: config.session,
+  store: new MongoStore({ url: config.mongo }),
   resave: false,
   saveUninitialized: true,
-  name: 'monster', //name of the cookie
+  name: 'curSess', //name of the cookie
   cookie: { 
   	secure: false,
   	maxAge: 3 * 60 * 60 * 1000, // 3 hours
@@ -50,31 +51,14 @@ app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());
 
-//DB
-/*var Sequelize = require('sequelize');
-var sequelize = new Sequelize(Config.pg,{logging: false,timezone:'-04:00'});*/
 
 // models
 app.set('models',require('./models'))
 var User = app.get('models').user;
 
-
-
-
 var sequelize = app.get('models').sequelize;
+
 sequelize.sync(); //{force:true}
-// controllers
-var Transact = require('./controllers/transact.js');
-var Issue = require('./controllers/issue.js');
-
-// routes 
-var adminRoutes = require('./routes/admin.js')(express,sequelize,app);
-var userRoutes = require('./routes/user.js')(express,sequelize,app);
-var homeRoutes = require('./routes/home.js')(express,sequelize,app);
-var transactRoutes = require('./routes/transact.js')(express,sequelize,app);
-var apiRoutes = require('./routes/api.js')(express,sequelize,app);
-var postRoutes = require('./routes/post.js')(express); // post uses mongo, not sequelize
-
 
 // passport
 var passport = require('passport');
@@ -82,9 +66,11 @@ passport.serializeUser(function(user, done) {
     done(null, user.id);
 });
 passport.deserializeUser(function(id, done) {
-  User.findById(id).then(user=>{
-  	done(null, user);
-  	return null;
+  User.findById(id,{
+      attributes: ['id', 'username', 'is_admin', 'is_active', 'max_negative_balance']
+    }).then(user=>{
+  	 done(null, user);
+  	 return null;
   }).catch(err=>{
   	done(err);
   });
@@ -94,17 +80,17 @@ var LocalStrategy = require('passport-local').Strategy;
 passport.use(new LocalStrategy(
   function(username, password, done) {
   	User.getByUsername(username).then(user=>{
-		if (!user) { 
-			return done(null, false, { message: 'Incorrect username or password.' }); 
-		}
-		if (!user.verifyPassword(password)) { 
-			return done(null, false, { message: 'Incorrect username or password.' }); 
-		}
-		if (!user.is_active){
-			return done(null, false, { message: 'Your account has not been activated. Check your email for an activation link.' }); 
-		}
-		// Success
-		return done(null, user);
+  		if (!user) { 
+  			return done(null, false, { message: 'Incorrect username or password.' }); 
+  		}
+  		if (!user.verifyPassword(password)) { 
+  			return done(null, false, { message: 'Incorrect username or password.' }); 
+  		}
+  		if (!user.is_active){
+  			return done(null, false, { message: 'Your account has not been activated.' }); 
+  		}
+      // Success
+  		return done(null, user);
   	}).catch(err=>{
 		if (err) { return done(err); }
   	});  
@@ -112,18 +98,22 @@ passport.use(new LocalStrategy(
 ));
 
 
-
-
 // -----------------------------//
 // ROUTES
 // -----------------------------//
+var apiRoutes = require('./routes/api.js')(express,app);
+var homeRoutes = require('./routes/home.js')(express,app);
+var userRoutes = require('./routes/user.js')(express,app);
+var exchangeRoutes = require('./routes/exchange.js')(express,app);
+var communityRoutes = require('./routes/community.js')(express,app);
+var adminRoutes = require('./routes/admin.js')(express,app);
 
-app.use('/admin', adminRoutes);
-app.use('/user', userRoutes);
-app.use('/', homeRoutes);
-app.use('/transact', transactRoutes);
 app.use('/api', apiRoutes);
-app.use('/messageboard', postRoutes);
+app.use('/', homeRoutes);
+app.use('/user', userRoutes);
+app.use('/exchange', exchangeRoutes);
+app.use('/community', communityRoutes);
+app.use('/admin', adminRoutes);
 
 
 // 404
@@ -134,6 +124,7 @@ app.use(function (req,res,next) {
 // 500
 app.use(function (err, req, res, next) {
 	console.error(err.stack);
+  console.log(err);
 	res.status(500);
 	res.render('generic',{msg:err});
 });

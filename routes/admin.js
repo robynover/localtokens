@@ -1,15 +1,10 @@
 "use strict";
-module.exports = function(express,sequelize,app){
 
-	//var express = require('express');
+module.exports = function(express,app){
 	var router = express.Router();
-
+	
 	var User = app.get('models').user;
-	var Coin = app.get('models').coin;
 	var Ledger = app.get('models').ledger;
-
-	// controllers
-	var Issue = require('../controllers/issue.js');
 
 	// === require admin users for this section=== //
 	router.all('/*',function(req,res,next){
@@ -28,192 +23,137 @@ module.exports = function(express,sequelize,app){
 		}	
 	});
 
-	// ======= ADMIN routes ======= //
-	
 	router.get('/',function(req,res){
 		res.redirect('/admin/ledger');
-	});
-
-	router.get('/mint',function(req,res){
-		var context = {};
-		context.layout = 'admin';
-		if (req.user){
-			context.username = req.user.username;
-			context.loggedin = true;
-		}
-		res.render('mintform',context);
-	});
-	
-	router.post('/mint', function(req,res){
-		Coin.create({}).then(c=>{
-			var context = {};
-			context.msg = "New coin created with Serial # " + c.serial_num;
-			context.layout = 'admin';
-
-			if (req.user){
-				context.username = req.user.username;
-				context.loggedin = true;
-			}
-			res.render('generic',context);
-		});
 	});
 
 	router.get('/ledger',function(req,res){
 
 		var perPg = 10;
 		var pg = 0;
+		var page = 1;
 		if (req.query.pg){
+			page = req.query.pg;
 			pg = parseInt(req.query.pg) - 1;
 		}
 		var offset = pg * perPg;
 		var total_entries, total_pages;
 
-		Ledger.getRecords(perPg,offset).then(l=>{
-			if (l.length > 0){ // correct for empty result set
-				total_entries = l[0].total_entries;
-				total_pages = Math.ceil(l[0].total_entries / perPg);
-			}
-			
-			pg = pg + 1;
-
-			let context = {};
-			context.pagetitle = 'Ledger';
-			context.records = l;
-			context.loggedin = true;
-			if (pg + 1 <= total_pages){
-				context.nextpage = pg + 1;
-			}
-			if (pg - 1 > 0){
-				context.prevpage = pg - 1;
-			}
-			context.page = pg;
-			context.total_entries = total_entries;
-			context.total_pages = total_pages;
-			context.layout = 'admin';
-			if (req.user){
-				context.username = req.user.username;
-			}
-			res.render('ledger',context);
-		});
-	});	
-
-	router.get('/bank',function(req,res){
-		var perPg = 10;
-		var pg = 0;
-		if (req.query.pg){
-			pg = parseInt(req.query.pg) - 1;
-		}
-		var offset = pg * perPg;
-		var context = {};
-		// get the total num coins in the bank
-		Coin.count({ where: {owner_id: null} }).then(function(c) {
-			context.bankcount = c;
-
-			Coin.getBankLedger(perPg,offset).then(l=>{
-				var total_entries = l[0].total_entries;
-				var total_pages = Math.ceil(l[0].total_entries / perPg);
-				pg = pg + 1;
-				
-				context.pagetitle = "Bank";
-				context.records = l;
-				context.layout = 'admin';
-				if (pg + 1 <= total_pages){
-					context.nextpage = pg + 1;
-				}
-				if (pg - 1 > 0){
-					context.prevpage = pg - 1;
-				}
-				context.page = pg;
-				context.total_entries = total_entries;
-				context.total_pages = total_pages;
-
-				if (req.user){
-					context.username = req.user.username;
-				}
-				res.render('bank',context);
-			});
-
-		});
-
-	});
-
-	router.get('/bestow',function(req,res){
 		var context = {};
 		context.layout = 'admin';
+		context.pagetitle = 'Ledger';
 		context.loggedin = true;
-		if (req.user){
-			context.username = req.user.username;
+		context.is_admin = req.user.is_admin;
+		context.username = req.user.username;
+
+		Ledger.getTransactions(perPg,offset)
+			.then(records=>{
+				if (records.length > 0){ 
+					total_entries = records[0].total_entries;
+					total_pages = Math.ceil(records[0].total_entries / perPg);
+				}
+				context.total_entries = total_entries;
+				context.total_pages = total_pages;
+				if (parseInt(page) + 1 <= total_pages){
+					context.nextpage = parseInt(page) + 1;
+				}
+				if (parseInt(page) - 1 > 0){
+					context.prevpage = parseInt(page) - 1;
+				}
+				context.page = page;
+
+				context.records = records;
+				res.render('ledger-admin.handlebars',context);
+			})
+			.catch(err=>{
+				res.render('generic',{msg:err});
+			});
+	});
+
+	router.get('/users',(req,res)=>{
+		var context = {};
+		context.layout = 'admin';
+		context.pagetitle = 'Users';
+		context.loggedin = true;
+		context.is_admin = req.user.is_admin;
+		context.username = req.user.username;
+
+		var limit = 20;
+		var pg = 0;
+		if (req.query.pg){
+			pg = parseInt(req.query.pg);
 		}
+		var offset = limit * pg;
+		var page = pg + 1;
+
+		var onlyInactive = false;
+		if (req.query.inactive){
+			onlyInactive = true;
+		}
+
+		User.getUsersWithBalance(onlyInactive,limit,offset)
+			.then(users=>{
+				context.users = users;
+
+				var total_entries = users[0].total_entries;
+				var total_pages = Math.ceil(total_entries / limit);
+				context.total_entries = total_entries;
+				context.total_pages = total_pages;
+				context.page = page;
+				if (parseInt(page) + 1 <= total_pages){
+					context.nextpage = parseInt(page) + 1;
+				}
+				if (parseInt(page) - 1 > 0){
+					context.prevpage = parseInt(page) - 1;
+				}
+
+				res.render('users-admin',context);
+			});
+	});
+
+	router.get('/bestow',(req,res)=>{
+		var context = {};
+		context.layout = 'admin';
+		context.pagetitle = 'Bestow';
+		context.loggedin = true;
+		context.is_admin = req.user.is_admin;
+		context.username = req.user.username;
+		context.result_msg = req.flash('message');
 		res.render('bestowform',context);
 	});
 
-	router.post('/bestow',function(req,res){
-		var username = req.body.receiver;
-		var amt = parseInt(req.body.num);
-		if (amt <= 10 && amt > 0){
-			User.getIdByUsername(username).then(u=>{
-				var uid = u[0].id;
-				if (uid > 0){
-					Issue(uid,amt,app,sequelize).then(r=>{
-						var msg = 'The following coins were bestowed on user ' + username + ':<br>';
-						for (var i = 0; i<r.length; i++){
-							msg += '<li>' + r[i].serial_num + '</li>';
-						}
-						var context = {};
-						context.msg = msg;
-						context.layout = 'admin';
-						context.loggedin = true;
-						if (req.user){
-							context.username = req.user.username;
-						}
-						res.render('generic',context);
-						//console.log(r);
-					}).catch(err=>{
-						console.log('ERROR');
-						console.log(err);
-						res.status(500);
-						res.render('generic',{msg:err});
-					});
-				} else {
-					res.status(422);
-					res.render('generic',{msg:'No user id supplied'});
-				}
-			});	
-		} else {
-			res.status(422);
-			res.render('generic',{msg:'You can only bestow 10 tokens max at one time'});
-		}
-		
-	});
-
-	router.get('/users',function(req,res){
+	router.post('/bestow',(req,res)=>{
 		var context = {};
 		context.layout = 'admin';
-		if (req.user){
-			context.username = req.user.username;
-		}
-		var unactivated = false;
-		if (req.query.unact){
-			unactivated = true;
-		}
-		User.getUsersWithBalance(unactivated).then(users=>{
-			context.users = users;
-			res.render('users',context);
-		});
-	});
+		context.pagetitle = 'Bestow';
+		context.loggedin = true;
+		context.is_admin = req.user.is_admin;
+		context.username = req.user.username;
 
-	router.post('/users/activate',function(req,res){
-		User.update(
-		    { is_active: true }, 
-		    { where: { id: req.body.userids }} 
-		).then(users=>{
-			//console.log(users);
-			res.json({ok:true});
-		}).catch(err=>{
-			res.json({ok:false});
-		});
+		var amount = parseInt(req.body.num);
 
+		if (amount > 10){
+			context.msg = "Cannot bestow more than 10 tokens";
+			res.render('generic',context);
+			return;
+		}
+
+		User.getByUsername(req.body.receiver)
+			.then(idObj=>{
+				Ledger.create({
+					receiver_id: idObj.id,
+					amount: amount,
+					note: ''
+				})
+					.then(ledger=>{
+						req.flash('message', 'Successfully bestowed ' + amount + ' on ' + idObj.username);
+						res.redirect('/admin/bestow');
+					})
+					.catch(err=>{
+						res.render('generic',{msg:err});
+					});
+			});
 	});
 
 	return router;
-};
+}

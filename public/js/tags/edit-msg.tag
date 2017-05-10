@@ -1,0 +1,132 @@
+<edit-msg>
+	<div id="editmodal">
+		<p class="modalclose">
+			<a onclick = {close} href="#" class="close">
+				<i class="fa fa-times-circle-o" aria-hidden="true"></i>
+			</a>
+		</p>
+		<div class="thumb" if={ thumb } ref="thumb">
+			<img src={ thumb } >
+			<p><a href="#" onclick={removePhoto}>Remove</a></p>
+		</div>
+		
+		<div id="photo-upload">	
+			<p><strong>Photo</strong></p>
+			<div class="upload-details">
+				<input type="file" name="photo" id="photo-file" ref="photo"><br>
+				<p>File must be less than 4MB</p>
+			</div>
+		</div>
+
+		<input type="text" name="title" value= {title} ref="title">
+		<textarea name="message" ref="message">{content}</textarea>
+		<input type="text" name="contact" value= {contact} ref="contact">
+		
+		<button onclick= {save}>Save</button>
+		
+		<div class="error">{ feedback }</div>
+	</div>
+
+	<style>
+		button{
+			float:left;
+		}
+		.error{
+			float:left;
+			line-height: 3.5rem;
+			margin-left: 1.5rem;
+		}
+		#photo-upload{
+			float:left;
+			margin-left: 1.5rem;
+		}
+		.thumb{
+			float:left;
+			width: 100px;
+			text-align: center;
+			font-size: 75%;
+		}
+		
+	</style>
+
+	<script>
+	this.id = opts.id;
+	this.content = opts.content;
+	this.title = opts.title;
+	this.contact = opts.contact;
+	this.observable = opts.observable;
+	this.removeImg = false;
+	this.thumb = opts.thumb;
+	var self = this;
+
+	this.close = function(e){
+		e.preventDefault();
+		this.unmount(true);
+	}
+	this.removePhoto = function(e){
+		e.preventDefault();
+		this.refs.thumb.style.visibility = 'hidden';
+		this.removeImg = true;
+	}
+
+	this.save = function(e){
+		e.preventDefault();
+		var data = new FormData();
+
+		if (!self.refs.message.value){
+			this.feedback = 'Body cannot be empty';
+			return;
+		}
+		if (!self.refs.title.value){
+			this.feedback = 'Title cannot be empty';
+			return;
+		}
+		if (!self.refs.contact.value){
+			this.feedback = 'Contact info cannot be empty';
+			return;
+		}
+
+		data.append('message', self.refs.message.value);
+		data.append('title', self.refs.title.value);
+		data.append('contact', self.refs.contact.value);
+		data.append('remove', self.removeImg);
+
+
+		// is there a file?
+		if (self.refs.photo.value){
+			var file = self.refs.photo.files[0];
+			data.append('photo',file);
+		} 
+
+		var http = new XMLHttpRequest();
+	    http.open("POST", '/api/post/edit/' + self.id, true);
+		http.send(data);
+
+	    http.onreadystatechange = function() {
+	        if(http.readyState == 4 && http.status == 200) {
+	        	var reply = JSON.parse(http.responseText);
+	            if (reply.success){	            	
+	            	var obj = {};
+	            	obj.body = self.refs.message.value;
+	            	obj.title = self.refs.title.value;
+	            	obj.contact = self.refs.contact.value;
+	            	if (self.refs.photo.value){
+	            		obj.photo = reply.photo;
+	            		obj.thumb = reply.thumb;
+	            	}
+	            	if (self.removeImg){
+	            		obj.remove = true;
+	            	}
+	            	self.observable.trigger('done',obj);
+	            	self.unmount(true);
+	            }
+	        }
+	    }
+	}
+
+	
+
+
+	</script>
+
+</edit-msg>

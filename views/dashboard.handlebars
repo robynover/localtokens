@@ -1,55 +1,63 @@
+<link rel="stylesheet" href="/css/lib/chartist.css">
 <div class="dashboard">
-	{{#if success}}
-		<p class="flash-success">{{success}}</p>
-	{{/if}}
-
-	<h2>{{greeting}}</h2>
+	<h2>Dashboard</h2>
 	<div class="row">
-		<div class="three columns supercolumn">
-			
+		<div class="two columns supercolumn">
 			<div class="subcolumn">
-				<h4 class="subcolumn-heading">Balance</h4>
-				<p class="balance">{{balance}}</p>
+				<balance username="{{username}}" header="true"></balance>
 			</div>
-			
+			<div class="subcolumn">
+				<h5 class="stats">Stats</h5>
+				<stats username="{{username}}"></stats>
+			</div>
 		</div>
-		<div class="nine columns dash-transactions">
-			<h4>Recent Transactions</h4>
+
+		<div class="four columns">
+			<h5>Exchange History</h5>
+			<div class="ct-chart ct-major-sixth"></div>
+			<div class="chart-label ct-series-a">&nbsp;</div> Earned {{gained}}<br>
+			<div class="chart-label ct-series-b">&nbsp;</div> Spent	{{spent}}
+			<!---->
+		</div>
+
+
+		<div class="six columns">
+			<h5>Recent Exchanges</h5>
 			<table class="dashboard-transactions transactions">
-				<tr><th></th><th>date</th><th>amount</th><th>description</th><th>balance</th></tr>
+				<tr><th>date</th><th>amount</th><th>description</th></tr>
 				{{#each ledger}}
 					<tr class="{{ifNegative signed_amt 'neg' 'pos'}}">
-						<td>
-							{{#if note}}
-							&nbsp;<i class="fa fa-sticky-note-o note-icon" aria-hidden="true" id="icon-{{id}}"></i>
-							<div class="noteview" id="note-{{id}}">{{note}}</div>
-							{{/if}}
-						</td>
+						
 						<td>{{formatted_date}}</td>
 						<td class="amt">{{signed_amt}}</td>
 						<td>{{description}}</td>
-						<td>{{balance}}</td>
 						
 					</tr>
 				{{/each}}
 
 			</table>
-			<p class="goto-text"><a href="/user/transactions">See all transactions &rarr;</a></p>
-
+			<p class="goto-text"><a href="/user/ledger">See all exchanges &rarr;</a></p>
 		</div>
 	</div>
-
-	<div class="row under-row">
-	    <div class="one-third column" id="info1">info</div>
-	    <div class="one-third column" id="info2">
-	    	<p>You've made <span class="numtrans"> </span> <span class="tword">transactions</span> 
-	    		with <span class="numppl"> </span> <span class="pword">people</span> total</p>
-	    </div>
-	    <div class="one-third column" id="info3">
-	    	<h4>Recent Community Posts</h4>
-	    	<div class="dashboard-posts"></div>
-	    	<p class="goto-text"><a href="/messageboard">See all posts &rarr;</a></p>
-	    </div>
-	</div>
-
 </div>
+
+<!-- chartist.js -->
+<script src="/js/lib/chartist.min.js"></script>
+<!-- riot.js -->
+<script src="/js/lib/riot.min.js"></script>
+{{!-- <script src="/js/tags/balance.js"></script>
+<script src="/js/tags/stats.js"></script> --}}
+<script src="/js/riottags.min.js"></script>
+<script>
+    riot.mount('balance');
+    riot.mount('stats');
+
+    new Chartist.Pie('.ct-chart', {
+      series: [{{gained}}, {{spent}}]
+    }, {
+      donut: true,
+      donutWidth: 60,
+      donutSolid: true,
+      showLabel: false
+    });
+</script>

@@ -6,7 +6,7 @@
     "Robyn Overstreet"
   ],
   "license": "MIT",
-  "homepage": "https://github.com/robynover/localtokens",
+  "homepage": "",
   "ignore": [
     "**/.*",
     "node_modules",
@@ -15,8 +15,12 @@
     "tests"
   ],
   "dependencies": {
-    "jquery": "^3.2.1",
+    "skeleton": "^2.0.4",
+    "font-awesome": "fontawesome#^4.7.0",
+    "chartist": "^0.11.0"
+  },
+  "devDependencies": {
     "moment": "^2.18.1",
-    "validate": "validate.js#^0.11.1"
+    "validate": "^0.11.1"
   }
 }

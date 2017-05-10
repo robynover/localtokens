@@ -10,12 +10,11 @@ $('#user-activate').on('click',function(){
 	if (users.length > 0){
 		$.ajax({
 			method: 'POST',
-        	url: "/admin/users/activate",
+        	url: "/api/admin/users/activate",
         	data: { userids: users}
         })
         .done(function(data){
-        	console.log(data);
-        	if (data.ok){
+        	if (data.success){
         		// reload
         		window.location.reload(true);
         	} else {
@@ -31,8 +30,8 @@ $('#user-activate').on('click',function(){
 $('.bestow form #receiver').on('blur', function(){
   var receiver = $(this).val();
   $.ajax({
-    method: "GET",
-    url: "/api/user/exists?u="+receiver,
+    method: "POST",
+    url: "/api/user/" + receiver + "/exists"
   }).done(function( json ) {
       if(json.error){
         $('.field-validation.receiver').removeClass('success');

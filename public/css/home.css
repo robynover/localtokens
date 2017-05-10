@@ -56,4 +56,8 @@ nav.topnav {
 section.faq {
   background: linear-gradient(to bottom right, white, #1EAEDB); }
 
+.home .column, .home .columns {
+  box-shadow: none;
+  border: none; }
+
 /*# sourceMappingURL=home.css.map */

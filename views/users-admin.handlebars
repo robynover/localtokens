@@ -1,0 +1,43 @@
+<h2>Users</h2>
+<p><a href="/admin/users">All</a> | <a href="?inactive=1">Inactive</a></p>
+<table id="users-table">
+	<thead>
+		<tr><th>Select</th><th>Username</th><th>Name</th><th>Active</th><th>Admin</th><th>Balance</th></tr>
+	</thead>
+	<tbody>
+{{#each users}}
+	<tr>
+		<td><input type="checkbox" value="{{id}}" name="userid"></td>
+		<td>{{username}}</td>
+		<td>{{firstname}} {{lastname}}</td>
+		<td>{{#if is_active}}
+			<i class="fa fa-check" aria-hidden="true"></i>
+			{{/if}}
+		</td>
+		<td>{{#if is_admin}}
+			<i class="fa fa-check" aria-hidden="true"></i>
+			{{/if}}
+		</td>
+		<td>
+			{{balance}}
+		</td>
+	</tr>
+{{/each}}
+</tbody>
+</table>
+
+<div class="pagenav prev">
+	{{#if prevpage}}
+		<a href="?pg={{prevpage}}">&larr; Prev</a> 
+	{{/if}}
+</div>
+
+<div class="pagenav next">
+	{{#if nextpage}}
+		<a href="?pg={{nextpage}}">Next &rarr;</a> 
+	{{/if}}
+</div>
+
+<p class="pagecount">Page {{page}} of {{total_pages}}</p>
+
+<button class="button-primary" id="user-activate">Activate</button>

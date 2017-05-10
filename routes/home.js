@@ -1,14 +1,51 @@
 "use strict";
-module.exports = function(express,sequelize,app){
+var striptags = require('striptags');
+var Sequelize = require('sequelize');
+var passport = require('passport');
+var config = require('../config/config.js')[process.env.NODE_ENV];
 
-	//var express = require('express');
+module.exports = function(express,app){
+
 	var router = express.Router();
-	var passport = require('passport');
-	var Sequelize = require('sequelize'); // called staticly in validation
+	
 	var User = app.get('models').user;
+	//var Item = app.get('models').item;
 
-	var striptags = require('striptags');
+	/*router.get('/user/:username/items/:itype',(req,res)=>{
+		if (req.user){
+			User.getByUsername(req.params.username)
+				.then(user=>{
+					var item_type = 'seeking';
+					if (req.params.itype != 'seeking'){
+						item_type = 'offering';
+					}
+					user.getItems({where:{offering_seeking:item_type}})
+						.then(items=>{
+							res.render('items-test',{items:JSON.stringify(items),item_type:item_type});
+						});
+				});
+		} else {
+			res.json({success:false,error:'Not logged in'});
+		}
+	});
 
+	router.get('/user/:username',(req,res)=>{
+		if (req.user){
+			User.getByUsername(req.params.username)
+				.then(user=>{
+					var context = {};
+					context.profilename = user.username;
+					context.username = req.user.username;
+					context.profile_text = user.profile_text;
+					context.url = "/api/user/profile/edit";
+
+					res.render('editbox-test',context);
+				});
+		} else {
+			res.json({success:false,error:'Not logged in'});
+		}
+	});*/
+	
 	router.get('/',function(req,res){
 		var context = {};
 		context.layout = "home";
@@ -19,39 +56,34 @@ module.exports = function(express,sequelize,app){
 		}
 		res.render('generic',context);
 	});
-	router.post('/login',
-	  passport.authenticate('local', { successRedirect: '/user/dashboard',
-	                                   failureRedirect: '/login',
-	                                   failureFlash: true })
-	);
 
-	router.get('/login',function(req,res){
-		var error = '';
-		var err = req.flash();
-		if (err){
-			error = err.error;
-		}
-		var loggedin = false;
+	router.get('/signin',(req,res)=>{
+		res.render('login');
+	});
+
+	router.post('/signin',passport.authenticate('local'),(req,res)=>{
+		// If this function gets called, authentication was successful.
+		// 401 status is sent if authentication fails
+		res.redirect('/user/dashboard');
+	});
+
+	router.get('/signout',(req,res)=>{
+		req.logout();
+		res.render('generic',{msg:"You've been successfully logged out."});
+	});
+
+	router.get('/signup',(req,res)=>{
 		if (req.user){
-			loggedin = true;
+			req.logout();
 		}
-		res.render('login',{pagetitle:'Login', error: error, loggedin:loggedin});
+		var context = {};
+		context.pagetitle = 'Sign Up';
+		context.error = req.flash('err');
+		context.loggedin = false;
+		res.render('signup',context);
 	});
 
-	router.get('/logout', function(req, res){
-	  req.logout();
-	  res.render('generic',{msg:"You've been successfully logged out."});
-	});
-
-	router.get('/signup',function(req,res){
-		var loggedin = false;
-		if (req.user){
-			loggedin = true;
-		}
-		res.render('signup',{pagetitle:'Sign Up', error: req.flash('err'), loggedin:loggedin});
-	});
-
-	router.post('/signup',function(req,res){
+	router.post('/signup', (req,res)=>{
 		// set up variables to return in errors, if needed
 		var context = {};
 		context.username = striptags(req.body.username);
@@ -97,6 +129,8 @@ module.exports = function(express,sequelize,app){
 			//res.render('signup');
 		});
 	});
+
+
 
 	return router;
 };

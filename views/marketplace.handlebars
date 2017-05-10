@@ -1,0 +1,55 @@
+<div class="marketplace">
+	<div class="flash">{{success_msg}}</div>
+	<h2>{{pagetitle}}</h2>
+
+	<form>
+	<input type="text" name="q" value="{{#if q}}{{q}}{{/if}}" placeholder="Search" id="search">&nbsp;&nbsp;
+	<input type="radio" name="type" value="offering" {{#equal type "Offers"}}checked{{/equal}}> Offers &nbsp;&nbsp;
+	<input type="radio" name="type" value="seeking" {{#equal type "Needs"}}checked{{/equal}}> Needs &nbsp;&nbsp;
+	<button type="submit" class="button-primary"><i class="fa fa-search" aria-hidden="true"></i></button>
+	</form>
+	
+	<div class="new-msg-btn"><button class="button-primary"><a href="/community/posts/new">new post</a></button></div>
+
+	<ul class="type-tabs">
+		<li  {{#equal type "Offers"}}class="active"{{/equal}}><a href="?q={{q}}&type=offering">Offers</a></li>
+		<li {{#equal type "Needs"}}class="active"{{/equal}}><a href="?q={{q}}&type=seeking">Needs</a></li>
+	</ul>
+
+
+	{{#if results}}
+		{{#each results}}
+			
+			<div class="postlistwrap">
+				<div class="thumbnail">
+				{{#if thumb}}
+					<a href="/community/post/{{_id}}">
+						<img src="{{thumb}}" alt="{{title}} thumbnail">
+					</a>
+				{{else}}
+					<a href="/community/post/{{_id}}" class="thumb-icon">
+						<i class="fa fa-thumb-tack fa-2x" aria-hidden="true"></i>
+					</a>
+				{{/if}}
+				</div>
+				<h4><a href="/community/post/{{_id}}">{{title}}</a></h4>
+				<p class="postdate"><em><a href="/user/profile/{{username}}">{{username}}</a></em> 
+					at {{formatDate datetime 'h:mm a, ddd MMM D, YYYY'}}</p>
+			</div>
+
+		{{/each}}
+
+	{{else}}
+		<p>{{noresults}}</p>
+	{{/if}}
+	<div class="page-nav">
+		<div class="prev">
+		    {{#if prevdate}}<a href="?prev={{prevdate}}">&larr; Prev</a>{{/if}}
+		</div>
+		<div class="next"> 
+		    {{#if startdate}}<a href="?start={{startdate}}">Next &rarr;</a>{{/if}}
+		</div>
+	</div>
+
+	<div class="new-msg-btn bottom"><button class="button-primary"><a href="/community/posts/new">new post</a></button></div>
+</div>

@@ -2,43 +2,26 @@
 <html lang="en">
 <head>
 
-  <!-- Basic Page Needs
-  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
   <meta charset="utf-8">
   <title>{{pagetitle}} Local Tokens Admin</title>
   
-
-  <!-- Mobile Specific Metas
-  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <!-- FONT
-  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  {{!-- <link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
-  <link href="https://fonts.googleapis.com/css?family=Merriweather" rel="stylesheet"> --}}
-  
-  <!-- CSS
-  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  <link rel="stylesheet" href="/css/normalize.css">
-  <link rel="stylesheet" href="/css/skeleton.css">
+  <link rel="stylesheet" href="/css/lib/normalize.css">
+  <link rel="stylesheet" href="/css/lib/skeleton.css">
   <link rel="stylesheet" href="/css/lib/font-awesome.min.css">
-  <link rel="stylesheet" href="/css/common.css">
-  <link rel="stylesheet" href="/css/admin.css">
-
+  <link rel="stylesheet" href="/css/admin.combo.min.css">
 
 </head>
+
 <body class="admin">
 
-  <!-- Primary Page Layout
-  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
   {{>topnav loggedin=true}}
  
   <nav class="menu">
     <div class="container">
       <ul>
         <li><a href="/admin/ledger">Ledger</a></li>
-        <li><a href="/admin/bank">Bank</a></li>
-        <li><a href="/admin/mint">Mint</a></li>
         <li><a href="/admin/bestow">Bestow</a></li>
         <li><a href="/admin/users">Users</a></li>
       </ul>
@@ -54,9 +37,9 @@
 	<!-- JS
 	  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
     <script src="/js/lib/jquery.min.js" ></script>
-    <script src="/js/lib/moment.js"></script>
-    <script src="/js/admin.js" ></script>
-    <script src="/js/script.js" ></script>
+    <script src="/js/lib/moment.min.js"></script>
+    <script src="/js/admin.min.js" ></script>
+    <!--<script src="/js/script.js" ></script>-->
     
 	</body>
 	</html>

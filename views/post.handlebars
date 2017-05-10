@@ -1,33 +1,102 @@
 <div class="messageboard thread">
-	<p><a href="/messageboard">&larr; Back to All Posts</a></p>
-	<div class="postwrap orig" id="wrap-{{_id}}">
-		<h2>{{title}}</h2>
-		<p class="postdate orig"><em><a href="/user/profile/{{author}}">{{author}}</a></em> 
+	<p><a href="/community/marketplace">&larr; Back to Market</a></p>
+	<div class="postwrap" id="wrap-{{_id}}">
+
+		<p class="post-label">{{type}}</p>
+		<h2 id="posttitle">{{title}}</h2>
+		<p class="postdate"><em><a href="/user/profile/{{author}}">{{author}}</a></em> 
 			at {{formatDate datetime 'h:mm a, ddd MMM D, YYYY'}}</p>
 
-		<div class="postbody orig">
-			{{body}}	
+		<div class="postbody orig" id="postbody">
+			{{body}}
 		</div>
 
-		{{#if photo}}
-		<div class="msgphoto">
+		 <div class="msgphoto">
+		 	{{#if photo}}
 			<img src="{{photo}}">
-		</div>
-		{{/if}}
+			{{/if}}
+		</div> 
 
+		<hr>
+		<p><strong>Contact:</strong> <span id="postcontact">{{contact}}</span>
+		
 		{{#equal username author}}
 		<p class="tools">
 				<a href="#" title="edit" class="edit" id="edit-{{_id}}"><i class="fa fa-pencil" aria-hidden="true"></i></a>
 				<a href="#" title="delete" class="delete" id="delete-{{_id}}"><i class="fa fa-times" aria-hidden="true"></i></a>
 		</p>
 		{{/equal}}
+		
 	</div>
-	
-	<div id="editmodal">
-		<p class="modalclose"><a href="#" class="close"><i class="fa fa-times-circle-o" aria-hidden="true"></i></a></p>
-		<input type="text" name="title">
-		<textarea name="message"></textarea>
-		<input type="hidden" name="id">
-		<button>Edit</button>
-	</div>
+	<edit-msg id={{_id}} thumb="{{thumb}}"></edit-msg>
+	<confirm></confirm>
 </div>
+
+<!-- riot.js -->
+<script src="/js/lib/riot.min.js"></script>
+{{!-- <script src="/js/tags/edit-msg.js"></script>
+<script src="/js/tags/confirm.js"></script> --}}
+
+<script src="/js/riottags.min.js"></script>
+<script>
+
+	
+	var myObservable = riot.observable();
+
+	$('.edit').on('click',function(e){
+		e.preventDefault
+		riot.mount('edit-msg',{
+			content: {{{body_str}}},
+			title: {{{title_str}}},
+			contact: {{{contact_str}}},
+			observable: myObservable
+		});
+	});
+	myObservable.on('done',function(msg){
+		$('#postbody').html(msg.body);
+		$('#posttitle').html(msg.title);
+		$('#postcontact').html(msg.contact);
+		
+		if (msg.photo){
+			if ($('.msgphoto img').length > 0){
+				$('.msgphoto img').attr('src',msg.photo);
+			} else {
+				var img = $('<img>').attr('src',msg.photo);
+				$('.msgphoto').append(img);
+			}
+			$('edit-msg').attr('thumb',msg.thumb);
+		}
+		if (msg.remove){
+			$('.msgphoto img').remove();
+			$('edit-msg').attr('thumb','');
+		}
+			
+	});
+
+	$('.delete').on('click',function(e){
+		e.preventDefault();
+		var id = this.id.split('-')[1];
+		riot.mount('confirm',{
+			question:"Really delete this post?",
+			observable:myObservable,
+			id: id
+		});
+	});
+
+	myObservable.on('yes',function(result){
+		// do the delete
+		$.ajax({
+		  method: "POST",
+		  url: "/api/post/delete/"+result
+		})
+		  .done(function( msg ) {
+		  	if (msg.success){
+		  		var url = window.location.href;
+		  		var domainAndPort = url.split('/')[2];
+		  		window.location.replace('http://' + domainAndPort + "/community/posts?del=1");
+		  	}
+		    
+		  });
+	});
+
+</script>

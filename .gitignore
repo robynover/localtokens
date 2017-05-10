@@ -1,8 +1,9 @@
 node_modules/*
-config.js
+config/*
 public/uploads/*
 bower_components/*
 NOTES.txt
+TODO.txt
 .gitignore
 .sass-cache/*
 test/*

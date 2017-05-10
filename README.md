@@ -1,2 +1,0 @@
-# localtokens
-Local currency

@@ -1,6 +1,6 @@
 {
   "name": "currency",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "local currency",
   "main": "app.js",
   "scripts": {
@@ -33,11 +33,13 @@
     "chai": "^3.5.0",
     "chai-http": "^3.0.0",
     "grunt": "^1.0.1",
+    "grunt-contrib-cssmin": "^2.2.0",
     "grunt-contrib-jshint": "^1.1.0",
-    "grunt-contrib-uglify": "^2.2.0",
+    "grunt-contrib-uglify": "^2.3.0",
     "grunt-contrib-watch": "^1.0.0",
     "grunt-sass": "^2.0.0",
     "load-grunt-tasks": "^3.5.2",
+    "riot": "^3.4.2",
     "supertest": "^3.0.0"
   }
 }

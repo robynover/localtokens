@@ -1,0 +1,27 @@
+<div class="community">
+	<h2>Community</h2>
+	<div class="row">
+		<div class="three columns">
+			<h3>Offers</h3>
+			{{#each items_offering}}
+				<li>{{description}} &mdash; <a href="/user/profile/{{username}}">{{username}}</a></li>
+			{{/each}}
+		</div>
+
+		<div class="three columns">
+			<h3>Requests</h3>
+			{{#each items_seeking}}
+				<li>{{description}} &mdash; <a href="/user/profile/{{username}}">{{username}}</a></li>
+			{{/each}}
+		</div>
+
+		<div class="five columns">
+			<h3>Recent Posts</h3>
+			{{#each posts}}
+				<li><a href="/community/post/{{_id}}">{{title}}</a></li>
+			{{/each}}
+			<p class="goto-text"><a href="/community/posts">See all posts &rarr;</a></p>
+		</div>
+
+	</div>
+</div>

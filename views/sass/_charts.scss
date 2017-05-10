@@ -1,0 +1,14 @@
+$acolor: #1D434E;
+$bcolor: #50B6D6;
+
+.chart-label{
+	display:inline;
+}
+
+.chart-label.ct-series-a{
+	background-color: $acolor;
+}
+
+.chart-label.ct-series-b{
+	background-color: $bcolor;
+}

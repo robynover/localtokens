@@ -1,0 +1,45 @@
+<div class="sendtokens">
+    {{#if success}}
+        <p class="flash-success">{{success}}</p>
+    {{/if}}
+    <h2>Send Tokens</h2>
+    <div class="row">
+        <div class="two columns balance">
+            <balance username="{{username}}" header="true"></balance>
+        </div>
+        <div class="ten columns">
+            
+            <form action="/exchange/send" method="post">
+                
+                <div>
+                    <label>Send to</label>
+                    <user-field name="receiver" to="{{to}}"></user-field>
+                </div>
+
+                <div>
+                    <label>Amount</label>
+                    <input type="number" name="amt" id="amt"/>
+                </div>
+
+                <div>
+                    <label>Note to Recipient (optional)</label>
+                    <textarea name="note" id="note"></textarea>
+                </div>
+                
+                <div>
+                    <input type="submit" value="Send it!"/>
+                </div>
+            </form>
+        </div>
+        
+    </div>
+</div>
+<!-- riot.js -->
+<script src="/js/lib/riot.min.js"></script>
+{{!-- <script src="/js/tags/user-field.js"></script>
+<script src="/js/tags/balance.js"></script> --}}
+<script src="/js/riottags.min.js"></script>
+<script>
+    riot.mount('user-field');
+    riot.mount('balance');
+</script>
