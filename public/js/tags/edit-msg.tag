@@ -9,7 +9,11 @@
 			<img src={ thumb } >
 			<p><a href="#" onclick={removePhoto}>Remove</a></p>
 		</div>
-		
+		<div class="type-selector">
+			<input type="radio" name="type" value="offering" ref="ptype" checked={ptype == 'offering'}> Offering
+			&nbsp;&nbsp;<input type="radio" name="type" value="seeking" ref="ptype" checked={ptype == 'seeking'}> Seeking
+		</div>
+
 		<div id="photo-upload">	
 			<p><strong>Photo</strong></p>
 			<div class="upload-details">
@@ -38,13 +42,16 @@
 		}
 		#photo-upload{
 			float:left;
-			margin-left: 1.5rem;
+			/*margin-left: 1.5rem;*/
 		}
 		.thumb{
 			float:left;
 			width: 100px;
 			text-align: center;
 			font-size: 75%;
+		}
+		.type-selector input{
+			display: inline;
 		}
 		
 	</style>
@@ -57,6 +64,7 @@
 	this.observable = opts.observable;
 	this.removeImg = false;
 	this.thumb = opts.thumb;
+	this.ptype = opts.type;
 	var self = this;
 
 	this.close = function(e){
@@ -67,6 +75,15 @@
 		e.preventDefault();
 		this.refs.thumb.style.visibility = 'hidden';
 		this.removeImg = true;
+	}
+
+	this.getType = function(){
+		for (var i in this.refs.ptype){
+			if (this.refs.ptype[i].checked){
+				this.ptype = this.refs.ptype[i].value;
+				return this.refs.ptype[i].value;
+			}
+		}
 	}
 
 	this.save = function(e){
@@ -90,6 +107,7 @@
 		data.append('title', self.refs.title.value);
 		data.append('contact', self.refs.contact.value);
 		data.append('remove', self.removeImg);
+		data.append('type', self.getType() );
 
 
 		// is there a file?
@@ -110,6 +128,7 @@
 	            	obj.body = self.refs.message.value;
 	            	obj.title = self.refs.title.value;
 	            	obj.contact = self.refs.contact.value;
+	            	obj.type = self.ptype;
 	            	if (self.refs.photo.value){
 	            		obj.photo = reply.photo;
 	            		obj.thumb = reply.thumb;

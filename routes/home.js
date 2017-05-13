@@ -9,42 +9,6 @@ module.exports = function(express,app){
 	var router = express.Router();
 	
 	var User = app.get('models').user;
-	//var Item = app.get('models').item;
-
-	/*router.get('/user/:username/items/:itype',(req,res)=>{
-		if (req.user){
-			User.getByUsername(req.params.username)
-				.then(user=>{
-					var item_type = 'seeking';
-					if (req.params.itype != 'seeking'){
-						item_type = 'offering';
-					}
-					user.getItems({where:{offering_seeking:item_type}})
-						.then(items=>{
-							res.render('items-test',{items:JSON.stringify(items),item_type:item_type});
-						});
-				});
-		} else {
-			res.json({success:false,error:'Not logged in'});
-		}
-	});
-
-	router.get('/user/:username',(req,res)=>{
-		if (req.user){
-			User.getByUsername(req.params.username)
-				.then(user=>{
-					var context = {};
-					context.profilename = user.username;
-					context.username = req.user.username;
-					context.profile_text = user.profile_text;
-					context.url = "/api/user/profile/edit";
-
-					res.render('editbox-test',context);
-				});
-		} else {
-			res.json({success:false,error:'Not logged in'});
-		}
-	});*/
 	
 	router.get('/',function(req,res){
 		var context = {};
@@ -58,14 +22,26 @@ module.exports = function(express,app){
 	});
 
 	router.get('/signin',(req,res)=>{
-		res.render('login');
+		var error = '';
+		var err = req.flash();
+		if (err){
+			error = err.error;
+		}
+		res.render('login',{pagetitle:'Sign In', error: error});
 	});
 
-	router.post('/signin',passport.authenticate('local'),(req,res)=>{
+	/*router.post('/signin',passport.authenticate('local'),(req,res)=>{
 		// If this function gets called, authentication was successful.
 		// 401 status is sent if authentication fails
 		res.redirect('/user/dashboard');
-	});
+
+	});*/
+	router.post('/signin',
+	  passport.authenticate('local', { successRedirect: '/user/dashboard',
+	                                   failureRedirect: '/signin',
+	                                   failureFlash: true })
+	);
+
 
 	router.get('/signout',(req,res)=>{
 		req.logout();
@@ -86,7 +62,7 @@ module.exports = function(express,app){
 	router.post('/signup', (req,res)=>{
 		// set up variables to return in errors, if needed
 		var context = {};
-		context.username = striptags(req.body.username);
+		context.username = striptags(req.body.username.toLowerCase());
 		context.email = striptags(req.body.email);
 		context.firstname = striptags(req.body.firstname);
 		context.lastname = striptags(req.body.lastname);
@@ -106,14 +82,14 @@ module.exports = function(express,app){
 		}
 		
 		User.create({
-			username: req.body.username,
+			username: req.body.username.toLowerCase(),
 			password: User.encryptPassword(req.body.password),
 			email: req.body.email,
 			firstname: striptags(req.body.firstname),
 			lastname: striptags(req.body.lastname)
 		}).then(user=>{
 			// TODO: send email verification
-			res.render('generic',{msg:'Signup successful! Check your inbox for a confirmation.'});
+			res.render('generic',{msg:'Signup successful! We will be in touch shortly to activate your account.'});
 		}).catch(Sequelize.ValidationError, err => {
 			var msg = '';
 			for(var i in err.errors){

@@ -2,25 +2,37 @@
 <div class="dashboard">
 	<h2>Dashboard</h2>
 	<div class="row">
-		<div class="two columns supercolumn">
-			<div class="subcolumn">
-				<balance username="{{username}}" header="true"></balance>
+		<div class="one-half column supercolumn">
+			<div class="row">
+				<div class="four columns supercolumn">
+					<div class="subcolumn">
+						<balance username="{{username}}" header="true"></balance>
+					</div>
+					<div class="subcolumn">
+						<h5 class="stats">Stats</h5>
+						<stats username="{{username}}"></stats>
+					</div>
+				</div>
+				<div class="eight columns">
+					<h5>Exchange History</h5>
+					<div class="ct-chart ct-major-sixth"></div>
+					<div class="chart-label ct-series-a">&nbsp;</div> Earned {{gained}}<br>
+					<div class="chart-label ct-series-b">&nbsp;</div> Spent	{{spent}}
+				</div>
 			</div>
-			<div class="subcolumn">
-				<h5 class="stats">Stats</h5>
-				<stats username="{{username}}"></stats>
+
+			<div class="row under-row">
+				<div class="one-half column">
+					<general-item-list type="offering"></general-item-list>
+				</div>
+				<div class="one-half column">
+					<general-item-list type="seeking"></general-item-list>
+				</div>
 			</div>
+
 		</div>
 
-		<div class="four columns">
-			<h5>Exchange History</h5>
-			<div class="ct-chart ct-major-sixth"></div>
-			<div class="chart-label ct-series-a">&nbsp;</div> Earned {{gained}}<br>
-			<div class="chart-label ct-series-b">&nbsp;</div> Spent	{{spent}}
-		</div>
-
-
-		<div class="six columns">
+		<div class="one-half column dashboard-exchanges">
 			<h5>Recent Exchanges</h5>
 			<table class="dashboard-transactions transactions">
 				<tr><th>date</th><th>amount</th><th>description</th></tr>
@@ -36,31 +48,16 @@
 
 			</table>
 			<p class="goto-text"><a href="/user/ledger">See all exchanges &rarr;</a></p>
+
 		</div>
+
 	</div>
-
-	<div class="row under-row">
-		<div class="column supercolumn">
-			<div class="row">
-				<div class="one-half column subcolumn">
-					<general-item-list type="offering"></general-item-list>
-				</div>
-				<div class="one-half column subcolumn">
-					<general-item-list type="seeking"></general-item-list>
-				</div>
-			</div>
-		</div>
-	</div>
-
-
-</div> <!-- /dashboard -->
+</div><!-- /dashboard -->
 
 <!-- chartist.js -->
 <script src="/js/lib/chartist.min.js"></script>
 <!-- riot.js -->
 <script src="/js/lib/riot.min.js"></script>
-{{!-- <script src="/js/tags/balance.js"></script>
-<script src="/js/tags/stats.js"></script> --}}
 <script src="/js/riottags.min.js"></script>
 <script>
     riot.mount('balance');

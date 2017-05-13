@@ -1,4 +1,4 @@
-if ($('table.transactions').length > 0){
+/*if ($('table.transactions').length > 0){
 	$('.note-icon').on('click',function(e){
 		var note_id = this.id.split('-')[1];
 		$('#note-'+note_id).toggle();
@@ -11,7 +11,7 @@ if ($('table.transactions').length > 0){
 		
 		
 	})
-}
+}*/
 
 if ($('.sendtokens').length > 0 ){
 	$('.sendtokens form').on('submit',function(e){
@@ -28,7 +28,26 @@ if ($('.sendtokens').length > 0 ){
 	});
 }
 
-/* -- validation -- */
+/* -- post form validation -- */
+if ($('#new-msg-form').length > 0){
+  $('#new-msg-form').on('submit', function(e){
+    e.preventDefault();
+    if ($('#new-msg-form .msgtitle').val().length < 1){
+      $('.field-validation').text('Title cannot be empty');
+      return false;
+    } else if ($('#new-msg-form .msgbody').val().length < 1){
+      $('.field-validation').text('Body cannot be empty');
+      return false;
+    } else if ($('#new-msg-form .contactinput').val().length < 1){
+      $('.field-validation').text('Contact info cannot be empty');
+      return false;
+    } 
+    this.submit();
+  });
+}
+
+
+/* -- sign-up validation -- */
 
 if (typeof validate !== 'undefined'){
 

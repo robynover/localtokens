@@ -40,7 +40,7 @@ var upload = multer({ storage: storage, limits: {fileSize:4000000, fileFilter:re
 module.exports = function(express,app){
 	var router = express.Router();
 
-	var Item = app.get('models').item;
+	//var Item = app.get('models').item;
 	var Post = require('../models/mongoose/post.js');
 
 	// === require users to be logged in for this section=== //
@@ -53,7 +53,7 @@ module.exports = function(express,app){
 		}	
 	});
 
-	router.get('/',(req,res)=>{
+	/*router.get('/',(req,res)=>{
 		var context = {};
 		context.loggedin = true;
 		context.username = req.user.username;
@@ -73,7 +73,7 @@ module.exports = function(express,app){
 							});
 					});	
 			});	
-	});
+	});*/
 
 	router.get('/posts/new',function(req,res){
 		var context = {};
@@ -130,7 +130,7 @@ module.exports = function(express,app){
 		
 	});
 
-	router.get('/posts',(req,res)=>{
+	/*router.get('/posts',(req,res)=>{
 		var context = {};
 		context.success_msg = req.flash('message');
 		if (req.query.del){
@@ -139,7 +139,7 @@ module.exports = function(express,app){
 		context.loggedin = true;
 		context.username = req.user.username;
 		context.is_admin = req.user.is_admin;
-		context.pagetitle = "Marketplace";
+		context.pagetitle = "Market";
 
 		var limit = 20;
 		var findparams = {};
@@ -219,7 +219,7 @@ module.exports = function(express,app){
 			});
 		});
 		
-	});
+	});*/
 
 	router.get('/post/:id',(req,res,next)=>{
 		Post.findById(req.params.id, function (err, doc){
@@ -233,7 +233,12 @@ module.exports = function(express,app){
 				// for JS:
 				doc.body_str = JSON.stringify(doc.body);
 				doc.title_str = JSON.stringify(doc.title);
-				doc.contact_str = JSON.stringify(doc.contact);
+				if (!doc.contact){
+					doc.contact_str= JSON.stringify("_");
+				} else {
+					doc.contact_str = JSON.stringify(doc.contact);
+				}
+				
 				res.render('post',doc);
 			} else {
 				next();
@@ -248,7 +253,7 @@ module.exports = function(express,app){
 		var lastDate = null;
 
 		var context = {};
-		context.pagetitle = "Market";
+		context.pagetitle = "Marketplace";
 		context.success_msg = req.flash('message');
 		if (req.query.del){
 			context.success_msg = "Post deleted successfully";

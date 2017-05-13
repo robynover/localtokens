@@ -83,10 +83,10 @@ module.exports = function(express,app){
 					}
 					User.findById(req.user.id)
 						.then(user=>{
-							user.getSimpleLedger(5)
+							user.getSimpleLedger(10)
 								.then(ledger=>{
 									context.ledger = ledger;
-									res.render('dashboard',context);
+									res.render('dashboard2',context);
 								});
 						});
 					

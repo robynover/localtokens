@@ -71,10 +71,9 @@ module.exports = function(sequelize, DataTypes) {
     underscored: true,
     //freezeTableName: true, // table name "user" conflicts with postgres user table
     classMethods: {
-      associate: function(models) {
-        User.hasMany(models.item);
+      /*associate: function(models) {
         
-      },
+      },*/
       getIdByUsername: function(username){
         return User.findOne({
           attributes: ['id'],
@@ -84,7 +83,7 @@ module.exports = function(sequelize, DataTypes) {
       },
       getByUsername: function(username){
         return User.findOne({
-          where:{username:username}
+          where:{username: sequelize.where(sequelize.fn('LOWER', sequelize.col('username')),username.toLowerCase())}
         });
       },
       encryptPassword: function(pw){
@@ -163,7 +162,7 @@ module.exports = function(sequelize, DataTypes) {
               + 'ledger.*, u1.username AS sender, u2.username AS receiver, '
               + 'CASE '
               + " WHEN sender_id <> :id AND sender_id IS NOT NULL THEN CONCAT('From ', u1.username) "
-              + " WHEN sender_id IS NULL THEN 'System issued' "
+              + " WHEN sender_id IS NULL THEN 'From BANK' "
               + " WHEN receiver_id <> :id THEN CONCAT ('To ',u2.username) "
               + 'END AS description, '
               + 'CASE WHEN sender_id = :id THEN -1 * amount ELSE amount END AS signed_amt, '

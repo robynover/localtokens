@@ -106,6 +106,9 @@ nav li {
 .neg td.amt {
   color: red; }
 
+.numcol {
+  text-align: right; }
+
 .column, .columns {
   border: 1px solid #d6d6d6;
   padding: 1rem;
@@ -141,6 +144,9 @@ h2 {
 
 .dashboard table {
   width: 100%; }
+
+.dashboard .dashboard-exchanges {
+  min-height: 60rem; }
 
 footer {
   background: #f2f2f2;
@@ -365,7 +371,7 @@ nav.topnav {
     padding: 1.5rem; }
     .messageboard #editmodal textarea {
       width: 100%; }
-    .messageboard #editmodal input {
+    .messageboard #editmodal input[type="text"] {
       width: 100%; }
     .messageboard #editmodal .modalclose {
       text-align: right;
@@ -470,10 +476,22 @@ input#amt {
   box-shadow: none;
   position: relative; }
 
+.profile .chart-wrap {
+  margin-top: 4rem; }
+
 .profile .chart {
-  /* border: 1px solid rgba(214, 214, 214, 1);
-		box-shadow: $shadow; */
-  margin-top: 5rem; }
+  width: 10rem;
+  float: right; }
+
+.profile .legend {
+  float: right; }
+
+.profile .profile-header {
+  border-bottom: 1px solid #d6d6d6; }
+  .profile .profile-header .bal {
+    font-size: 1.5rem;
+    display: inline;
+    font-weight: bold; }
 
 .profile .profile-bal {
   background-color: #ff6666;
@@ -560,17 +578,17 @@ tr.opened td {
   /* background-color: #efefef; */ }
 
 /* new styles */
-.login-wrap, .signup-wrap {
+.login-wrap {
   margin: 0 auto;
   width: 29rem; }
 
-.login-container, .signup-container {
+.login-container {
   float: left;
   padding: 5rem;
   border: 1px solid #d6d6d6;
   box-shadow: 2px 2px 3px #e6e5e5;
   background-color: #fff; }
-  .login-container h2, .signup-container h2 {
+  .login-container h2 {
     margin-top: 0; }
 
 .community li {

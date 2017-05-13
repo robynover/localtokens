@@ -1,18 +1,25 @@
 <h2>Exchanges</h2>
 <table class="transactions">
-	<tr><th></th><th>date</th><th>amount</th><th>description</th><th>balance</th></tr>
+	<tr>
+		{{!-- <th></th> --}}
+		<th>date</th>
+		<th>to/from</th>
+		<th>note</th>
+		<th class="numcol">amount</th>
+		<th class="numcol">balance</th>
+	</tr>
 	{{#each ledger}}
 		<tr class="{{ifNegative signed_amt 'neg' 'pos'}}">
-			<td>
+			{{!-- <td>
 				{{#if note}}
 				&nbsp;<i class="fa fa-sticky-note-o note-icon" aria-hidden="true" id="icon-{{id}}"></i>
-				{{!-- <div class="noteview" id="note-{{id}}">{{note}}</div> --}}
 				{{/if}}
-			</td>
+			</td> --}}
 			<td>{{formatted_date}}</td>
-			<td class="amt">{{signed_amt}}</td>
 			<td>{{description}}</td>
-			<td>{{balance}}</td>
+			<td>{{note}}</td>
+			<td class="amt numcol">{{signed_amt}}</td>
+			<td class="numcol">{{balance}}</td>
 		</tr>
 		<tr class="note-addition" id="note-{{id}}"><td></td><td colspan="4"><strong>Note:</strong> {{note}}</td></tr>
 

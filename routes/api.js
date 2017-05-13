@@ -7,9 +7,10 @@ var Image = require('../image.js');
 module.exports = function(express,app){
 
 	var router = express.Router();
+
+	var sequelize = app.get('models').sequelize;
 	
 	var User = app.get('models').user;
-	var Item = app.get('models').item;
 	var Ledger = app.get('models').ledger;
 	var Notification = app.get('models').notification;
 	var Post = require('../models/mongoose/post.js');
@@ -223,42 +224,6 @@ module.exports = function(express,app){
 		}
 	});
 
-	/*router.post('/user/item/new',(req,res)=>{
-		if(req.user){
-			if (req.body.type && req.body.description){
-				Item.create({
-					offering_seeking:req.body.type,
-					description:req.body.description,
-					user_id: req.user.id
-				}).then(item=>{
-				  	res.json({success:true,item_id:item.id});
-				});
-			} else {
-				res.json({success:false,error:'no input given'});
-			}
-		} else {
-			res.json({success:false,error:'Not logged in'});
-		}
-	});*/
-
-	/*router.get('/user/:username/items/:itype/view',(req,res)=>{
-		if (req.user){
-			User.getByUsername(req.params.username)
-				.then(user=>{
-					var item_type = 'seeking';
-					if (req.params.itype != 'seeking'){
-						item_type = 'offering';
-					}
-					user.getItems({where:{offering_seeking:item_type}})
-						.then(items=>{
-							res.json({success:true,items:items});
-						});
-				});
-		} else {
-			res.json({success:false,error:'Not logged in'});
-		}
-	});*/
-
 	router.post('/user/profile/edit',(req,res)=>{
 		if (req.user){
 			User.update({
@@ -337,62 +302,23 @@ module.exports = function(express,app){
 	router.post('/user/:username/exists',function(req,res){
 		// log in not required, b/c this get called on sign up
 		User.findOne({
-			where: {username: req.params.username}	
+			//where: {username: req.params.username}	
+			where: {username: sequelize.where(sequelize.fn('LOWER', sequelize.col('username')),req.params.username.toLowerCase())}
 		})
 			.then(user=>{
 				if (user){
-					res.json({success:true,user_id:user.id});
+					return res.json({success:true,user_id:user.id});
 				} else {
-					res.json({success:false,error:'User not found'});
+					return res.json({success:false,error:'User not found'});
 				}	
 			})
 			.catch(err=>{
-				res.json({success:false,error:err.message});
+				return res.json({success:false,error:err.message});
 			});
 		
 	});
 
-	/* --- ITEMS --- */
-
-	/*router.post('/item/:id/delete',(req,res)=>{
-		if (req.user){
-			// this item should belong to the logged in user
-			Item.findById(req.params.id)
-				.then(item=>{
-					if (item.user_id == req.user.id){
-						Item.destroy({
-							where: {id:req.params.id}
-						}).then(()=>{
-							res.json({success:true});
-						});
-					} else {
-						res.json({success:false,error:'User does not own this item'});
-					}
-				}).catch(err=>{
-					res.json({success:false,error:err});
-				});
-		} else {
-			res.json({success:false,error:'Not logged in'});
-		}
-	});*/
-
-	router.post('/items/:type/:username',(req,res)=>{
-		if (req.user){
-			var type = 'offering';
-			if (req.params.type != 'offering'){
-				type = 'seeking';
-			}
-			Post.find({username:req.params.username,type:type}).exec()
-				.then(docs=>{
-					res.json({success:true,items:docs});
-				})
-				.catch(err=>{
-					res.json({success:false,error:err});
-				});
-		} else {
-			res.json({success:false,error:'Not logged in'});
-		}
-	});
+	
 
 
 
@@ -425,8 +351,6 @@ module.exports = function(express,app){
 			
 			if (err){
 				console.log(err);
-				//res.status(500);
-				//res.render('500',{msg:err});
 				res.json({success:false});
 				return;
 			}
@@ -446,6 +370,7 @@ module.exports = function(express,app){
 			if (req.body.title){
 				doc.title = req.body.title;
 			}
+			doc.type = req.body.type;
 		  	
 		  	doc.body = req.body.message;
 		  	doc.contact = req.body.contact;
@@ -507,6 +432,42 @@ module.exports = function(express,app){
 		});
 		
 	});
+
+	/* --- ITEMS (as Posts) --- */
+
+	router.get('/items/:type',(req,res)=>{
+		Post.find({type:req.params.type})
+			.limit(8)
+			.sort({datetime:-1})
+			.exec((err,posts)=>{
+				if (err){
+					res.json({success:false});
+				} else {
+					res.json({success:true,items:posts});
+				}
+				
+			});
+	});
+
+	router.post('/items/:type/:username',(req,res)=>{
+		if (req.user){
+			var type = 'offering';
+			if (req.params.type != 'offering'){
+				type = 'seeking';
+			}
+			Post.find({username:req.params.username,type:type}).exec()
+				.then(docs=>{
+					res.json({success:true,items:docs});
+				})
+				.catch(err=>{
+					res.json({success:false,error:err});
+				});
+		} else {
+			res.json({success:false,error:'Not logged in'});
+		}
+	});
+
+	
 
 	return router;
 };

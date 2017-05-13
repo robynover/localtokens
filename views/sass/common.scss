@@ -65,6 +65,9 @@ nav{
 		color: red;
 	}
 }
+.numcol{
+	text-align: right;
+}
 .column,.columns{
 	border: 1px solid rgba(214, 214, 214, 1);
 	padding: 1rem;
@@ -104,6 +107,9 @@ h2{
 		width: 100%;
 	}
 	
+	.dashboard-exchanges{
+		min-height: 60rem;
+	}
 }
 
 footer{
@@ -373,7 +379,7 @@ nav.topnav{
 	    textarea{
 	    	width: 100%;
 	    }
-	    input{
+	    input[type="text"]{
 	    	width:100%;
 	    }
 	    .modalclose{
@@ -508,10 +514,24 @@ input#amt{
 		box-shadow: none;
 		position: relative;
 	}
+	.chart-wrap{
+		margin-top: 4rem;
+	}
 	.chart{
-		/* border: 1px solid rgba(214, 214, 214, 1);
-		box-shadow: $shadow; */
-		margin-top: 5rem;
+		width: 10rem;
+		float:right;
+	}
+	.legend{
+		float:right;
+	}
+	.profile-header{
+		border-bottom: 1px solid $lightborder;
+		.bal{
+			font-size: 1.5rem;
+			display: inline;
+			font-weight: bold;
+		}
+		
 	}
 	.profile-bal{
 		background-color: lighten(#ff0000,20%);
@@ -610,11 +630,11 @@ tr.opened td{
 
 /* new styles */
 
-.login-wrap, .signup-wrap{
+.login-wrap{
 	margin: 0 auto;
 	width: 29rem;
 }
-.login-container, .signup-container{
+.login-container{
 	float: left;
 	padding: 5rem;
     border: 1px solid $lightborder;

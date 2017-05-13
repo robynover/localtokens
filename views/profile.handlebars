@@ -1,12 +1,29 @@
 <link rel="stylesheet" href="/css/lib/chartist.css">
 <div class="profile">
-	<h2>{{user.username}}</h2>
 
-	{{#notequal user.username username}}
-		<button class="button-primary">Pay {{user.username}}</button>
-	{{/notequal}}
+	<div class="row profile-header">
+		<div class="four columns">
+			<h2>{{user.username}}</h2>
+			Balance <balance username="{{user.username}}"></balance><br>
+			<stats username="{{user.username}}"></stats>
+		</div>
+		<div class="eight columns">
+			<div class="chart-wrap">
+				<div class="chart">	
+					<div class="ct-chart ct-square"></div>
+				</div>
+				<div class="legend">
+					<div class="chart-label ct-series-a">&nbsp;</div> Earned {{gained}}<br>
+					<div class="chart-label ct-series-b">&nbsp;</div> Spent	{{spent}}
+				</div>
+			</div>
+		</div>
 
-	<div class="row">
+	</div>
+
+	
+
+	<div class="row under-row">
 		<div class="one-third column profile-pic">
 			
 			{{#if user.profile_photo}}
@@ -22,13 +39,10 @@
 				<photo-upload url="/api/user/photo"></photo-upload>
 			{{/equal}}
 
+			{{#notequal user.username username}}
+				<a href="/exchange/send?to={{user.username}}"><button class="button-primary">Pay {{user.username}}</button></a>
+			{{/notequal}}
 			
-			<div class="chart">
-				<stats username="{{user.username}}"></stats>
-				<div class="ct-chart ct-minor-seventh"></div>
-				<div class="chart-label ct-series-a">&nbsp;</div> Earned {{gained}}<br>
-				<div class="chart-label ct-series-b">&nbsp;</div> Spent	{{spent}}
-			</div>
 		</div>
 		<div class="two-thirds column supercolumn">
 				
@@ -101,9 +115,9 @@
 	new Chartist.Pie('.ct-chart', {
 	  series: [{{gained}}, {{spent}}]
 	}, {
-	  donut: true,
+	  /*donut: true,
 	  donutWidth: 60,
-	  donutSolid: true,
+	  donutSolid: true,*/
 	  showLabel: false
 	});
 </script>

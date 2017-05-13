@@ -1,5 +1,5 @@
 <div class="messageboard thread">
-	<p><a href="/community/marketplace">&larr; Back to Market</a></p>
+	<p><a href="/community/marketplace">&larr; Back to Marketplace</a></p>
 	<div class="postwrap" id="wrap-{{_id}}">
 
 		<p class="post-label">{{type}}</p>
@@ -49,6 +49,7 @@
 			content: {{{body_str}}},
 			title: {{{title_str}}},
 			contact: {{{contact_str}}},
+			type: "{{type}}",
 			observable: myObservable
 		});
 	});
@@ -56,6 +57,7 @@
 		$('#postbody').html(msg.body);
 		$('#posttitle').html(msg.title);
 		$('#postcontact').html(msg.contact);
+		$('.post-label').html(msg.type);
 		
 		if (msg.photo){
 			if ($('.msgphoto img').length > 0){
@@ -93,7 +95,7 @@
 		  	if (msg.success){
 		  		var url = window.location.href;
 		  		var domainAndPort = url.split('/')[2];
-		  		window.location.replace('http://' + domainAndPort + "/community/posts?del=1");
+		  		window.location.replace('http://' + domainAndPort + "/community/marketplace?del=1");
 		  	}
 		    
 		  });
