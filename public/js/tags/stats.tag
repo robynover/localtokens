@@ -1,11 +1,31 @@
 <stats>
-	<div><span class="num" ref="exchanges"></span> <span ref="eword">exchanges</span></div>
-	<div>with <span class="num" ref="people"></span> <span ref="pword">people</span></div>
+	<div class="stats-container">
+		<div class="line1">&nbsp;</div>
+		<div class="num" ref="exchanges"></div> 
+		<div ref="eword" class="line2">exchanges</div>
+	</div>
+	<div class="stats-container">
+		<div class="line1">with</div>
+	 	<div class="num" ref="people"></div> 
+	 	<div ref="pword" class="line2">people</div>
+	 </div>
 
 	<style>
 		.num{
-			font-weight: bold;
+			font-size: 4rem;
 		}
+		.line1, .line2{
+			text-transform: uppercase;
+		}
+		.line1{
+			font-size: 80%;
+		}
+		.stats-container{
+			width: 48%;
+			float:left;
+		}
+
+
 	</style>
 
 	<script>

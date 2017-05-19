@@ -57,6 +57,9 @@
 .chart-label.ct-series-b {
   background-color: #50B6D6; }
 
+.clearfix {
+  clear: both; }
+
 .container {
   max-width: 1200px; }
 
@@ -109,6 +112,9 @@ nav li {
 .numcol {
   text-align: right; }
 
+.balcol {
+  border-left: 1px solid #d6d6d6; }
+
 .column, .columns {
   border: 1px solid #d6d6d6;
   padding: 1rem;
@@ -124,6 +130,10 @@ nav li {
   padding: 1rem;
   margin-bottom: 3.75rem;
   box-shadow: 2px 2px 3px #e6e5e5; }
+
+.invisible-column {
+  border: none;
+  box-shadow: none; }
 
 .under-row {
   margin-top: 3.75rem; }
@@ -142,11 +152,32 @@ h2 {
 .dashboard stats, .dashboard .stats {
   text-align: center; }
 
+.dashboard .stats-container {
+  margin-top: 2rem; }
+
+.dashboard .balance-header {
+  text-transform: uppercase;
+  text-align: center; }
+
+.dashboard .ratio {
+  margin-top: 2rem; }
+
 .dashboard table {
   width: 100%; }
 
 .dashboard .dashboard-exchanges {
-  min-height: 60rem; }
+  padding: 5rem; }
+
+.dashboard .credit {
+  text-align: center; }
+
+.dashboard .credit-label {
+  text-transform: uppercase;
+  text-align: center; }
+
+.dashboard div.credit {
+  font-size: 3rem;
+  margin-top: 4rem; }
 
 footer {
   background: #f2f2f2;
@@ -456,8 +487,40 @@ input#amt {
 .dashboard ul {
   list-style-type: none; }
 
-.profile stats div {
-  display: inline; }
+.profile h2 {
+  margin-top: 0;
+  text-align: center; }
+
+.profile h5 {
+  font-weight: bold;
+  text-align: center; }
+
+.profile .profile-photo {
+  text-align: center; }
+  .profile .profile-photo img {
+    width: 150px;
+    max-width: 150px;
+    margin-top: -8rem;
+    border: 1px solid #d6d6d6;
+    box-shadow: 2px 2px 3px #e6e5e5; }
+
+.profile .balance-header, .profile .credit-label {
+  text-transform: uppercase; }
+
+.profile .credit {
+  font-size: 4rem; }
+
+.profile .balance-box, .profile .credit-box {
+  float: left;
+  width: 48%;
+  text-align: center; }
+
+.profile .stats-container {
+  text-align: center; }
+
+.profile .ratio {
+  margin-top: 2rem;
+  margin-bottom: 2rem; }
 
 .profile .profile-pic {
   position: relative;
@@ -487,11 +550,16 @@ input#amt {
   float: right; }
 
 .profile .profile-header {
-  border-bottom: 1px solid #d6d6d6; }
+  margin-top: 12rem; }
   .profile .profile-header .bal {
-    font-size: 1.5rem;
-    display: inline;
-    font-weight: bold; }
+    font-size: 4rem; }
+
+.profile .pay-user {
+  text-align: center; }
+
+.profile .user-info {
+  border: 1px solid #d6d6d6;
+  box-shadow: 2px 2px 3px #e6e5e5; }
 
 .profile .profile-bal {
   background-color: #ff6666;
@@ -502,6 +570,18 @@ input#amt {
   right: -1px;
   line-height: 3rem;
   z-index: 999; }
+
+.profile .profile-stats {
+  border: 1px solid #d6d6d6;
+  box-shadow: 2px 2px 3px #e6e5e5; }
+  .profile .profile-stats .chart {
+    float: none;
+    margin: auto; }
+  .profile .profile-stats .legend {
+    float: none; }
+
+.profile .credit {
+  text-align: center; }
 
 .profile h2 {
   margin-bottom: 0; }
@@ -626,6 +706,38 @@ tr.opened td {
 .postwrap h2 {
   margin-top: 1.5rem;
   margin-bottom: 0; }
+
+.user-search input[name="q"] {
+  width: 25rem; }
+
+.user-search .find-header {
+  margin-bottom: 0; }
+
+.user-search .results li {
+  list-style-type: none;
+  padding: 2rem;
+  float: left;
+  /* width: 100%; */
+  width: 27%;
+  border: 1px solid #cecece;
+  margin-right: 3rem;
+  margin-bottom: 3rem; }
+  .user-search .results li img {
+    height: 100px;
+    float: left; }
+  .user-search .results li .photo-wrap {
+    display: inline-block;
+    width: 100px;
+    overflow: hidden;
+    float: left; }
+  .user-search .results li .result-text {
+    height: 9rem;
+    line-height: 9rem;
+    display: inline-block;
+    margin-left: 1.5rem; }
+
+.user-search .results li:nth-child(odd) {
+  background: rgba(242, 242, 242, 0.7); }
 
 /* media queries */
 @media (max-width: 719px) {

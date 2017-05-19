@@ -30,17 +30,30 @@ module.exports = function(express,app){
 		res.render('login',{pagetitle:'Sign In', error: error});
 	});
 
+	app.post('/signin', function (req, res, next) {
+		var redirectTo = '/user/dashboard';
+		if (req.session.lastVisited){
+			redirectTo = req.session.lastVisited;
+		}
+	    passport.authenticate('local', { successRedirect: redirectTo,
+	                                   failureRedirect: '/signin',
+	                                   failureFlash: true })(req,res,next);
+	});
 	/*router.post('/signin',passport.authenticate('local'),(req,res)=>{
 		// If this function gets called, authentication was successful.
 		// 401 status is sent if authentication fails
-		res.redirect('/user/dashboard');
+		var redirectTo = '/user/dashboard';
+		if (req.session.lastVisited){
+			redirectTo = req.session.lastVisited;
+		}
+		res.redirect(redirectTo);
 
 	});*/
-	router.post('/signin',
-	  passport.authenticate('local', { successRedirect: '/user/dashboard',
+	/*router.post('/signin',
+		passport.authenticate('local', { successRedirect: '/user/dashboard',
 	                                   failureRedirect: '/signin',
 	                                   failureFlash: true })
-	);
+	);*/
 
 
 	router.get('/signout',(req,res)=>{

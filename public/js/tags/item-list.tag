@@ -3,13 +3,13 @@
 	<ul class={type} if={items}>
 		<li each={ items }><a href={"/community/post/" + _id } >{ title }</a></li>
 	</ul>
-	<p hide={items}>None yet</p>
+	<p show={items.length < 1}>None yet</p>
 
 	<script>
 		this.listTitle = opts.type.charAt(0).toUpperCase() + opts.type.slice(1);
 		this.type = opts.type;
 		this.username = opts.username;
-		this.items = null;
+		this.items = [];
 
 		var self = this;
 

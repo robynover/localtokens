@@ -107,6 +107,24 @@ module.exports = function(sequelize, DataTypes) {
           replacements: {lmt:limit,offset:offset},
           type: sequelize.QueryTypes.SELECT 
         } );
+      },
+      searchUsers: function(term){
+        var q = "SELECT * FROM users "
+              + "WHERE LOWER(username) LIKE :term "
+              + "OR LOWER(firstname) LIKE :term "
+              + "OR LOWER(lastname) LIKE :term";
+
+        return sequelize.query(q,{
+          replacements: {term: '%' + term.toLowerCase() + '%'},
+          type: sequelize.QueryTypes.SELECT
+        });
+      },
+      getRecentUsers: function(limit){
+        var limit = parseInt(limit);
+        return User.findAll({
+          limit: limit,
+          order: [['created_at','DESC']]
+        });
       }
     },
     instanceMethods: {
@@ -135,11 +153,11 @@ module.exports = function(sequelize, DataTypes) {
       },
       getSimpleLedger: function(limit){
         limit = parseInt(limit);
-        var q = "SELECT to_char(ledger.transaction_timestamp, 'Mon DD YYYY HH12: MI AM') AS formatted_date, "
+        var q = "SELECT to_char(ledger.transaction_timestamp, 'Mon FMDD, FMHH12: MI AM') AS formatted_date, "
               + 'ledger.*, u1.username AS sender, u2.username AS receiver, '
               + 'CASE '
               + " WHEN sender_id <> :id AND sender_id IS NOT NULL THEN CONCAT('From ', u1.username) "
-              + " WHEN sender_id IS NULL THEN 'System issued' "
+              + " WHEN sender_id IS NULL THEN 'From BANK' "
               + " WHEN receiver_id <> :id THEN CONCAT ('To ',u2.username) "
               + 'END AS description, '
               + 'CASE WHEN sender_id = :id THEN -1 * amount ELSE amount END AS signed_amt '
@@ -157,7 +175,7 @@ module.exports = function(sequelize, DataTypes) {
       getLedgerWithBalance: function(limit,offset){
         limit = parseInt(limit);
         offset = parseInt(offset);
-        var q = "SELECT to_char(ledger.transaction_timestamp, 'Mon DD YYYY HH12: MI AM') AS formatted_date, "
+        var q = "SELECT to_char(ledger.transaction_timestamp, 'Mon FMDD YYYY FMHH12: MI AM') AS formatted_date, "
               + 'COUNT(ledger.id) OVER () AS total_entries, '
               + 'ledger.*, u1.username AS sender, u2.username AS receiver, '
               + 'CASE '

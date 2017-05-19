@@ -6,7 +6,7 @@
 		<th>to/from</th>
 		<th>note</th>
 		<th class="numcol">amount</th>
-		<th class="numcol">balance</th>
+		<th class="numcol balcol">balance</th>
 	</tr>
 	{{#each ledger}}
 		<tr class="{{ifNegative signed_amt 'neg' 'pos'}}">
@@ -19,7 +19,7 @@
 			<td>{{description}}</td>
 			<td>{{note}}</td>
 			<td class="amt numcol">{{signed_amt}}</td>
-			<td class="numcol">{{balance}}</td>
+			<td class="numcol balcol">{{balance}}</td>
 		</tr>
 		<tr class="note-addition" id="note-{{id}}"><td></td><td colspan="4"><strong>Note:</strong> {{note}}</td></tr>
 

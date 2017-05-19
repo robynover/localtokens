@@ -2,7 +2,15 @@
 <p><a href="/admin/users">All</a> | <a href="?inactive=1">Inactive</a></p>
 <table id="users-table">
 	<thead>
-		<tr><th>Select</th><th>Username</th><th>Name</th><th>Active</th><th>Admin</th><th>Balance</th></tr>
+		<tr>
+			<th>Select</th>
+			<th>Username</th>
+			<th>Name</th>
+			<th>Active</th>
+			<th>Admin</th>
+			<th class="numcol">Credit</th>
+			<th class="numcol">Balance</th>
+		</tr>
 	</thead>
 	<tbody>
 {{#each users}}
@@ -18,8 +26,15 @@
 			<i class="fa fa-check" aria-hidden="true"></i>
 			{{/if}}
 		</td>
-		<td>
-			{{balance}}
+		<td class="numcol credit">
+			<number-edit number="{{max_negative_balance}}" userid="{{id}}"></number-edit>
+		</td>
+		<td class="numcol">
+			{{#if balance}}
+				{{balance}}
+			{{else}}
+				0
+			{{/if}}
 		</td>
 	</tr>
 {{/each}}
@@ -41,3 +56,12 @@
 <p class="pagecount">Page {{page}} of {{total_pages}}</p>
 
 <button class="button-primary" id="user-activate">Activate</button>
+
+
+<script src="/js/lib/riot.min.js"></script>
+<script src="/js/riottags.min.js"></script>
+<script>
+    riot.mount('number-edit',{
+    	url: '/api/admin/user/[id]/credit'
+    });
+</script>

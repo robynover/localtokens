@@ -1,4 +1,4 @@
-riot.tag2('stats', '<div><span class="num" ref="exchanges"></span> <span ref="eword">exchanges</span></div> <div>with <span class="num" ref="people"></span> <span ref="pword">people</span></div>', 'stats .num,[data-is="stats"] .num{ font-weight: bold; }', '', function(opts) {
+riot.tag2('stats', '<div class="stats-container"> <div class="line1">&nbsp;</div> <div class="num" ref="exchanges"></div> <div ref="eword" class="line2">exchanges</div> </div> <div class="stats-container"> <div class="line1">with</div> <div class="num" ref="people"></div> <div ref="pword" class="line2">people</div> </div>', 'stats .num,[data-is="stats"] .num{ font-size: 4rem; } stats .line1,[data-is="stats"] .line1,stats .line2,[data-is="stats"] .line2{ text-transform: uppercase; } stats .line1,[data-is="stats"] .line1{ font-size: 80%; } stats .stats-container,[data-is="stats"] .stats-container{ width: 48%; float:left; }', '', function(opts) {
 	var self = this;
 	var eword = 'exchanges';
 	var pword = 'people';

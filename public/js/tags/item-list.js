@@ -1,8 +1,8 @@
-riot.tag2('item-list', '<h4>{listTitle}</h4> <ul class="{type}" if="{items}"> <li each="{items}"><a href="{⁗/community/post/⁗ + _id}">{title}</a></li> </ul> <p hide="{items}">None yet</p>', '', '', function(opts) {
+riot.tag2('item-list', '<h4>{listTitle}</h4> <ul class="{type}" if="{items}"> <li each="{items}"><a href="{⁗/community/post/⁗ + _id}">{title}</a></li> </ul> <p show="{items.length < 1}">None yet</p>', '', '', function(opts) {
 		this.listTitle = opts.type.charAt(0).toUpperCase() + opts.type.slice(1);
 		this.type = opts.type;
 		this.username = opts.username;
-		this.items = null;
+		this.items = [];
 
 		var self = this;
 

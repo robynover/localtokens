@@ -1,5 +1,5 @@
 <general-item-list>
-	<h5>Community { listTitle }</h5>
+	<h6>{ listTitle }</h6>
 	<ul class={type} if={items}>
 		<li each={ items }><a href={"/community/post/" + _id } >{ title }</a> &mdash;
 		 <a href={"/user/profile/" + username}>{username}</a></li>

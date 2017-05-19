@@ -16,6 +16,7 @@ module.exports = function(express,app){
 			context.username = req.user.username;
 			context.is_admin = req.user.is_admin;
 			context.success = req.flash('success');
+			context.pagetitle = "Send";
 			if(req.query.to){
 				context.to = striptags(req.query.to);
 			}

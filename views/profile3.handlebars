@@ -1,0 +1,103 @@
+<div class="profile">
+	<div class="row profile-header">
+		<div class="four columns user-info">
+			<div class="profile-photo">
+				{{#if user.profile_photo}}
+					<img id="profile-photo" src="{{user.profile_photo}}">
+				{{else}}
+					<img id="profile-photo" src="/images/avatar.png">
+				{{/if}}
+			</div>
+			<h2>{{user.firstname}}</h2>
+			<h5>{{user.username}}</h5>
+			{{#notequal user.username username}}
+				<div class="pay-user">
+					<a href="/exchange/send?to={{user.username}}"><button class="button-primary">Pay {{user.username}}</button></a>
+				</div>
+			{{/notequal}}
+			<div class="balance-box">
+				<balance username="{{user.username}}"></balance>
+				<div class="balance-header">Balance</div>	
+			</div>
+			<div class="credit-box">
+				<div class="credit">{{user.max_negative_balance}}</div>
+				<div class="credit-label">Credit Limit</div>
+			</div>
+
+			<br class="clearfix">
+			<ratio-chart spent="{{spent}}" earned="{{gained}}" size="330"></ratio-chart>
+			<stats username="{{user.username}}"></stats>
+		</div>
+		<div class="eight columns">
+			<div class="row">
+				<div class="column one-half">
+					<item-list type="offering" username="{{user.username}}"></item-list>
+					{{#equal user.username username}}
+						<p><a href="/community/posts/new">Add &rarr;</a></p>
+					{{/equal}}
+				</div>
+
+				<div class="column one-half">
+					<item-list type="seeking" username="{{user.username}}"></item-list>
+					{{#equal user.username username}}
+						<p><a href="/community/posts/new">Add &rarr;</a></p>
+					{{/equal}}
+				</div>
+			</div>
+		</div>
+
+	</div>
+
+	
+
+	<div class="row under-row">
+		<div class="one-third column profile-pic">
+			
+			{{!-- {{#if user.profile_photo}}
+				<img id="profile-photo" src="{{user.profile_photo}}">
+			{{else}}
+				<img id="profile-photo" src="/images/avatar.png">
+			{{/if}} --}}
+			{{!-- <div class="profile-bal">
+				<balance username="{{user.username}}"></balance>
+			</div> --}}
+			
+			{{!-- {{#equal user.username username}}
+				<photo-upload url="/api/user/photo"></photo-upload>
+			{{/equal}} --}}
+
+			
+			
+		</div>
+		<div class="two-thirds column supercolumn">
+				
+			{{!-- 
+			{{#equal user.username username}}
+			<p class="edit-profile"><i class="fa fa-pencil" aria-hidden="true"></i></p>
+			{{/equal}} --}}
+
+			
+
+		</div>
+	</div>
+</div>
+
+<!-- riot.js -->
+<script src="/js/lib/riot.min.js"></script>
+<script src="/js/riottags.min.js"></script>
+
+<script>
+	var myObservable = riot.observable();
+	riot.mount('balance');
+	riot.mount('stats');
+	riot.mount('item-list');
+	riot.mount('photo-upload',{
+		url: '/api/user/photo',
+		observable: myObservable
+	});
+	myObservable.on('done',function(photo){
+		$('#profile-photo').attr('src',photo);
+	});
+	riot.mount('ratio-chart');
+	
+</script>

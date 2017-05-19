@@ -1,4 +1,4 @@
-riot.tag2('general-item-list', '<h5>Community {listTitle}</h5> <ul class="{type}" if="{items}"> <li each="{items}"><a href="{⁗/community/post/⁗ + _id}">{title}</a> &mdash; <a href="{⁗/user/profile/⁗ + username}">{username}</a></li> </ul> <p hide="{items}">None yet</p>', '', '', function(opts) {
+riot.tag2('general-item-list', '<h6>{listTitle}</h6> <ul class="{type}" if="{items}"> <li each="{items}"><a href="{⁗/community/post/⁗ + _id}">{title}</a> &mdash; <a href="{⁗/user/profile/⁗ + username}">{username}</a></li> </ul> <p hide="{items}">None yet</p>', '', '', function(opts) {
 
 		if (opts.type == 'offering'){
 			this.listTitle = "Offers";

@@ -21,8 +21,7 @@ module.exports = function(grunt) {
         files: {
           'public/css/admin.css': 'views/sass/admin.scss',
           'public/css/common.css': 'views/sass/common.scss',
-          'public/css/home.css': 'views/sass/home.scss',
-          'public/css/lib/chartist.css': 'views/sass/lib/chartist.scss'
+          'public/css/home.css': 'views/sass/home.scss'
         }
       }
     },

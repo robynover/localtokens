@@ -96,7 +96,8 @@ passport.use(new LocalStrategy(
   	});  
   }
 ));
-
+var savePath = require('./savePath');
+app.use(savePath);
 
 // -----------------------------//
 // ROUTES

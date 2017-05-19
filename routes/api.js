@@ -127,6 +127,29 @@ module.exports = function(express,app){
 
 	});
 
+	router.post('/admin/user/:id/credit',function(req,res){
+		if (req.user){
+			if(req.user.is_admin){
+				User.findById(req.params.id)
+					.then(user=>{
+						user.max_negative_balance = parseInt(req.body.num);
+						user.save()
+							.then(u=>{
+								res.json({success:true});
+							})
+							.catch(err=>{
+								res.json({success:false,error:err});
+							});
+					})
+			} else {
+				res.json({success:false,error:'User is not admin'});
+			}
+			
+		} else{
+			res.json({success:false,error:'Not logged in'});
+		}
+	})
+
 	/* --- USERS --- */
 
 	router.post('/user/new',(req,res)=>{

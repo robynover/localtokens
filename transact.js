@@ -21,7 +21,7 @@ module.exports = function(app){
 											amount: amount 
 										});
 							} else{
-								throw new Error("sender doesn't have enough credits");
+								throw new Error("Sender doesn't have enough credits");
 							}
 						})
 					});

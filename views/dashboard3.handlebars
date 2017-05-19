@@ -1,71 +1,71 @@
-<link rel="stylesheet" href="/css/lib/chartist.css">
 <div class="dashboard">
 	<h2>Dashboard</h2>
 	<div class="row">
-		<div class="one-half column supercolumn">
+		<div class="one-half column">
 			<div class="row">
 				<div class="four columns supercolumn">
-					<div class="subcolumn">
-						<balance username="{{username}}" header="true"></balance>
-
+					<div class="">
+						<div class="balance-header">Balance</div>
+						<balance username="{{username}}"></balance>
 						<hr>
-						<h6 class="credit">Credit</h6>
 						<div class="credit">{{credit}}</div>
-						<span class="credit">*Credit is the amount your account can go negative</span>
+						<div class="credit-label">Credit Limit</div>	
 					</div>
-					{{!-- <div class="subcolumn">
-						<h5 class="stats">Stats</h5>
-						<stats username="{{username}}"></stats>
-					</div> --}}
+					
 				</div>
-				<div class="eight columns">
-					<h5>Exchange History</h5>
-					<div class="ct-chart ct-major-sixth"></div>
-					<div class="chart-label ct-series-a">&nbsp;</div> Earned {{gained}}<br>
-					<div class="chart-label ct-series-b">&nbsp;</div> Spent	{{spent}}
-					<p>&nbsp;</p>
+				<div class="eight columns supercolumn">
+					<ratio-chart spent="{{spent}}" earned="{{gained}}" size="350"></ratio-chart>
 					<stats username="{{username}}"></stats>
 				</div>
 			</div>
 
-			<div class="row under-row">
-				<div class="one-half column">
+
+		</div>
+
+		<div class="one-half column">
+				<h5>What's New</h5>
+				<div class="row">
+				<div class="one-half column invisible-column">
 					<general-item-list type="offering"></general-item-list>
 				</div>
-				<div class="one-half column">
+				<div class="one-half column invisible-column">
 					<general-item-list type="seeking"></general-item-list>
 				</div>
 			</div>
 
+			
 		</div>
 
-		<div class="one-half column dashboard-exchanges">
+	</div>
+	<div class="row under-row">
+		<div class="column dashboard-exchanges">
 			<h5>Recent Exchanges</h5>
 			<table class="dashboard-transactions transactions">
 				<tr>
 					<th>date</th>
 					<th>to/from</th>
+					<th>note</th>
 					<th class="numcol">amount</th>
+					<th class="numcol balcol">balance</th>
 				</tr>
 				{{#each ledger}}
 					<tr class="{{ifNegative signed_amt 'neg' 'pos'}}">
 						
 						<td>{{formatted_date}}</td>
 						<td>{{description}}</td>
+						<td>{{note}}</td>
 						<td class="amt numcol">{{signed_amt}}</td>
+						<td class="numcol balcol">{{balance}}
 					</tr>
 				{{/each}}
 
 			</table>
 			<p class="goto-text"><a href="/user/ledger">See all exchanges &rarr;</a></p>
 
-		</div>
-
+		<div>
 	</div>
 </div><!-- /dashboard -->
 
-<!-- chartist.js -->
-<script src="/js/lib/chartist.min.js"></script>
 <!-- riot.js -->
 <script src="/js/lib/riot.min.js"></script>
 <script src="/js/riottags.min.js"></script>
@@ -73,13 +73,7 @@
     riot.mount('balance');
     riot.mount('stats');
     riot.mount('general-item-list');
+    riot.mount('ratio-chart');
 
-    new Chartist.Pie('.ct-chart', {
-      series: [{{gained}}, {{spent}}]
-    }, {
-      donut: true,
-      donutWidth: 60,
-      donutSolid: true,
-      showLabel: false
-    });
+    
 </script>

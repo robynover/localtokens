@@ -50,8 +50,10 @@ module.exports = function(express,app){
 							context.page = pg;
 							context.total_entries = total_entries;
 							context.total_pages = total_pages;
+							context.pagetitle = "Ledger";
 							context.loggedin = true;
 							context.username = req.user.username;
+							context.is_admin = req.user.is_admin;
 							res.render('ledger-user',context);
 						});
 				})
@@ -70,6 +72,8 @@ module.exports = function(express,app){
 			context.loggedin = true;
 			context.username = req.user.username;
 			context.is_admin = req.user.is_admin;
+			context.credit = req.user.max_negative_balance;
+			context.pagetitle = "Dashboard";
 
 			Ledger.getUserExchangeRatio(req.user.id)
 				.then(result=>{
@@ -83,10 +87,10 @@ module.exports = function(express,app){
 					}
 					User.findById(req.user.id)
 						.then(user=>{
-							user.getSimpleLedger(10)
+							user.getLedgerWithBalance(6)
 								.then(ledger=>{
 									context.ledger = ledger;
-									res.render('dashboard2',context);
+									res.render('dashboard3',context);
 								});
 						});
 					
@@ -107,10 +111,12 @@ module.exports = function(express,app){
 			context.loggedin = true;
 			context.username = req.user.username;
 			context.is_admin = req.user.is_admin;
+
 			
 			User.getByUsername(req.params.username)
 				.then(user=>{
 					context.user = user;
+					context.pagetitle = user.username;
 					Ledger.getUserExchangeRatio(user.id)
 						.then(result=>{
 							for (var i in result){
@@ -120,12 +126,41 @@ module.exports = function(express,app){
 									context.gained = result[i].count;
 								}
 							}
-							res.render('profile',context);
+							res.render('profile3',context);
 						})
 					
 				});
 				
 		} else {
+			res.redirect('/signin');
+		}
+	});
+
+	router.get('/search',(req,res)=>{
+		if (req.user){
+			var context = {};
+			context.loggedin = true;
+			context.username = req.user.username;
+			context.is_admin = req.user.is_admin;
+			context.pagetitle = "Find People";
+
+			if (req.query.q){
+				context.query = striptags(req.query.q);
+				User.searchUsers(req.query.q)
+					.then(users=>{
+						context.users = users;
+						res.render('user-search',context);
+					});
+			} else {
+				User.getRecentUsers(21)
+					.then(users=>{
+						context.users = users;
+						res.render('user-search',context);
+					});
+				
+			}
+			
+		} else{
 			res.redirect('/signin');
 		}
 	});

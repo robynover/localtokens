@@ -21,7 +21,7 @@ module.exports = function(sequelize, DataTypes) {
 	  	defaultValue: sequelize.fn('NOW')
 	  },
 	  note:{
-		type: DataTypes.TEXT
+		type: DataTypes.STRING(255)
 	  }
 	},
 	{

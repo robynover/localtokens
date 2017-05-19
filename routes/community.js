@@ -80,6 +80,7 @@ module.exports = function(express,app){
 		context.loggedin = true;
 		context.username = req.user.username;
 		context.is_admin = req.user.is_admin;
+		context.pagetitle = "New Post";
 		res.render('postform',context);
 	});
 
@@ -230,6 +231,7 @@ module.exports = function(express,app){
 				doc.author = doc.username;
 				doc.username = req.user.username;
 				doc.is_admin = req.user.is_admin;
+				doc.pagetitle = doc.title;
 				// for JS:
 				doc.body_str = JSON.stringify(doc.body);
 				doc.title_str = JSON.stringify(doc.title);

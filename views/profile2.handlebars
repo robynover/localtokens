@@ -1,14 +1,9 @@
 <link rel="stylesheet" href="/css/lib/chartist.css">
 <div class="profile">
-
-	<div class="row profile-header">
-		<div class="four columns">
-			<h2>{{user.username}}</h2>
-			Balance <balance username="{{user.username}}"></balance> / Max Negative <strong>{{user.max_negative_balance}}</strong><br>
-
+	<h2>{{user.username}}</h2>
+	<div class="row under-row">
+		<div class="two columns profile-stats">
 			<stats username="{{user.username}}"></stats>
-		</div>
-		<div class="eight columns">
 			<div class="chart-wrap">
 				<div class="chart">	
 					<div class="ct-chart ct-square"></div>
@@ -20,15 +15,19 @@
 					Spent {{#if spent}}{{spent}}{{else}}0{{/if}}
 				</div>
 			</div>
+			
+			
+			<hr>
+			<balance username="{{username}}" header="true"></balance>
+
+			<hr>
+			<h6 class="credit">Max Negative</h6>
+			<div class="credit">{{user.max_negative_balance}}</div>
+			
+			
 		</div>
 
-	</div>
-
-	
-
-	<div class="row under-row">
-		<div class="one-third column profile-pic">
-			
+		<div class="four columns profile-pic">
 			{{#if user.profile_photo}}
 				<img id="profile-photo" src="{{user.profile_photo}}">
 			{{else}}
@@ -45,15 +44,9 @@
 			{{#notequal user.username username}}
 				<a href="/exchange/send?to={{user.username}}"><button class="button-primary">Pay {{user.username}}</button></a>
 			{{/notequal}}
-			
-		</div>
-		<div class="two-thirds column supercolumn">
-				
-			{{!-- <div class="profile-text" id="{{user_id}}"></div>
-			{{#equal user.username username}}
-			<p class="edit-profile"><i class="fa fa-pencil" aria-hidden="true"></i></p>
-			{{/equal}} --}}
 
+		</div>
+		<div class="six columns">
 			<div class="row">
 				<div class="column one-half">
 					<item-list type="offering" username="{{user.username}}"></item-list>
@@ -69,9 +62,10 @@
 					{{/equal}}
 				</div>
 			</div>
-
 		</div>
+
 	</div>
+
 </div>
 <!-- chartist.js -->
 <script src="/js/lib/chartist.min.js"></script>

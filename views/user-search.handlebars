@@ -1,0 +1,41 @@
+<div class="user-search">
+	<h2>Find People</h2>
+	<form>
+		<input type="text" name="q" placeholder="search">
+		<input type="submit" name="search" value="search" class="button-primary">
+	</form>
+
+	{{#if query}}
+		<h5 class="find-header">Results for <strong>{{query}}</strong></h5>
+		<p><a href="/user/search">clear results</a></p>
+		{{#if users}}
+		{{else}}
+			<p>No results found</p>
+		{{/if}}
+	{{else}}
+		<h5>Newest Members</h5>
+	{{/if}}
+
+	{{#if users}}	
+		<ul class="results">
+		{{#each users}}
+			<li>
+				{{#if profile_photo}}
+					<div class="photo-wrap">
+						<a href="/user/profile/{{username}}">
+							<img src="{{profile_photo}}">
+						</a>
+					</div>
+				{{else}}
+					<a href="/user/profile/{{username}}">
+						<img src="/images/avatar.png">
+					</a>
+				{{/if}}
+				
+				<div class="result-text"><strong><a href="/user/profile/{{username}}">{{username}}</a></strong>
+			 - {{firstname}} {{lastname}}</div>
+			</li>
+		{{/each}}
+		</ul>
+	{{/if}}
+</div>
