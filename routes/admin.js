@@ -5,6 +5,7 @@ module.exports = function(express,app){
 	
 	var User = app.get('models').user;
 	var Ledger = app.get('models').ledger;
+	var InvitationAllotment = require('../models/mongoose/invitationAllotment.js');
 
 	// === require admin users for this section=== //
 	router.all('/*',function(req,res,next){
@@ -152,6 +153,66 @@ module.exports = function(express,app){
 					.catch(err=>{
 						res.render('generic',{msg:err});
 					});
+			});
+	});
+
+	router.get('/user/:id',(req,res)=>{
+		var context = {};
+		context.layout = 'admin';
+		context.loggedin = true;
+		context.is_admin = req.user.is_admin;
+		context.username = req.user.username;
+
+		User.findById(req.params.id)
+			.then(user=>{
+				context.pagetitle = user.username;
+				context.user = user;
+
+				InvitationAllotment.findByUsername(user.username)
+					.then( ia=>{
+						context.limit = ia.limit;
+						context.left = ia.left;
+						context.used = ia.used;
+						res.render('user-admin',context);
+					})
+					.catch(err=>{
+						res.render('user-admin',context);
+					});
+
+				
+			})
+			.catch(err=>{
+				res.render('user-admin',context);
+			});
+	});
+
+	router.post('/user/:id',(req,res)=>{
+		var context = {};
+		context.layout = 'admin';
+		context.loggedin = true;
+		context.is_admin = req.user.is_admin;
+		context.username = req.user.username;
+
+		User.findById(req.params.id)
+			.then(user=>{
+				context.pagetitle = user.username;
+				context.user = user;
+
+				InvitationAllotment.findByUsername(user.username)
+					.then( ia=>{
+						//console.log(ia);
+
+						ia.addToLimit(req.body.num)
+							.then( ()=>{
+								context.limit = ia.limit;
+								context.left = ia.left;
+								context.used = ia.used;
+								res.render('user-admin',context);
+							})
+						
+					});
+
+				
 			});
 	});
 

@@ -37,7 +37,7 @@ var session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
 app.use(session({
   secret: config.session,
-  store: new MongoStore({ url: config.mongo }),
+  store: new MongoStore({ url: config.mongoSession }),
   resave: false,
   saveUninitialized: true,
   name: 'curSess', //name of the cookie
@@ -52,13 +52,20 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 
-// models
+// sequelize models
 app.set('models',require('./models'))
 var User = app.get('models').user;
 
 var sequelize = app.get('models').sequelize;
 
 sequelize.sync(); //{force:true}
+
+// mongoose
+var mongoose = require('mongoose');
+mongoose.connect(config.mongo);
+mongoose.Promise = require('bluebird');
+
+
 
 // passport
 var passport = require('passport');
@@ -67,7 +74,7 @@ passport.serializeUser(function(user, done) {
 });
 passport.deserializeUser(function(id, done) {
   User.findById(id,{
-      attributes: ['id', 'username', 'is_admin', 'is_active', 'max_negative_balance']
+      attributes: ['id', 'username', 'firstname','is_admin', 'is_active', 'max_negative_balance']
     }).then(user=>{
   	 done(null, user);
   	 return null;
@@ -106,8 +113,9 @@ var apiRoutes = require('./routes/api.js')(express,app);
 var homeRoutes = require('./routes/home.js')(express,app);
 var userRoutes = require('./routes/user.js')(express,app);
 var exchangeRoutes = require('./routes/exchange.js')(express,app);
-var communityRoutes = require('./routes/community.js')(express,app);
+var communityRoutes = require('./routes/community.js')(express);
 var adminRoutes = require('./routes/admin.js')(express,app);
+var inviteRoutes = require('./routes/invite.js')(express);
 
 app.use('/api', apiRoutes);
 app.use('/', homeRoutes);
@@ -115,6 +123,7 @@ app.use('/user', userRoutes);
 app.use('/exchange', exchangeRoutes);
 app.use('/community', communityRoutes);
 app.use('/admin', adminRoutes);
+app.use('/invite', inviteRoutes);
 
 
 // 404

@@ -533,6 +533,7 @@ input#amt{
 	}
 	.profile-photo{
 		text-align: center;
+		position:relative;
 		img{
 			width:150px;
 			max-width:150px;
@@ -541,6 +542,11 @@ input#amt{
 			box-shadow: $shadow;
 		}
 	}
+	
+	.profile-photo:hover .photowrap{
+		display:block;
+	}
+
 	.balance-header, .credit-label{
 		text-transform: uppercase;
 	}
@@ -558,6 +564,7 @@ input#amt{
 	.ratio{
 		margin-top: 2rem;
 		margin-bottom: 2rem;
+		text-align: center;
 	}
 	.profile-pic{
 		position: relative;
@@ -594,6 +601,11 @@ input#amt{
 			font-size: 4rem;
 
 		}	
+	}
+	.profile-edit{
+		text-align: center;
+		/* width: 150px;
+		margin: auto; */
 	}
 	.pay-user{
 		text-align: center;
@@ -657,11 +669,16 @@ input#amt{
 	    }
 	}
 	#user-photo-upload{
-		background: rgba(255,255,255,0.8);
+		background: rgba(255,255,255,0.9);
     	position: absolute;
     	margin-top: -21rem;
     	padding: 1rem;
     	width: 100%;
+    	border: 1px solid rgba(214, 214, 214, 0.3);
+	}
+	p.edit-photo{
+		margin: 0;
+		padding: 0;
 	}
 	.profile-text{
 		font-family: "Open Sans",sans-serif;
@@ -804,6 +821,12 @@ tr.opened td{
 	}
 	.results li:nth-child(odd){
 		background: rgba(242,242,242,0.7);
+	}
+}
+
+.invite{
+	textarea{
+		width: 50%;
 	}
 }
 

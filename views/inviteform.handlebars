@@ -1,0 +1,25 @@
+<div class="invite">
+	{{#if result}}
+		<div class="flash">{{result}}</div>
+	{{/if}}
+
+	<h2>Invite</h2>
+
+	{{#if numLeft}}
+		<p>You have <strong>{{numLeft}}</strong> invitations left</p>
+	{{else}}
+		<p>You do not have any invite codes. Contact an administrator to request invite codes.</p>
+	{{/if}}
+
+	{{#if numLeft}}
+
+		<form method="post" action="/invite">
+			<p>Enter up to {{numLeft}} email addresses, separated by commas</p>
+			<textarea name="emails"></textarea>
+			<br>
+			<input type="submit" value="Invite"></input>
+		</form>
+
+	{{/if}}
+
+</div>

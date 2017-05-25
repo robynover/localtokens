@@ -48,15 +48,6 @@
   src: local("Raleway SemiBold"), local("Raleway-SemiBold"), url("fonts/raleway-v11-latin-600.eot?#iefix") format("embedded-opentype"), url("fonts/raleway-v11-latin-600.woff2") format("woff2"), url("fonts/raleway-v11-latin-600.woff") format("woff"), url("fonts/raleway-v11-latin-600.ttf") format("truetype"), url("fonts/raleway-v11-latin-600.svg#Raleway") format("svg");
   /* Legacy iOS */ }
 
-.chart-label {
-  display: inline; }
-
-.chart-label.ct-series-a {
-  background-color: #1D434E; }
-
-.chart-label.ct-series-b {
-  background-color: #50B6D6; }
-
 .clearfix {
   clear: both; }
 
@@ -496,13 +487,17 @@ input#amt {
   text-align: center; }
 
 .profile .profile-photo {
-  text-align: center; }
+  text-align: center;
+  position: relative; }
   .profile .profile-photo img {
     width: 150px;
     max-width: 150px;
     margin-top: -8rem;
     border: 1px solid #d6d6d6;
     box-shadow: 2px 2px 3px #e6e5e5; }
+
+.profile .profile-photo:hover .photowrap {
+  display: block; }
 
 .profile .balance-header, .profile .credit-label {
   text-transform: uppercase; }
@@ -520,7 +515,8 @@ input#amt {
 
 .profile .ratio {
   margin-top: 2rem;
-  margin-bottom: 2rem; }
+  margin-bottom: 2rem;
+  text-align: center; }
 
 .profile .profile-pic {
   position: relative;
@@ -553,6 +549,11 @@ input#amt {
   margin-top: 12rem; }
   .profile .profile-header .bal {
     font-size: 4rem; }
+
+.profile .profile-edit {
+  text-align: center;
+  /* width: 150px;
+		margin: auto; */ }
 
 .profile .pay-user {
   text-align: center; }
@@ -610,11 +611,16 @@ input#amt {
     color: #666666; }
 
 .profile #user-photo-upload {
-  background: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.9);
   position: absolute;
   margin-top: -21rem;
   padding: 1rem;
-  width: 100%; }
+  width: 100%;
+  border: 1px solid rgba(214, 214, 214, 0.3); }
+
+.profile p.edit-photo {
+  margin: 0;
+  padding: 0; }
 
 .profile .profile-text {
   font-family: "Open Sans",sans-serif; }
@@ -738,6 +744,9 @@ tr.opened td {
 
 .user-search .results li:nth-child(odd) {
   background: rgba(242, 242, 242, 0.7); }
+
+.invite textarea {
+  width: 50%; }
 
 /* media queries */
 @media (max-width: 719px) {

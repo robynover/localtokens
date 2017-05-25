@@ -2,7 +2,7 @@
 	<div class="ratio">
 		
 		<div class="part earned-part" ref="earned">&nbsp;</div><div class="part spent-part" ref="spent">&nbsp;</div>
-		<div>Earned: {earned} | Spent: {spent}</div>
+		<div>Incoming: {earned} | Outgoing: {spent}</div>
 	</div>
 
 	<style>

@@ -14,6 +14,8 @@ module.exports = function(express,app){
 	var Ledger = app.get('models').ledger;
 	var Notification = app.get('models').notification;
 	var Post = require('../models/mongoose/post.js');
+	var CreditRules = app.get('models').credit_rules;
+	var CreditsGranted = app.get('models').credits_granted;
 
 	var transact = require('../transact.js')(app);
 
@@ -339,6 +341,45 @@ module.exports = function(express,app){
 				return res.json({success:false,error:err.message});
 			});
 		
+	});
+
+	router.get('/user/:id/credit/eligible', (req,res)=>{
+		var rule_num;
+		CreditsGranted.userHasHistory(req.params.id)
+			.then(ct=>{
+				if (ct[0].count == 0){
+					rule_num = 1; // user is not in table; start with 1st rule
+				} else {
+					CreditRules.nextUserRule(req.params.id)
+						.then( nr=>{
+							if (nr[0]){
+								rule_num = nr[0].rule_order;
+							} else {
+								rule_num = 0;
+							}
+							
+						})
+				}
+				
+			})
+			.then( ()=>{
+				if (rule_num > 0){
+					// is user eligible for next rule?
+					CreditRules.userEligibleForRule(req.params.id,rule_num)
+						.then(ue =>{
+							if (ue[0].result == true){
+								// apply rule
+								// add new CreditsGranted
+							} else {
+								// no rules apply
+							}
+						})
+				}
+
+
+
+				return res.json({success:true, n:rule_num});
+			})
 	});
 
 	

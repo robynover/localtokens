@@ -1,13 +1,13 @@
 "use strict";
-var Sequelize = require('sequelize');
-var passport = require('passport');
+//var Sequelize = require('sequelize');
+//var passport = require('passport');
 var config = require('../config/config.js')[process.env.NODE_ENV];
 var striptags = require('striptags');
 
 // mongoose
-var mongoose = require('mongoose');
+/*var mongoose = require('mongoose');
 mongoose.connect(config.mongo);
-mongoose.Promise = require('bluebird');
+mongoose.Promise = require('bluebird');*/
 
 // for file submission in forms
 var multer  = require('multer');
@@ -37,10 +37,9 @@ var restrictImgType = function(req, file, cb) {
 var upload = multer({ storage: storage, limits: {fileSize:4000000, fileFilter:restrictImgType} });
 
 
-module.exports = function(express,app){
+module.exports = function(express){
 	var router = express.Router();
 
-	//var Item = app.get('models').item;
 	var Post = require('../models/mongoose/post.js');
 
 	// === require users to be logged in for this section=== //

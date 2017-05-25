@@ -9,6 +9,8 @@ module.exports = function(express,app){
 	var router = express.Router();
 	
 	var User = app.get('models').user;
+	var Invitation = require('../models/mongoose/invitation.js');
+	var InvitationAllotment = require('../models/mongoose/invitationAllotment.js');
 	
 	router.get('/',function(req,res){
 		var context = {};
@@ -61,7 +63,7 @@ module.exports = function(express,app){
 		res.render('generic',{msg:"You've been successfully logged out."});
 	});
 
-	router.get('/signup',(req,res)=>{
+	/*router.get('/signup',(req,res)=>{
 		if (req.user){
 			req.logout();
 		}
@@ -70,7 +72,7 @@ module.exports = function(express,app){
 		context.error = req.flash('err');
 		context.loggedin = false;
 		res.render('signup',context);
-	});
+	});*/
 
 	router.post('/signup', (req,res)=>{
 		// set up variables to return in errors, if needed
@@ -93,32 +95,75 @@ module.exports = function(express,app){
 			res.render('signup',context);
 			return;
 		}
-		
-		User.create({
-			username: req.body.username.toLowerCase(),
-			password: User.encryptPassword(req.body.password),
-			email: req.body.email,
-			firstname: striptags(req.body.firstname),
-			lastname: striptags(req.body.lastname)
-		}).then(user=>{
-			// TODO: send email verification
-			res.render('generic',{msg:'Signup successful! We will be in touch shortly to activate your account.'});
-		}).catch(Sequelize.ValidationError, err => {
-			var msg = '';
-			for(var i in err.errors){
-				msg += err.errors[i].message += ', ';
-			}
-			msg = msg.substring(0,msg.length - 2);
-			
-			context.error = msg;
-			res.render('signup',context);
+		// make sure code is valid
+		Invitation.findByCode(req.body.code)
+			.then(inv=>{
+				if (inv.redeemed){
+					res.render('generic',{msg:'That code has already been used'});
+					return;
+				} else {
+					// redeem code
+					inv.redeemed = true;
+					inv.save()
+						.then( ()=>{
+							User.create({
+								username: req.body.username.toLowerCase(),
+								password: User.encryptPassword(req.body.password),
+								email: req.body.email,
+								firstname: striptags(req.body.firstname),
+								lastname: striptags(req.body.lastname)
+							}).then(user=>{
+								// set up invitation allotment
+								var ia = new InvitationAllotment({
+									userid: user.id,
+									username: user.username,
+									limit: 5
+								});
+								ia.save();
+								// TODO: send email verification
+								res.render('generic',{msg:'Signup successful! We will be in touch shortly to activate your account.'});
+							}).catch(Sequelize.ValidationError, err => {
+								var msg = '';
+								for(var i in err.errors){
+									msg += err.errors[i].message += ', ';
+								}
+								msg = msg.substring(0,msg.length - 2);
+								
+								context.error = msg;
+								res.render('signup',context);
 
-		}).catch(err => {
-			console.log(err);
-			//res.render('signup');
-		});
+							}).catch(err => {
+								console.log(err);
+								//res.render('signup');
+							});
+						});
+					
+				}
+			});	
 	});
 
+	/*router.get('/mailtest',(req,res)=>{
+		var mail = require('../mail.js');
+		var mailObj = mail.setUp(
+			'robyn@nyu.edu',
+			'Hello from your app',
+			'text',
+			'Hello. This is from SendGrid');
+		mail.send(mailObj)
+			.then(function (response) {
+			  console.log(response.statusCode);
+			  console.log(response.body);
+			  console.log(response.headers);
+			  res.render('generic',{msg:"Mail test"});
+			})
+			.catch(function (error) {
+			  // error is an instance of SendGridError
+			  // The full response is attached to error.response
+			  console.log(error.response.statusCode);
+			  res.render('generic',{msg:error.response});
+			});
+		
+	});*/
 
 
 	return router;

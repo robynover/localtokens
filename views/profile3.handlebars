@@ -2,12 +2,22 @@
 	<div class="row profile-header">
 		<div class="four columns user-info">
 			<div class="profile-photo">
+				
 				{{#if user.profile_photo}}
 					<img id="profile-photo" src="{{user.profile_photo}}">
 				{{else}}
 					<img id="profile-photo" src="/images/avatar.png">
 				{{/if}}
+
+				{{#equal user.username username}}
+				<div class="profile-edit">
+						<photo-upload url="/api/user/photo"></photo-upload>
+				</div>
+				{{/equal}}
+				
 			</div>
+			
+
 			<h2>{{user.firstname}}</h2>
 			<h5>{{user.username}}</h5>
 			{{#notequal user.username username}}
@@ -15,6 +25,7 @@
 					<a href="/exchange/send?to={{user.username}}"><button class="button-primary">Pay {{user.username}}</button></a>
 				</div>
 			{{/notequal}}
+
 			<div class="balance-box">
 				<balance username="{{user.username}}"></balance>
 				<div class="balance-header">Balance</div>	
@@ -25,7 +36,7 @@
 			</div>
 
 			<br class="clearfix">
-			<ratio-chart spent="{{spent}}" earned="{{gained}}" size="330"></ratio-chart>
+			<ratio-chart spent="{{spent}}" earned="{{gained}}" size="300"></ratio-chart>
 			<stats username="{{user.username}}"></stats>
 		</div>
 		<div class="eight columns">
@@ -48,38 +59,7 @@
 
 	</div>
 
-	
-
-	<div class="row under-row">
-		<div class="one-third column profile-pic">
-			
-			{{!-- {{#if user.profile_photo}}
-				<img id="profile-photo" src="{{user.profile_photo}}">
-			{{else}}
-				<img id="profile-photo" src="/images/avatar.png">
-			{{/if}} --}}
-			{{!-- <div class="profile-bal">
-				<balance username="{{user.username}}"></balance>
-			</div> --}}
-			
-			{{!-- {{#equal user.username username}}
-				<photo-upload url="/api/user/photo"></photo-upload>
-			{{/equal}} --}}
-
-			
-			
-		</div>
-		<div class="two-thirds column supercolumn">
-				
-			{{!-- 
-			{{#equal user.username username}}
-			<p class="edit-profile"><i class="fa fa-pencil" aria-hidden="true"></i></p>
-			{{/equal}} --}}
-
-			
-
-		</div>
-	</div>
+		
 </div>
 
 <!-- riot.js -->

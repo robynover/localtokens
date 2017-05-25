@@ -16,7 +16,7 @@
 {{#each users}}
 	<tr>
 		<td><input type="checkbox" value="{{id}}" name="userid"></td>
-		<td>{{username}}</td>
+		<td><a href="/admin/user/{{id}}">{{username}}</a></td>
 		<td>{{firstname}} {{lastname}}</td>
 		<td>{{#if is_active}}
 			<i class="fa fa-check" aria-hidden="true"></i>

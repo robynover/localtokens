@@ -1,4 +1,4 @@
-riot.tag2('ratio-chart', '<div class="ratio"> <div class="part earned-part" ref="earned">&nbsp;</div><div class="part spent-part" ref="spent">&nbsp;</div> <div>Earned: {earned} | Spent: {spent}</div> </div>', 'ratio-chart .part,[data-is="ratio-chart"] .part{ display:inline-block; height: 4rem; } ratio-chart .earned-part,[data-is="ratio-chart"] .earned-part{ background-color: #50b6d6; } ratio-chart .spent-part,[data-is="ratio-chart"] .spent-part{ background-color: #1d434e; }', '', function(opts) {
+riot.tag2('ratio-chart', '<div class="ratio"> <div class="part earned-part" ref="earned">&nbsp;</div><div class="part spent-part" ref="spent">&nbsp;</div> <div>Incoming: {earned} | Outgoing: {spent}</div> </div>', 'ratio-chart .part,[data-is="ratio-chart"] .part{ display:inline-block; height: 4rem; } ratio-chart .earned-part,[data-is="ratio-chart"] .earned-part{ background-color: #50b6d6; } ratio-chart .spent-part,[data-is="ratio-chart"] .spent-part{ background-color: #1d434e; }', '', function(opts) {
 		this.spent = parseInt(opts.spent);
 		this.earned = parseInt(opts.earned);
 		this.size = parseInt(opts.size);

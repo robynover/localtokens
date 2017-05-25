@@ -7,3 +7,5 @@ TODO.txt
 .gitignore
 .sass-cache/*
 test/*
+sendgrid.env
+scratch.sql
