@@ -343,46 +343,94 @@ module.exports = function(express,app){
 		
 	});
 
-	router.get('/user/:id/credit/eligible', (req,res)=>{
-		var rule_num;
-		CreditsGranted.userHasHistory(req.params.id)
-			.then(ct=>{
-				if (ct[0].count == 0){
-					rule_num = 1; // user is not in table; start with 1st rule
-				} else {
-					CreditRules.nextUserRule(req.params.id)
-						.then( nr=>{
-							if (nr[0]){
-								rule_num = nr[0].rule_order;
-							} else {
-								rule_num = 0;
-							}
-							
-						})
-				}
-				
-			})
-			.then( ()=>{
-				if (rule_num > 0){
-					// is user eligible for next rule?
-					CreditRules.userEligibleForRule(req.params.id,rule_num)
-						.then(ue =>{
-							if (ue[0].result == true){
-								// apply rule
-								// add new CreditsGranted
-							} else {
-								// no rules apply
-							}
-						})
-				}
+	router.get('/admin/user/:id/credit/eligible', (req,res)=>{
+		if (req.user){
+			if (req.user.is_admin){
+				var rule_num;
+				// has user used any credit rules?
+				CreditsGranted.userHasHistory(req.params.id)
+					.then(ct=>{
+						if (ct[0].count == 0){
+							rule_num = 1; // user is not in table; start with 1st rule
+						} else {
+							// get next rule
+							return CreditRules.nextUserRule(req.params.id)
+								.then( nr=>{
+									if (nr[0]){
+										rule_num = nr[0].rule_order;
+									} else {
+										rule_num = 0;
+									}
+								})
+						}	
+					})
+					.then( ()=>{
+						if (rule_num > 0){
+							// is user eligible for next rule?
+							CreditRules.userEligibleForRule(req.params.id,rule_num,app.get('models').credits_granted)
+								.then(ue =>{
+									var result = ue[0].result;
+									if (result == null){
+										result = false;
+									}
+									return res.json({success:true, eligible: result });
+									
+								})
+						} else {
+							return res.json({success:true, eligible: false });
 
-
-
-				return res.json({success:true, n:rule_num});
-			})
+						}	
+					})
+			} else {
+				res.json({success:false,error:'Must be admin'});
+			}
+		} else {
+			res.json({success:false,error:'Not logged in'});
+		}
 	});
 
-	
+	router.get('/admin/user/:id/credit/grant/rule/:rule_num', (req,res)=>{
+		if (req.user){
+			if (req.user.is_admin){
+
+				CreditRules.findOne({
+					where:{rule_order:req.params.rule_num}
+				})
+					.then( rule=>{
+						// make sure user hasn't used this rule already
+						CreditsGranted.findOne({
+							where:{
+								user_id: req.params.id,
+								rule_id: rule.id
+							}
+						})
+							.then( cg=>{
+								console.log(cg);
+								if (cg){
+									return res.json({success:false,error:'Already used this rule'});
+								} else {
+									// add new CreditsGranted
+									CreditsGranted.create({
+										amount_used: rule.benchmark,
+										credit_given: rule.gain,
+										user_id: req.params.id,
+										rule_id: rule.id
+									})
+										.then(granted=>{
+											//console.log(granted);
+											return res.json({success:true, rule_id: rule.id});
+										});
+								}
+
+							});
+					});
+			} else {
+				res.json({success:false,error:'Must be admin'});
+			}
+		} else {
+			res.json({success:false,error:'Not logged in'});
+		}
+	});
 
 
 

@@ -28,6 +28,16 @@ module.exports = function(sequelize, DataTypes) {
 				  { replacements: {id:user_id}, type: sequelize.QueryTypes.SELECT }
 				);
 			}
+		},
+		hooks: {
+			afterCreate: function(cg, options) {
+				// give the credit
+				var q = "UPDATE users SET max_negative_balance = (max_negative_balance + :new_credit) "
+					  + "WHERE id = :user_id";
+				return sequelize.query(q,
+				  { replacements: {user_id:cg.user_id,new_credit:cg.credit_given}, type: sequelize.QueryTypes.SELECT }
+				);
+			}
 		}
 	});
 
