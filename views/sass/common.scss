@@ -830,6 +830,12 @@ tr.opened td{
 	}
 }
 
+bookmark div{
+	float: left;
+	margin-left: -3rem;
+	margin-top: 5rem;
+}
+
 /* media queries */
 @media (max-width: 719px) {
 	nav.menu{

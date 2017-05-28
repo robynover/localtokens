@@ -3,9 +3,12 @@
 	<div class="postwrap" id="wrap-{{_id}}">
 
 		<p class="post-label">{{type}}</p>
+		<bookmark id="{{_id}}"></bookmark>
 		<h2 id="posttitle">{{title}}</h2>
 		<p class="postdate"><em><a href="/user/profile/{{author}}">{{author}}</a></em> 
-			at {{formatDate datetime 'h:mm a, ddd MMM D, YYYY'}}</p>
+			at {{formatDate datetime 'h:mm a, ddd MMM D, YYYY'}}
+		</p>
+		
 
 		<div class="postbody orig" id="postbody">
 			{{body}}
@@ -34,12 +37,10 @@
 
 <!-- riot.js -->
 <script src="/js/lib/riot.min.js"></script>
-{{!-- <script src="/js/tags/edit-msg.js"></script>
-<script src="/js/tags/confirm.js"></script> --}}
-
 <script src="/js/riottags.min.js"></script>
 <script>
 
+	riot.mount('bookmark');
 	
 	var myObservable = riot.observable();
 
@@ -54,9 +55,10 @@
 		});
 	});
 	myObservable.on('done',function(msg){
-		$('#postbody').html(msg.body);
-		$('#posttitle').html(msg.title);
-		$('#postcontact').html(msg.contact);
+		//add fields back, stripping html tags
+		$('#postbody').html(msg.body.replace(/<\/?[^>]+(>|$)/g, ""));
+		$('#posttitle').html(msg.title.replace(/<\/?[^>]+(>|$)/g, ""));
+		$('#postcontact').html(msg.contact.replace(/<\/?[^>]+(>|$)/g, ""));
 		$('.post-label').html(msg.type);
 		
 		if (msg.photo){

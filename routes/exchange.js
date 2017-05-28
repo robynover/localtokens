@@ -39,10 +39,12 @@ module.exports = function(express,app){
 			context.username = req.user.username;
 			context.is_admin = req.user.is_admin;
 
+			var receiver_id;
 			// get receiver id
 			User.getIdByUsername(req.body.receiver)
 				.then(idObj=>{
-					transact.send(req.user.id,idObj.id,req.body.amt,req.body.note)
+					receiver_id = idObj.id;
+					return transact.send(req.user.id,idObj.id,req.body.amt,req.body.note)
 						.then(result=>{
 							var word = "token";
 							if (req.body.amt > 1){
@@ -59,10 +61,14 @@ module.exports = function(express,app){
 							res.render('generic',{msg:err.message});
 						})
 				})
-				.catch(err=>{
-					res.status(422);
-					res.render('generic',{msg:'Unknown receiver'});
+				// log the transaction after response, to handle receiver credits
+				.then( ()=>{
+					transact.log(receiver_id);
 				})
+				.catch(err=>{
+					//res.status(422);
+					console.log(err.message);	
+				});
 		} else {
 			res.render('generic',{msg:'Not logged in'});
 		}

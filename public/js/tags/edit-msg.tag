@@ -88,6 +88,7 @@
 
 	this.save = function(e){
 		e.preventDefault();
+		e.target.innerHTML = '<i class="fa fa-circle-o-notch" aria-hidden="true"></i>';
 		var data = new FormData();
 
 		if (!self.refs.message.value){

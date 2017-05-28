@@ -16,6 +16,7 @@ module.exports = function(express,app){
 	var Post = require('../models/mongoose/post.js');
 	var CreditRules = app.get('models').credit_rules;
 	var CreditsGranted = app.get('models').credits_granted;
+	var Bookmark = require('../models/mongoose/bookmark.js');
 
 	var transact = require('../transact.js')(app);
 
@@ -195,9 +196,9 @@ module.exports = function(express,app){
 		if (req.user){
 			User.getByUsername(req.params.username)
 				.then(user=>{
-					user.getBalance()
+					return user.getBalance()
 						.then(bal=>{
-							res.json({success:true,balance:bal[0].balance});
+							return res.json({success:true,balance:bal[0].balance});
 						});
 				})
 				.catch(err=>{
@@ -579,7 +580,80 @@ module.exports = function(express,app){
 		}
 	});
 
-	
+	/* -- Bookmarks -- */
+	router.post('/bookmark/add', (req,res)=>{
+		if (req.user){
+			var post_id = req.body.post_id;
+			console.log(req.body.post_id);
+			console.log(req.body);
+			// does it exist already?
+			Bookmark.findOne({
+				username: req.user.username,
+				post_id: req.body.post_id
+			})
+				.then(b=>{
+					if (b){
+						//update -- make active
+						b.active = true;
+						b.save()
+							.then(b1=>{
+								return res.json({success:true,bookmark:b1});
+							})
+					} else {
+						// create
+						console.log(post_id);
+						Bookmark.create({
+							username: req.user.username,
+							post_id: post_id
+						})
+							.then(b1=>{
+								return res.json({success:true,bookmark:b1});
+							});
+					}
+				});
+			
+		} else {
+			return res.json({success:false,error:'Not logged in'});
+		}
+	});
+
+	router.post('/bookmark/remove', (req,res)=>{
+		if (req.user){
+			Bookmark.update({
+				username: req.user.username,
+				post_id: req.body.post_id
+			},{
+				active: false
+			}).exec()
+				.then(result=>{
+					return res.json({success:true});
+				})
+
+		} else {
+			return res.json({success:false,error:'Not logged in'});
+		}
+	});
+
+	router.get('/bookmark/:postid/status', (req,res)=>{
+		if (req.user){
+			Bookmark.findOne({
+				username: req.user.username,
+				post_id: req.params.postid
+			})
+				.then(b=>{
+					console.log(b);
+					var active;
+					if (b){
+						active = b.active;
+					} else {
+						active = false;
+					}
+					return res.json({success:true,active:active});
+				})
+		} else {
+			return res.json({success:false,error:'Not logged in'});
+		}
+	});
 
 	return router;
 };

@@ -43,7 +43,7 @@
 	    	if(http.readyState == 4 && http.status == 200) {
 	        	console.log(http.responseText);
 	            if (JSON.parse(http.responseText).success){	
-	            	self.refs.feedback.innerHTML = 'User found';
+	            	self.refs.feedback.innerHTML = '<i class="fa fa-check-circle" aria-hidden="true"></i>';
 	            	self.refs.feedback.classList.remove('error');
 	            	self.refs.feedback.classList.add('success');
 	            } else {
