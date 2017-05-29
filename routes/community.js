@@ -41,6 +41,7 @@ module.exports = function(express){
 	var router = express.Router();
 
 	var Post = require('../models/mongoose/post.js');
+	var Bookmark = require('../models/mongoose/bookmark.js');
 
 	// === require users to be logged in for this section=== //
 	router.all('/*',function(req,res,next){
@@ -262,11 +263,11 @@ module.exports = function(express){
 		context.loggedin = true;
 		context.username = req.user.username;
 		context.is_admin = req.user.is_admin;
-		context.type = 'Offers';
+		context.type = 'offering';
 		var type = 'offering';
 		if (req.query.type == 'seeking'){
 			type = 'seeking';
-			context.type = 'Needs';
+			context.type = 'seeking';
 		}
 		var findObj = {};
 		findObj.type = type;
@@ -279,8 +280,34 @@ module.exports = function(express){
 
 		if (req.query.q){
 			context.q = striptags(req.query.q);
-			findObj['$text'] = { $search : req.query.q }	
+			findObj['$text'] = { $search : req.query.q };	
 		}
+
+		context.yours = 0;
+		if(req.query.yours == 1){
+			findObj.username = req.user.username;
+			context.yours = 1;
+		}
+
+		context.bookmarks = 0;
+		var prom = new Promise((resolve,reject)=>{
+			if (req.query.bookmarks == 1){
+				context.bookmarks = 1;
+				// get this user's bookmarks
+				Bookmark.find({
+					username: req.user.username
+				}).then( bookmarks=>{
+					findObj._id = [];
+					for (var i in bookmarks){
+						findObj._id.push(bookmarks[i].post_id);
+					}
+					resolve();
+				});
+			} else {
+				resolve();
+			}
+
+		});
 
 		// find first and last dates so you know when to stop paging
 		var findFirst = Post.find(findObj)
@@ -313,31 +340,33 @@ module.exports = function(express){
 					
 				});
 
-		findFirst.then(()=>{
-			findLast.then(()=>{
-				Post.find(findObj)
-					.limit(limit)
-					.sort({datetime:-1})
-					.exec(function(err,results){
-						if(err){
-							console.log(err);
-							next();
-							return;
-						}
-						if (results.length > 0){
-							context.results = results;
-							if (results[results.length - 1].datetime.getTime() != lastDate.getTime()){
-								context.startdate = results[results.length - 1].datetime.toISOString();
+		prom.then( ()=> {
+			findFirst.then(()=>{
+				findLast.then(()=>{
+					Post.find(findObj)
+						.limit(limit)
+						.sort({datetime:-1})
+						.exec(function(err,results){
+							if(err){
+								console.log(err);
+								next();
+								return;
 							}
-							if (results[0].datetime.getTime() != firstDate.getTime()){
-								context.prevdate = results[0].datetime.toISOString();
+							if (results.length > 0){
+								context.results = results;
+								if (results[results.length - 1].datetime.getTime() != lastDate.getTime()){
+									context.startdate = results[results.length - 1].datetime.toISOString();
+								}
+								if (results[0].datetime.getTime() != firstDate.getTime()){
+									context.prevdate = results[0].datetime.toISOString();
+								}
+							} else {
+								context.noresults = "No results found";
 							}
-						} else {
-							context.noresults = "No results found";
-						}
-						res.render('marketplace',context);
+							res.render('marketplace',context);
 
-					});
+						});
+				});
 			});
 		});
 			

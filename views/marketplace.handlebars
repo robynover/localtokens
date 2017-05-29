@@ -4,53 +4,75 @@
 
 	<form>
 	<input type="text" name="q" value="{{#if q}}{{q}}{{/if}}" placeholder="Search" id="search">&nbsp;&nbsp;
-	<input type="radio" name="type" value="offering" {{#equal type "Offers"}}checked{{/equal}}> Offers &nbsp;&nbsp;
-	<input type="radio" name="type" value="seeking" {{#equal type "Needs"}}checked{{/equal}}> Needs &nbsp;&nbsp;
+	<input type="radio" name="type" value="offering" {{#equal type "offering"}}checked{{/equal}}> Offers &nbsp;&nbsp;
+	<input type="radio" name="type" value="seeking" {{#equal type "seeking"}}checked{{/equal}}> Needs &nbsp;&nbsp;
 	<button type="submit" class="button-primary"><i class="fa fa-search" aria-hidden="true"></i></button>
 	</form>
-	
-	<div class="new-msg-btn"><button class="button-primary"><a href="/community/posts/new">new post</a></button></div>
 
-	<ul class="type-tabs">
-		<li  {{#equal type "Offers"}}class="active"{{/equal}}><a href="?q={{q}}&type=offering">Offers</a></li>
-		<li {{#equal type "Needs"}}class="active"{{/equal}}><a href="?q={{q}}&type=seeking">Needs</a></li>
-		{{!-- <li {{#equal type "Bookmarks"}}class="active"{{/equal}}><a href="?q={{q}}&type=bookmarks">Your Bookmarks</a></li> --}}
-	</ul>
-
-
-	{{#if results}}
-		{{#each results}}
-			
-			<div class="postlistwrap">
-				<div class="thumbnail">
-				{{#if thumb}}
-					<a href="/community/post/{{_id}}">
-						<img src="{{thumb}}" alt="{{title}} thumbnail">
-					</a>
-				{{else}}
-					<a href="/community/post/{{_id}}" class="thumb-icon">
-						<i class="fa fa-thumb-tack fa-2x" aria-hidden="true"></i>
-					</a>
-				{{/if}}
-				</div>
-				<h4><a href="/community/post/{{_id}}">{{title}}</a></h4>
-				<p class="postdate"><em><a href="/user/profile/{{username}}">{{username}}</a></em> 
-					at {{formatDate datetime 'h:mm a, ddd MMM D, YYYY'}}</p>
-			</div>
-
-		{{/each}}
-
-	{{else}}
-		<p>{{noresults}}</p>
-	{{/if}}
-	<div class="page-nav">
-		<div class="prev">
-		    {{#if prevdate}}<a href="?prev={{prevdate}}">&larr; Prev</a>{{/if}}
+	<div class="row tab-header">
+		<div class= "one columns supercolumn">
+			&nbsp;
 		</div>
-		<div class="next"> 
-		    {{#if startdate}}<a href="?start={{startdate}}">Next &rarr;</a>{{/if}}
+		<div class="eleven columns supercolumn">
+			<div class="new-msg-btn"><button class="button-primary"><a href="/community/posts/new">new post</a></button></div>
+			<ul class="type-tabs">
+				<li  {{#equal type "offering"}}class="active"{{/equal}}><a href="?q={{q}}&type=offering&yours={{yours}}&bookmarks={{bookmarks}}">Offers</a></li>
+				<li {{#equal type "seeking"}}class="active"{{/equal}}><a href="?q={{q}}&type=seeking&yours={{yours}}&bookmarks={{bookmarks}}">Needs</a></li>
+			</ul>
 		</div>
 	</div>
+	
+	<div class ="row">
+		<div class= "one column supercolumn post-selector">
+			<ul>
+				<li {{#equal yours "0"}}{{#equal bookmarks "0"}}class="active"{{/equal}}{{/equal}}>
+					<a href="?q={{q}}&type={{type}}&yours=0">All</a>
+				</li>
+				<li {{#equal yours "1"}} class="active" {{/equal}}>
+					<a href="?q={{q}}&type={{type}}&yours=1">Your Posts</a>
+				</li>
+				<li {{#equal bookmarks "1"}} class="active"{{/equal}}>
+					<a href="?q={{q}}&type={{type}}&yours=0&bookmarks=1">Bookmarks</a>
+				</li>
+			</ul>
+		</div>
 
+		<div class="eleven columns supercolumn posts-container">
+
+			{{#if results}}
+				{{#each results}}
+					
+					<div class="postlistwrap">
+						<div class="thumbnail">
+						{{#if thumb}}
+							<a href="/community/post/{{_id}}">
+								<img src="{{thumb}}" alt="{{title}} thumbnail">
+							</a>
+						{{else}}
+							<a href="/community/post/{{_id}}" class="thumb-icon">
+								<i class="fa fa-thumb-tack fa-2x" aria-hidden="true"></i>
+							</a>
+						{{/if}}
+						</div>
+						<h4><a href="/community/post/{{_id}}">{{title}}</a></h4>
+						<p class="postdate"><em><a href="/user/profile/{{username}}">{{username}}</a></em> 
+							at {{formatDate datetime 'h:mm a, ddd MMM D, YYYY'}}</p>
+					</div>
+
+				{{/each}}
+
+			{{else}}
+				<p>{{noresults}}</p>
+			{{/if}}
+			<div class="page-nav">
+				<div class="prev">
+				    {{#if prevdate}}<a href="?prev={{prevdate}}">&larr; Prev</a>{{/if}}
+				</div>
+				<div class="next"> 
+				    {{#if startdate}}<a href="?start={{startdate}}">Next &rarr;</a>{{/if}}
+				</div>
+			</div>
+		</div> <!-- /column -->
+	</div> <!-- /row -->
 	<div class="new-msg-btn bottom"><button class="button-primary"><a href="/community/posts/new">new post</a></button></div>
 </div>

@@ -683,7 +683,7 @@ tr.opened td {
 .type-tabs {
   padding: 1.3rem;
   margin-bottom: 0;
-  border-bottom: 1px solid #cecece; }
+  /* border-bottom: 1px solid #cecece; */ }
   .type-tabs li {
     list-style-type: none;
     display: inline;
@@ -694,6 +694,23 @@ tr.opened td {
     background-color: #d9d8d8; }
   .type-tabs li.active {
     background-color: #fff; }
+
+.row.tab-header {
+  border-bottom: 1px solid #cecece; }
+
+.post-selector {
+  margin-top: 2.5rem;
+  text-transform: uppercase;
+  font-size: 80%; }
+  .post-selector ul li {
+    padding: 0;
+    list-style-type: none;
+    margin-bottom: 2.5rem; }
+  .post-selector li.active {
+    font-weight: bold; }
+
+.posts-container {
+  border-left: 1px solid #1EAEDB; }
 
 #search {
   width: 50%; }

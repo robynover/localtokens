@@ -641,7 +641,6 @@ module.exports = function(express,app){
 				post_id: req.params.postid
 			})
 				.then(b=>{
-					console.log(b);
 					var active;
 					if (b){
 						active = b.active;
