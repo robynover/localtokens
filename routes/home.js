@@ -11,6 +11,7 @@ module.exports = function(express,app){
 	var User = app.get('models').user;
 	var Invitation = require('../models/mongoose/invitation.js');
 	var InvitationAllotment = require('../models/mongoose/invitationAllotment.js');
+	var Feedback = require('../models/mongoose/feedback.js');
 	
 	router.get('/',function(req,res){
 		var context = {};
@@ -41,23 +42,7 @@ module.exports = function(express,app){
 	                                   failureRedirect: '/signin',
 	                                   failureFlash: true })(req,res,next);
 	});
-	/*router.post('/signin',passport.authenticate('local'),(req,res)=>{
-		// If this function gets called, authentication was successful.
-		// 401 status is sent if authentication fails
-		var redirectTo = '/user/dashboard';
-		if (req.session.lastVisited){
-			redirectTo = req.session.lastVisited;
-		}
-		res.redirect(redirectTo);
-
-	});*/
-	/*router.post('/signin',
-		passport.authenticate('local', { successRedirect: '/user/dashboard',
-	                                   failureRedirect: '/signin',
-	                                   failureFlash: true })
-	);*/
-
-
+	
 	router.get('/signout',(req,res)=>{
 		req.logout();
 		res.render('generic',{msg:"You've been successfully logged out."});
@@ -142,29 +127,41 @@ module.exports = function(express,app){
 			});	
 	});
 
-	/*router.get('/mailtest',(req,res)=>{
-		var mail = require('../mail.js');
-		var mailObj = mail.setUp(
-			'robyn@nyu.edu',
-			'Hello from your app',
-			'text',
-			'Hello. This is from SendGrid');
-		mail.send(mailObj)
-			.then(function (response) {
-			  console.log(response.statusCode);
-			  console.log(response.body);
-			  console.log(response.headers);
-			  res.render('generic',{msg:"Mail test"});
-			})
-			.catch(function (error) {
-			  // error is an instance of SendGridError
-			  // The full response is attached to error.response
-			  console.log(error.response.statusCode);
-			  res.render('generic',{msg:error.response});
-			});
-		
-	});*/
+	router.get('/feedback', (req,res)=>{
+		if (req.user){
+			var context = {};
+			context.loggedin = true;
+			context.username = req.user.username;
+			context.pagetitle = "Feedback";
+			context.is_admin = req.user.is_admin;
+			res.render('feedbackform',context);
+		} else {
+			res.redirect('/signin');
+		}
+	});
 
+	router.post('/feedback', (req,res)=>{
+		if (req.user){
+			var context = {};
+			context.loggedin = true;
+			context.username = req.user.username;
+			context.pagetitle = "Feedback";
+			context.is_admin = req.user.is_admin;
+
+			Feedback.create({
+				username: req.user.username,
+				content: req.body.feedback
+			})
+				.then(f=>{
+					context.msg = "Thank you for your feedback!";
+					res.render('feedbackform',context);
+				})
+
+			
+		} else {
+			res.redirect('/signin');
+		}
+	});
 
 	return router;
 };

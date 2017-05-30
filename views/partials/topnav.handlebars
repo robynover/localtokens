@@ -11,10 +11,21 @@
         </div>
       {{/if}}
       {{#if username}}
-        <a href="/user">
-          <i class="fa fa-user-circle-o"></i>
-          {{username}}
-        </a>
+          {{!-- <user-dropdown username="{{username}}"></user-dropdown> --}}
+          <div class="topnav-user">
+            <a href="/user" id="user-link">
+              <i class="fa fa-user-circle-o"></i>
+              {{username}}
+            </a>
+            <div class="topnav-user-menu">
+              <ul>
+                <li><a href="/user/profile/{{username}}">Profile</a></li>
+                {{!-- <li><a href="/user/settings">Settings</a></li> --}}
+                <li><a href="/feedback">Feedback</a></li>
+              </ul>
+            </div>
+          </div>
+
       {{/if}}
       {{#if loggedin}}
       <div class="alertbell">

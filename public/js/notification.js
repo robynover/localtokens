@@ -26,6 +26,10 @@ $.ajax({
       li.append('on ' + moment(data.notifications[i].date).format("M/D [at] h:mm a"));
       container.append(li);
     }
+    if (data.notifications.length == 0){
+      var li = $('<li>You have no notifications</li>');
+      container.append(li);
+    }
     $('nav.topnav .dropdown').html(container);
     
   } else if (data.error == 'no results'){

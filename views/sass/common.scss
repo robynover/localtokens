@@ -221,6 +221,25 @@ nav.topnav{
 	display: inline-block;
 	margin-right: 2rem;
 }
+.topnav-user{
+	display: inline-block;
+}
+.topnav-user-menu{
+	/* display: inline-block; */
+	display:none;
+	position: absolute;
+	z-index: 9999;
+	color: $basecolor;
+	background-color: #333;
+	padding: 0 1.2rem;
+	/* border: 1px solid #bcbcbc; */
+	margin-top: 1rem;
+	li{
+		display: block;
+		padding: 0;
+		margin: 0;
+	}
+}
 .admin{
 	nav.menu{
 		box-shadow: none;
@@ -858,11 +877,23 @@ bookmark div{
 	margin-top: 5rem;
 }
 
+.feedback textarea{
+	width: 50%;
+    height: 30rem;
+}
+
 /* media queries */
 @media (max-width: 719px) {
 	nav.menu{
 		li{
 			display:block;
+			border: 1px solid #cecece;
+			width: 94%;
+			padding-left: 1.5rem;
+			box-shadow: $shadow;
 		}
+	}
+	.feedback textarea{
+		width: 90%;
 	}
 }

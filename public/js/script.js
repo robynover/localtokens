@@ -189,3 +189,16 @@ if (typeof validate !== 'undefined'){
   });
 
 } // end if validate
+
+// username dropdown on top nav
+if($('.topnav-user-menu').length > 0){
+  $('#user-link').on('click',function(e){
+    e.preventDefault();
+    if ($('.topnav-user-menu').css('display') == 'none'){
+      $('.topnav-user-menu').css('display','inline-block');
+    } else {
+      $('.topnav-user-menu').css('display','none');
+    }
+  });
+
+}
