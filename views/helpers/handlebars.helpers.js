@@ -44,6 +44,10 @@ var register = function(Handlebars) {
             } else {
                 return options.fn(this)
             }
+        },
+        trimString: function(passedString, numchars,options) {
+           var theString = passedString.substring( 0, numchars ) + '...';
+           return theString;
         }
     };
 

@@ -1,0 +1,19 @@
+<h2>User Feedback</h2>
+
+<table>
+	<tr>
+		<th>Date</th>
+		<th>User</th>
+		<th>Message</th>
+		<th></th>
+	</tr>
+	{{#each feedback}}
+	<tr>
+		<td>{{formatDate datetime 'HH:mm MM-DD-YYYY'}}</td>
+		<td>{{username}}</td>
+		<td>{{trimString content 200}}</td>
+		<td><a href="/admin/feedback/{{_id}}">&rarr;</a></td>
+	</tr>
+	{{/each}}
+
+</table>

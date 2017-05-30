@@ -6,6 +6,7 @@ module.exports = function(express,app){
 	var User = app.get('models').user;
 	var Ledger = app.get('models').ledger;
 	var InvitationAllotment = require('../models/mongoose/invitationAllotment.js');
+	var Feedback = require('../models/mongoose/feedback.js');
 
 	// === require admin users for this section=== //
 	router.all('/*',function(req,res,next){
@@ -214,6 +215,38 @@ module.exports = function(express,app){
 
 				
 			});
+	});
+
+	router.get('/feedback',(req,res)=>{
+		var context = {};
+		context.layout = 'admin';
+		context.loggedin = true;
+		context.is_admin = req.user.is_admin;
+		context.username = req.user.username;
+		context.pagetitle = "Feedback";
+
+		Feedback.find()
+			.sort({ datetime: -1 })
+			.exec()
+			.then(feedback=>{
+				context.feedback = feedback;
+				res.render('feedback-admin',context);
+			});
+	});
+
+	router.get('/feedback/:id', (req,res)=>{
+		var context = {};
+		context.layout = 'admin';
+		context.loggedin = true;
+		context.is_admin = req.user.is_admin;
+		context.username = req.user.username;
+		context.pagetitle = "Feedback";
+
+		Feedback.findById(req.params.id)
+			.then(feedback=>{
+				context.feedback = feedback;
+				res.render('feedback-admin-single',context);
+			})
 	});
 
 	return router;
