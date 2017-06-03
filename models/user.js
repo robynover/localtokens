@@ -3,7 +3,9 @@ var config = require('../config/config.js')[process.env.NODE_ENV];
 
 const crypto = require('crypto');
 
+
 module.exports = function(sequelize, DataTypes) {
+  var InvitationAllotment = require('./mongoose/invitationAllotment.js');
   var User = sequelize.define('user', {
     id: {
       type: DataTypes.INTEGER,

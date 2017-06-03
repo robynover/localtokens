@@ -25,7 +25,12 @@ module.exports = function(express){
 				context.username = req.user.username;
 				context.is_admin = req.user.is_admin;
 				context.loggedin = true;
-				context.numLeft = doc.left;
+				if (doc){
+					context.numLeft = doc.left;
+				} else {
+					context.numLeft = 0;
+				}
+				
 				if (context.numLeft < 0){
 					context.numLeft = 0;
 				}
@@ -33,7 +38,7 @@ module.exports = function(express){
 				res.render('inviteform',context);
 			})
 			.catch(err=>{
-				console.log(err);
+				//console.log(err);
 				res.render('generic',{msg:err});
 			});
 	});
@@ -49,7 +54,6 @@ module.exports = function(express){
 			.then( (doc) =>{
 				var numLeft = doc.left;
 
-				
 				// get emails from form, trim and validate
 				var emails = req.body.emails.split(',').map(function(x) {
 				   return x.trim();
@@ -82,7 +86,7 @@ module.exports = function(express){
 					}
 					return Promise.all(promises).then( ()=>{
 						var word = 'invitations';
-						if (email.length == 1){ word = 'invitation';}
+						if (emails.length == 1){ word = 'invitation';}
 						context.result = emails.length + " " + word + " sent";
 						context.numLeft = numLeft - emails.length;
 						if (context.numLeft < 0){

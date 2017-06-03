@@ -201,15 +201,29 @@ module.exports = function(express,app){
 
 				InvitationAllotment.findByUsername(user.username)
 					.then( ia=>{
-						//console.log(ia);
-
-						ia.addToLimit(req.body.num)
-							.then( ()=>{
-								context.limit = ia.limit;
-								context.left = ia.left;
-								context.used = ia.used;
-								res.render('user-admin',context);
+						if (!ia){
+							InvitationAllotment.create({
+								username: user.username,
+								userid: user.id,
+								limit: req.body.num
 							})
+								.then( ()=>{
+									context.limit = req.body.num;
+									context.left = req.body.num;
+									context.used = 0;
+									res.render('user-admin',context);
+								})
+						} else {
+							ia.addToLimit(req.body.num)
+								.then( ()=>{
+									context.limit = ia.limit;
+									context.left = ia.left;
+									context.used = ia.used;
+									res.render('user-admin',context);
+								});
+						}
+
+						
 						
 					});
 
@@ -248,6 +262,7 @@ module.exports = function(express,app){
 				res.render('feedback-admin-single',context);
 			})
 	});
+
 
 	return router;
 }

@@ -5,7 +5,7 @@ var express = require('express');
 var app = express();
 var crypto = require('crypto');
 //set port
-app.set('port', process.env.PORT || 3000);
+app.set('port', process.env.PORT || 3333);
 
 // config
 var config = require('./config/config.js')[app.get('env')];
