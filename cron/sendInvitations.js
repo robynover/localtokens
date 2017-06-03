@@ -17,7 +17,7 @@ Invitation.find({sent:false})
 
 		if (docs.length > 0){
 			for (var i in docs){
-				var url = 'http://localhost:3000/invite/new/'+docs[i].code;
+				var url = 'http://localhost:3000/invite/'+docs[i].code;
 				var mailObj = mail.setUp(
 					docs[i].invitee_email,
 					docs[i].inviter_username + ' invited you to Local Tokens',

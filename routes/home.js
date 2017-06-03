@@ -96,7 +96,8 @@ module.exports = function(express,app){
 								password: User.encryptPassword(req.body.password),
 								email: req.body.email,
 								firstname: striptags(req.body.firstname),
-								lastname: striptags(req.body.lastname)
+								lastname: striptags(req.body.lastname),
+								max_negative_balance: 5
 							}).then(user=>{
 								// set up invitation allotment
 								var ia = new InvitationAllotment({

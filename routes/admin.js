@@ -221,13 +221,8 @@ module.exports = function(express,app){
 									context.used = ia.used;
 									res.render('user-admin',context);
 								});
-						}
-
-						
-						
-					});
-
-				
+						}	
+					});	
 			});
 	});
 

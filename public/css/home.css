@@ -2,7 +2,7 @@ nav.topnav {
   background-color: #000;
   color: white;
   text-transform: uppercase;
-  padding: 1.5rem 8%;
+  padding: .5rem 8%;
   float: left;
   width: 84%; }
   nav.topnav h1 {
@@ -12,7 +12,8 @@ nav.topnav {
   nav.topnav .navtitle {
     float: left; }
   nav.topnav .navbuttons {
-    float: right; }
+    float: right;
+    line-height: 7rem; }
     nav.topnav .navbuttons button {
       background-color: rgba(239, 239, 239, 0.2);
       color: #fff;
