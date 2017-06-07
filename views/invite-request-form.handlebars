@@ -1,0 +1,14 @@
+<h2>Request an invite</h2>
+{{#if success}}
+	<p>{{success}}</p>	
+{{else}}
+	<form method="post" action="/request" id="request-invite">
+		<label>Email address</label>
+		<input type="text" name="email" id="email"><div class="field-validation"></div>
+		<br>
+		<input type="submit" value="Request">
+	</form>
+{{/if}}
+
+<!-- validate.js -->
+<script src="/js/lib/validate.min.js"></script>

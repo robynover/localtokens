@@ -12,6 +12,7 @@ module.exports = function(express,app){
 	var Invitation = require('../models/mongoose/invitation.js');
 	var InvitationAllotment = require('../models/mongoose/invitationAllotment.js');
 	var Feedback = require('../models/mongoose/feedback.js');
+	var InviteRequest = require('../models/mongoose/inviteRequest.js');
 	
 	router.get('/',function(req,res){
 		var context = {};
@@ -97,7 +98,8 @@ module.exports = function(express,app){
 								email: req.body.email,
 								firstname: striptags(req.body.firstname),
 								lastname: striptags(req.body.lastname),
-								max_negative_balance: 5
+								max_negative_balance: 5,
+								is_active: true
 							}).then(user=>{
 								// set up invitation allotment
 								var ia = new InvitationAllotment({
@@ -107,7 +109,7 @@ module.exports = function(express,app){
 								});
 								ia.save();
 								// TODO: send email verification
-								res.render('generic',{msg:'Signup successful! We will be in touch shortly to activate your account.'});
+								res.render('generic',{msg:'Signup successful! Sign in with your password.'});
 							}).catch(Sequelize.ValidationError, err => {
 								var msg = '';
 								for(var i in err.errors){
@@ -162,6 +164,28 @@ module.exports = function(express,app){
 		} else {
 			res.redirect('/signin');
 		}
+	});
+
+	router.get('/request', (req,res)=>{
+		var context = {};
+		context.pagetitle = "Request an Invite";
+		res.render('invite-request-form',context); 
+	});
+
+	router.post('/request', (req,res)=>{
+		var context = {};
+		context.pagetitle = "Request an Invite";
+		InviteRequest.create({
+			email:req.body.email
+		})
+			.then(ir=>{
+				context.success = "Thank you! Your request has been submitted.";
+				res.render('invite-request-form',context);
+			})
+			.catch(err=>{
+				res.render('generic',{msg:err});
+			})
+		 
 	});
 
 	return router;

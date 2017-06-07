@@ -7,6 +7,7 @@ module.exports = function(express,app){
 	var Ledger = app.get('models').ledger;
 	var InvitationAllotment = require('../models/mongoose/invitationAllotment.js');
 	var Feedback = require('../models/mongoose/feedback.js');
+	var InviteRequest = require('../models/mongoose/inviteRequest.js');
 
 	// === require admin users for this section=== //
 	router.all('/*',function(req,res,next){
@@ -135,7 +136,7 @@ module.exports = function(express,app){
 		var amount = parseInt(req.body.num);
 
 		if (amount > 10){
-			context.msg = "Cannot bestow more than 10 tokens";
+			context.msg = "Cannot bestow more than 10 creds";
 			res.render('generic',context);
 			return;
 		}
@@ -168,6 +169,7 @@ module.exports = function(express,app){
 			.then(user=>{
 				context.pagetitle = user.username;
 				context.user = user;
+				context.maxneg = user.max_negative_balance;
 
 				InvitationAllotment.findByUsername(user.username)
 					.then( ia=>{
@@ -198,31 +200,50 @@ module.exports = function(express,app){
 			.then(user=>{
 				context.pagetitle = user.username;
 				context.user = user;
+				context.maxneg = user.max_negative_balance;
 
-				InvitationAllotment.findByUsername(user.username)
-					.then( ia=>{
-						if (!ia){
-							InvitationAllotment.create({
-								username: user.username,
-								userid: user.id,
-								limit: req.body.num
-							})
-								.then( ()=>{
-									context.limit = req.body.num;
-									context.left = req.body.num;
-									context.used = 0;
-									res.render('user-admin',context);
+				if (req.body.num){
+					InvitationAllotment.findByUsername(user.username)
+						.then( ia=>{
+							if (!ia){
+								InvitationAllotment.create({
+									username: user.username,
+									userid: user.id,
+									limit: req.body.num
 								})
-						} else {
-							ia.addToLimit(req.body.num)
-								.then( ()=>{
+									.then( ()=>{
+										context.limit = req.body.num;
+										context.left = req.body.num;
+										context.used = 0;
+										res.render('user-admin',context);
+									})
+							} else {
+								ia.addToLimit(req.body.num)
+									.then( ()=>{
+										context.limit = ia.limit;
+										context.left = ia.left;
+										context.used = ia.used;
+										res.render('user-admin',context);
+									});
+							}	
+						});
+				} else if (req.body.maxneg){
+					// update user record
+					user.max_negative_balance = req.body.maxneg;
+					user.save()
+						.then(u=>{
+							InvitationAllotment.findByUsername(user.username)
+								.then(ia=>{
 									context.limit = ia.limit;
 									context.left = ia.left;
 									context.used = ia.used;
+									context.maxneg = u.max_negative_balance;
 									res.render('user-admin',context);
 								});
-						}	
-					});	
+							
+						});
+				}
+					
 			});
 	});
 
@@ -258,6 +279,21 @@ module.exports = function(express,app){
 			})
 	});
 
+	router.get('/requests',(req,res)=>{
+		var context = {};
+		context.layout = 'admin';
+		context.loggedin = true;
+		context.is_admin = req.user.is_admin;
+		context.username = req.user.username;
+		context.pagetitle = "Invite Requests";
+		InviteRequest.find()
+			.sort({datetime: 1})
+			.exec()
+			.then(ir=>{
+				context.emails = ir;
+				res.render('requests-admin',context);
+			});
+	})
 
 	return router;
 }

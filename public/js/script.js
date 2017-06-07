@@ -188,6 +188,18 @@ if (typeof validate !== 'undefined'){
       }
   });
 
+  // validate email on request-invite form
+  $('#request-invite').on('submit',function(e){
+    e.preventDefault();
+    var v = validate.single($('#email').val(), constraints['email']);
+    if (v){
+      var msg = 'Not a valid email address';
+      $('.field-validation').text(msg);
+    } else {
+      this.submit();
+    }
+  });
+
 } // end if validate
 
 // username dropdown on top nav

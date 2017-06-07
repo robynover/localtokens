@@ -193,6 +193,9 @@ nav.topnav{
 				color: $basecolor;
 			}
 		}
+		.sign-btn{
+			line-height: 8rem;
+		}
 	}
 	.dropdown{
 		position:absolute;
@@ -249,8 +252,8 @@ nav.topnav{
 .user-id{
 	margin-right:1.5rem;
 	float:left;
-	height: 4rem;
-	line-height: 4rem;
+	height: 8rem;
+	line-height: 8rem;
 }
 
 .subcolumn.notification{

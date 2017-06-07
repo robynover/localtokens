@@ -46,7 +46,7 @@ module.exports = function(express,app){
 					receiver_id = idObj.id;
 					return transact.send(req.user.id,idObj.id,req.body.amt,req.body.note)
 						.then(result=>{
-							var word = "token";
+							var word = "cred";
 							if (req.body.amt > 1){
 								word += 's';
 							}

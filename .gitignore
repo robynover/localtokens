@@ -9,3 +9,4 @@ TODO.txt
 test/*
 sendgrid.env
 scratch.sql
+testmail.js

@@ -300,9 +300,9 @@ module.exports = function(express,app){
 						for (var i in n){
 							var amount;
 							if (n[i].amount == 1){
-								amount = "1 token";
+								amount = "1 cred";
 							} else {
-								amount = n[i].amount.toString() + " tokens";
+								amount = n[i].amount.toString() + " creds";
 							}
 							var obj = {};
 							obj.date = n[i].transaction_date;

@@ -13,6 +13,9 @@ riot.tag2('balance', '<h5 if="{opts.header == ⁗true⁗}">Balance</h5> <div cla
 	    	if(http.readyState == 4 && http.status == 200) {
 	    		var data = JSON.parse(http.responseText);
 	            if (data.success){
+	            	if (!data.balance){
+	            		data.balance = "0";
+	            	}
 	            	self.refs.bal.innerHTML = data.balance;
 	            } else {
 

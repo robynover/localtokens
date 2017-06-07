@@ -26,6 +26,9 @@
 	    	if(http.readyState == 4 && http.status == 200) {
 	    		var data = JSON.parse(http.responseText);
 	            if (data.success){	
+	            	if (!data.balance){
+	            		data.balance = "0";
+	            	}
 	            	self.refs.bal.innerHTML = data.balance;
 	            } else {
 	            	//self.refs.bal.innerHTML = 'User not found';
