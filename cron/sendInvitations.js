@@ -9,8 +9,12 @@ var mail = require('../mail.js');
 
 var Invitation = require('../models/mongoose/invitation.js');
 
-// path for production!
-var invitationBody = fs.readFileSync('/home/robyn/currencyapp2/localtokens/cron/invitationbody.txt').toString();
+// get current path
+var pathArr = __filename.split('/');
+pathArr.pop();
+var pathToBody = pathArr.join('/') + '/invitationbody.txt';
+
+var invitationBody = fs.readFileSync(pathToBody).toString();
 
 function doReplacements(text,name,url){
 	var t = text.replace('%firstname%',name);
