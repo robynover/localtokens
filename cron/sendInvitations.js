@@ -1,5 +1,5 @@
 "use strict";
-
+var fs = require('fs');
 var config = require('../config/config.js')[process.env.NODE_ENV];
 var mongoose = require('mongoose');
 mongoose.connect(config.mongo);
@@ -9,6 +9,13 @@ var mail = require('../mail.js');
 
 var Invitation = require('../models/mongoose/invitation.js');
 
+var invitationBody = fs.readFileSync('./invitationbody.txt').toString();
+
+function doReplacements(text,name,url){
+	text = text.replace('%firstname%',name);
+	return text.replace('%url$',url);
+}
+
 Invitation.find({sent:false})
 	.then( docs=>{
 		//console.log(docs);
@@ -17,12 +24,12 @@ Invitation.find({sent:false})
 
 		if (docs.length > 0){
 			for (var i in docs){
-				var url = 'http://localhost:3000/invite/'+docs[i].code;
+				var url = 'http://communitycred.com/invite/'+docs[i].code;
 				var mailObj = mail.setUp(
 					docs[i].invitee_email,
-					docs[i].inviter_username + ' invited you to Local Tokens',
+					docs[i].inviter_firstname + ' invited you to join Community Cred',
 					'text',
-					"Hello there! Here's your invitation code for Local Tokens. Go to this URL to sign up: "+ url);
+					doReplacements(invitationBody,docs[i].inviter_firstname,url));
 				promises.push(mail.send(mailObj));
 				
 				docs[i].sent = true;
