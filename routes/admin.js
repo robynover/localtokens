@@ -96,18 +96,20 @@ module.exports = function(express,app){
 
 		User.getUsersWithBalance(onlyInactive,limit,offset)
 			.then(users=>{
-				context.users = users;
+				if (users){
+					context.users = users;
 
-				var total_entries = users[0].total_entries;
-				var total_pages = Math.ceil(total_entries / limit);
-				context.total_entries = total_entries;
-				context.total_pages = total_pages;
-				context.page = page;
-				if (parseInt(page) + 1 <= total_pages){
-					context.nextpage = parseInt(page) + 1;
-				}
-				if (parseInt(page) - 1 > 0){
-					context.prevpage = parseInt(page) - 1;
+					var total_entries = users[0].total_entries;
+					var total_pages = Math.ceil(total_entries / limit);
+					context.total_entries = total_entries;
+					context.total_pages = total_pages;
+					context.page = page;
+					if (parseInt(page) + 1 <= total_pages){
+						context.nextpage = parseInt(page) + 1;
+					}
+					if (parseInt(page) - 1 > 0){
+						context.prevpage = parseInt(page) - 1;
+					}
 				}
 
 				res.render('users-admin',context);
