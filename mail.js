@@ -16,7 +16,7 @@ module.exports = {
   },
 
   send: function(mailObj){
-    var sg = require('sendgrid')(config[process.env.NODE_ENV].sendgrid);
+    var sg = require('sendgrid')(config['production'].sendgrid);
     var request = sg.emptyRequest({
       method: 'POST',
       path: '/v3/mail/send',
