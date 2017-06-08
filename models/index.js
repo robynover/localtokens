@@ -8,7 +8,7 @@ var env       = process.env.NODE_ENV || 'development';
 var config    = require(__dirname + '/../config/config.js')[env];
 var db        = {};
 
-var sequelize = new Sequelize(config.pg,{timezone:'America/New_York'});
+var sequelize = new Sequelize(config.pg,{timezone:'America/New_York',logging:false});
 
 fs
   .readdirSync(__dirname)
