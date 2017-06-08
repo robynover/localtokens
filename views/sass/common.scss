@@ -537,6 +537,10 @@ input#amt{
 	.columns.balance{
 		box-shadow: $shadow;
 	}
+	.limit{
+		font-size: 4rem;
+		text-align: center;
+	}
 }
 
 .dashboard{

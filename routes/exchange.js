@@ -15,6 +15,7 @@ module.exports = function(express,app){
 			context.loggedin = true;
 			context.username = req.user.username;
 			context.is_admin = req.user.is_admin;
+			context.credit = req.user.max_negative_balance;
 			context.success = req.flash('success');
 			context.pagetitle = "Send";
 			if(req.query.to){

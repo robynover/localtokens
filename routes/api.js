@@ -277,6 +277,8 @@ module.exports = function(express,app){
 					}
 				}).then(()=>{
 					res.json({success:true,path:'/uploads/user/'+req.file.filename});
+				}).catch(err=>{
+					res.json({success:false});
 				})
 			});
 		} else {

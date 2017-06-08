@@ -497,6 +497,10 @@ input#amt {
 .sendtokens .columns.balance {
   box-shadow: 2px 2px 3px #e6e5e5; }
 
+.sendtokens .limit {
+  font-size: 4rem;
+  text-align: center; }
+
 .dashboard ul {
   list-style-type: none; }
 
