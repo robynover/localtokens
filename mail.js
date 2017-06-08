@@ -7,7 +7,7 @@ module.exports = {
       type = 'text/html';
     }
     var helper = require('sendgrid').mail;
-    var fromEmail = new helper.Email('info@communitycred.com');
+    var fromEmail = new helper.Email('info@communitycred.com','Community Cred');
     var toEmail = new helper.Email(to);
     var subject = subject;
     var content = new helper.Content(type, content);
