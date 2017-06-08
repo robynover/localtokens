@@ -1,6 +1,6 @@
 "use strict";
 var fs = require('fs');
-var config = require('../config/config.js')[process.env.NODE_ENV];
+var config = require('../config/config.js')['production'];
 var mongoose = require('mongoose');
 mongoose.connect(config.mongo);
 mongoose.Promise = require('bluebird');
