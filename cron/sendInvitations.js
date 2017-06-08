@@ -12,8 +12,8 @@ var Invitation = require('../models/mongoose/invitation.js');
 var invitationBody = fs.readFileSync('./invitationbody.txt').toString();
 
 function doReplacements(text,name,url){
-	text = text.replace('%firstname%',name);
-	return text.replace('%url$',url);
+	var t = text.replace('%firstname%',name);
+	return t.replace('%url%',url);
 }
 
 Invitation.find({sent:false})
@@ -25,11 +25,12 @@ Invitation.find({sent:false})
 		if (docs.length > 0){
 			for (var i in docs){
 				var url = 'http://communitycred.com/invite/'+docs[i].code;
+				var body = doReplacements(invitationBody,docs[i].inviter_firstname,url);
 				var mailObj = mail.setUp(
 					docs[i].invitee_email,
 					docs[i].inviter_firstname + ' invited you to join Community Cred',
 					'text',
-					doReplacements(invitationBody,docs[i].inviter_firstname,url));
+					body);
 				promises.push(mail.send(mailObj));
 				
 				docs[i].sent = true;

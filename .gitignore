@@ -10,3 +10,4 @@ test/*
 sendgrid.env
 scratch.sql
 testmail.js
+cron/testfile.js
