@@ -96,7 +96,7 @@ module.exports = function(express,app){
 
 		User.getUsersWithBalance(onlyInactive,limit,offset)
 			.then(users=>{
-				if (users){
+				if (users[0]){
 					context.users = users;
 
 					var total_entries = users[0].total_entries;
