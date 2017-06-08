@@ -13,12 +13,18 @@ module.exports = function(app){
 				.then(user=>{
 					return user.getBalance()
 						.then(balanceArr=>{
-							console.log(user);
+							/*console.log(user);
 							console.log(user.max_negative_balance);
 							console.log(parseInt(balanceArr[0].balance) + parseInt(user.max_negative_balance));
-							console.log(balanceArr);
+							console.log(balanceArr);*/
 
-							if ( (parseInt(balanceArr[0].balance) + parseInt(user.max_negative_balance)) >= amount ){
+							if (!balanceArr[0].balance){
+								var bal = 0;
+							} else {
+								var bal = parseInt(balanceArr[0].balance);
+							}
+
+							if ( (bal + parseInt(user.max_negative_balance)) >= amount ){
 								// send
 								return Ledger.create({
 											sender_id: sender_id,
