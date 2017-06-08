@@ -9,7 +9,7 @@ var mail = require('../mail.js');
 
 var Invitation = require('../models/mongoose/invitation.js');
 
-var invitationBody = fs.readFileSync('./invitationbody.txt').toString();
+var invitationBody = fs.readFileSync('invitationbody.txt').toString();
 
 function doReplacements(text,name,url){
 	var t = text.replace('%firstname%',name);
