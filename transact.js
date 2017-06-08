@@ -13,6 +13,7 @@ module.exports = function(app){
 				.then(user=>{
 					return user.getBalance()
 						.then(balanceArr=>{
+							console.log(user);
 							console.log(user.max_negative_balance);
 							console.log(parseInt(balanceArr[0].balance) + parseInt(user.max_negative_balance));
 
