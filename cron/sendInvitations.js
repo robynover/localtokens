@@ -2,7 +2,7 @@
 var fs = require('fs');
 var config = require('../config/config.js')['production'];
 var mongoose = require('mongoose');
-mongoose.connect(config.mongo);
+var db = mongoose.connect(config.mongo);
 mongoose.Promise = require('bluebird');
 
 var mail = require('../mail.js');
@@ -43,7 +43,9 @@ Invitation.find({sent:false})
 			}
 		} else {
 			console.log('no docs to process');
+			db.disconnect();
 			process.exit();
+
 		}
 		
 
@@ -52,6 +54,7 @@ Invitation.find({sent:false})
 				Promise.all(updatePromises)
 					.then( ()=>{
 						console.log('sent');
+						db.disconnect();
 						process.exit();
 					});
 			})
@@ -60,6 +63,7 @@ Invitation.find({sent:false})
 			  // The full response is attached to error.response
 			  console.log("ERROR ___________________");
 			  console.log(error.response);
+			  db.disconnect();
 			  process.exit();
 			});
 		
