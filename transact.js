@@ -16,6 +16,7 @@ module.exports = function(app){
 							console.log(user);
 							console.log(user.max_negative_balance);
 							console.log(parseInt(balanceArr[0].balance) + parseInt(user.max_negative_balance));
+							console.log(balanceArr);
 
 							if ( (parseInt(balanceArr[0].balance) + parseInt(user.max_negative_balance)) >= amount ){
 								// send
