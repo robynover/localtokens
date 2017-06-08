@@ -113,6 +113,10 @@ module.exports = function(express,app){
 				}
 
 				res.render('users-admin',context);
+			})
+			.catch(err=>{
+				context.msg = err;
+				res.render('generic',context);
 			});
 	});
 
