@@ -501,6 +501,9 @@ input#amt {
   font-size: 4rem;
   text-align: center; }
 
+.sendtokens h5 {
+  text-align: center; }
+
 .dashboard ul {
   list-style-type: none; }
 

@@ -39,6 +39,7 @@ module.exports = function(express,app){
 			context.loggedin = true;
 			context.username = req.user.username;
 			context.is_admin = req.user.is_admin;
+			context.credit = req.user.max_negative_balance;
 
 			var receiver_id;
 			// get receiver id
@@ -64,7 +65,7 @@ module.exports = function(express,app){
 				})
 				// log the transaction after response, to handle receiver credits
 				.then( ()=>{
-					transact.log(receiver_id);
+					return transact.log(receiver_id);
 				})
 				.catch(err=>{
 					//res.status(422);
