@@ -786,7 +786,7 @@ tr.opened td {
     float: left; }
   .user-search .results li .result-text {
     height: 9rem;
-    line-height: 9rem;
+    line-height: 5rem;
     display: inline-block;
     margin-left: 1.5rem; }
 
