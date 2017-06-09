@@ -84,6 +84,8 @@ nav.menu {
   nav.menu li {
     padding-left: 0;
     padding-right: 0; }
+  nav.menu li.active {
+    font-weight: bold; }
 
 nav ul {
   list-style-type: none;
