@@ -42,6 +42,7 @@ if ($('#new-msg-form').length > 0){
       $('.field-validation').text('Contact info cannot be empty');
       return false;
     } 
+    $('input[type="submit"]').val('uploading ...');
     this.submit();
   });
 }
