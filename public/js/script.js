@@ -213,5 +213,4 @@ if($('.topnav-user-menu').length > 0){
       $('.topnav-user-menu').css('display','none');
     }
   });
-
 }
