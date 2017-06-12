@@ -24,6 +24,7 @@ var register = function(Handlebars) {
                 // get timezone offset
                 var d = new Date();
                 offset = d.getTimezoneOffset()/60;
+                console.log("Handlebars helper. timezone offset: "+offset);
                 var dt = moment(datetime).subtract(offset,'hours');
                 return dt.format(format);
             }
