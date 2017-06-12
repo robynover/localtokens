@@ -99,7 +99,7 @@ passport.use(new LocalStrategy(
       // Success
   		return done(null, user);
   	}).catch(err=>{
-		if (err) { return done(err); }
+		  if (err) { return done(err); }
   	});  
   }
 ));

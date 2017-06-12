@@ -21,10 +21,14 @@ var register = function(Handlebars) {
         },
         formatDate: function(datetime, format){
             if (moment) {
-              return moment(datetime).format(format);
+                // get timezone offset
+                var d = new Date();
+                offset = d.getTimezoneOffset()/60;
+                var dt = moment(datetime).subtract(offset,'hours');
+                return dt.format(format);
             }
             else {
-              return datetime;
+                return datetime;
             }
         },
         equal: function(lvalue, rvalue, options) {
