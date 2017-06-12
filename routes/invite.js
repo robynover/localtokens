@@ -70,6 +70,7 @@ module.exports = function(express){
 					if (emails.length <= numLeft){
 						
 						var promises = [];
+						var newInvites = [];
 
 						for (var i in emails){
 							var obj = {};
@@ -80,17 +81,15 @@ module.exports = function(express){
 
 							var invitation = new Invitation(obj);
 							invitation.generateCode();
-							invitation.save()
-								.then(inv=>{
-									// save to invitation allotment record
-									promises.push(doc.addInvite(inv._id));	
-								})
-								.catch(err=>{
-									console.log(err.message);
-								});
-								
+
+							promises.push(invitation.save().then(inv=>{
+								//console.log("new invitation save " + inv._id);
+								newInvites.push(inv._id);
+							}));								
 						}
+
 						return Promise.all(promises).then( ()=>{
+							
 							var word = 'invitations';
 							if (emails.length == 1){ word = 'invitation';}
 							context.result = emails.length + " " + word + " sent";
@@ -98,13 +97,17 @@ module.exports = function(express){
 							if (context.numLeft < 0){
 								context.numLeft = 0;
 							}
-							console.log(doc.left);
-						    res.render('inviteform',context);	
+							//console.log(doc.left);
+						    res.render('inviteform',context);
+
+						    // add new invites to invition allotment
+						    doc.invites = doc.invites.concat(newInvites);
+						    return doc.save();	
 						})
 							.catch(err=>{
 								context.result = err;
 								res.render('inviteform',context);
-								console.log(err);
+								//console.log(err);
 							});
 					} else {
 						context.result = "You do not have enough invites to invite "+emails.length+ " people";
@@ -114,8 +117,6 @@ module.exports = function(express){
 		} else {
 			res.render('generic',{msg:'You must be logged in to view this page'});
 		}
-		
-
 	});
 
 	router.get('/:code', (req,res)=>{
@@ -133,8 +134,8 @@ module.exports = function(express){
 					context.code = inv.code;
 					res.render('signup',context);
 				}
-			})
-	})
+			});
+	});
 
 	return router;
 }

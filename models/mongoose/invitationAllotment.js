@@ -20,12 +20,16 @@ invitationAllotmentSchema.methods.addToLimit = function(amount){
     return this.save();
 
 };
-invitationAllotmentSchema.methods.addInvite = function(id){
-    if (!this.invites.includes(id)){
-        this.invites.push(id); 
+/*invitationAllotmentSchema.methods.addInvite = function(id){
+    if (!this.invites.includes(mongoose.Types.ObjectId(id))){
+        this.invites.push(mongoose.Types.ObjectId(id)); 
+        console.log("SAVING "+ id);
+        return this.save();
+    } else {
+        console.log('not saving ' + id);
     }
-    return this.save();
-};
+    return false;
+};*/
 
 invitationAllotmentSchema.statics.findByUsername = function(username) {
   return this.findOne({ username: username });
