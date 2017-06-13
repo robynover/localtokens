@@ -40,6 +40,6 @@
 ### Front end
 All of the compiled and minified css and js files are in the repo, so to get started, you won't need to do anything to get them to work. When you make changes, though, you'll need to run the following:
 
-	* Changes to sass: `grunt css`
-	* Changes to js: `grunt uglify`
-	* Changes to riot.js `.tag` files: `riot public/js/tags/something.tag` (will produce the file `something.js`) 
+* Changes to sass: `grunt css`
+* Changes to js: `grunt uglify`
+* Changes to riot.js `.tag` files: `riot public/js/tags/something.tag` (will produce the file `something.js`) 
