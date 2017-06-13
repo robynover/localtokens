@@ -37,9 +37,9 @@ module.exports = function(express,app){
 
 	app.post('/signin', function (req, res, next) {
 		var redirectTo = '/user/dashboard';
-		if (req.session.lastVisited){
+		/*if (req.session.lastVisited){
 			redirectTo = req.session.lastVisited;
-		}
+		}*/
 	    passport.authenticate('local', { successRedirect: redirectTo,
 	                                   failureRedirect: '/signin',
 	                                   failureFlash: true })(req,res,next);
@@ -107,7 +107,7 @@ module.exports = function(express,app){
 								var ia = new InvitationAllotment({
 									userid: user.id,
 									username: user.username,
-									limit: 5
+									limit: 10
 								});
 								ia.save()
 									.then( ()=>{
