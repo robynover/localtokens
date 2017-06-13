@@ -1,6 +1,6 @@
 Hello!
 
-Your friend %firstname% invited you to join Community Cred, a local digital currency system. Community Cred lets you exchange goods and services using an alternative currency -- no cash required. Trading locally helps keeps resources in our communities, and helps meet the needs of people with limited access to money. You can read more about Community Cred at http://communitycred.com. 
+Your friend %firstname% invited you to join Community Cred, a local digital currency system. Community Cred lets you exchange goods and services using an alternative currency -- no cash required. Trading locally helps keep resources in our communities, and helps meet the needs of people with limited access to money. You can read more about Community Cred at http://communitycred.com. 
 
 When you're ready to sign up, use this URL, which contains your invitation code: %url%
 
