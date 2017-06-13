@@ -1,4 +1,7 @@
 var config = require('./config/config.js');
+var sg = require('sendgrid')(config['production'].sendgrid);
+var sgListId = config['production'].sendgridListId;
+
 module.exports = {
 
   setUp: function(to,subject,textType,content){
@@ -16,7 +19,6 @@ module.exports = {
   },
 
   send: function(mailObj){
-    var sg = require('sendgrid')(config['production'].sendgrid);
     var request = sg.emptyRequest({
       method: 'POST',
       path: '/v3/mail/send',
@@ -24,6 +26,38 @@ module.exports = {
     });
 
     return sg.API(request);
+  },
+
+  addUser: function(email){
+    var request = sg.emptyRequest();
+    request.body = [
+      {
+        "email": email
+      }
+    ];
+    request.method = 'POST';
+    request.path = '/v3/contactdb/recipients';
+    return sg.API(request);
+  },
+
+  addRecipientToList: function(listId,recipientId){
+    var request = sg.emptyRequest();
+    request.method = 'POST';
+    request.path = '/v3/contactdb/lists/' + listId + '/recipients/' + recipientId;
+    return sg.API(request);
+  },
+
+  addEmailToUserList: function(email){
+    return this.addUser(email)
+      .then(r=>{
+        if (r.body.persisted_recipients[0]){
+          var recipientId = r.body.persisted_recipients[0];
+          return this.addRecipientToList(sgListId,recipientId);
+        } else {
+          throw new Error("Email could not be added");
+          return false;
+        }
+      })
   }
   
 };

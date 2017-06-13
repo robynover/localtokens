@@ -3,6 +3,7 @@ var striptags = require('striptags');
 var Sequelize = require('sequelize');
 var passport = require('passport');
 var config = require('../config/config.js')[process.env.NODE_ENV];
+var mail = require('../mail.js');
 
 module.exports = function(express,app){
 
@@ -100,17 +101,33 @@ module.exports = function(express,app){
 								lastname: striptags(req.body.lastname),
 								max_negative_balance: 5,
 								is_active: true
-							}).then(user=>{
+							})
+							.then(user=>{
 								// set up invitation allotment
 								var ia = new InvitationAllotment({
 									userid: user.id,
 									username: user.username,
 									limit: 5
 								});
-								ia.save();
-								// TODO: send email verification
+								ia.save()
+									.then( ()=>{
+										// add to sendgrid users list
+										mail.addEmailToUserList(user.email)
+											.then(r=>{
+												if (r.statusCode == 201){
+													//console.log('success');
+												} else {
+													//console.log('failed to add email to list');
+												}
+											});
+										});
+								
 								res.render('generic',{msg:'Signup successful! Sign in with your password.'});
-							}).catch(Sequelize.ValidationError, err => {
+
+								
+								
+							})
+							.catch(Sequelize.ValidationError, err => {
 								var msg = '';
 								for(var i in err.errors){
 									msg += err.errors[i].message += ', ';
@@ -122,7 +139,8 @@ module.exports = function(express,app){
 
 							}).catch(err => {
 								console.log(err);
-								//res.render('signup');
+								context.error = err.message;
+								res.render('signup',context);
 							});
 						});
 					
