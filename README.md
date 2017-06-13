@@ -1,11 +1,11 @@
-== Requirements ==
+==Requirements==
 
 1. Recent version of Node.js -- https://nodejs.org/en/
 2. PostgreSQL -- for Mac at http://postgresapp.com/
 3. MongoDB -- install with homebrew on Mac https://docs.mongodb.com/manual/tutorial/install-mongodb-on-os-x/
 
 
-== Install ==
+==Install==
 
 1. Check out repo
 2. From the project directory, run `npm install`
@@ -20,17 +20,19 @@
 
 
 
-== sample config.js file contents ==
+==sample config.js file contents==
 
-module.exports = {
-	development: {
-		pg: 'postgres://user:pw@localhost:5432/communitycred',
-		session: 'somephrasehere',
-		salt: 'somerandomlettersandnumbers',
-		mongo: 'mongodb://localhost/mydb',
-		mongoSession: 'mongodb://localhost/sessiondb',
-		sendgrid: 'sendgridAPIkey',
-		inviteSalt: 'morerandomcharacters',
-		sendgridListId: 'sendgridListIdHere'
-	}
-};
+```
+	module.exports = {
+		development: {
+			pg: 'postgres://user:pw@localhost:5432/communitycred',
+			session: 'somephrasehere',
+			salt: 'somerandomlettersandnumbers',
+			mongo: 'mongodb://localhost/mydb',
+			mongoSession: 'mongodb://localhost/sessiondb',
+			sendgrid: 'sendgridAPIkey',
+			inviteSalt: 'morerandomcharacters',
+			sendgridListId: 'sendgridListIdHere'
+		}
+	};
+```
