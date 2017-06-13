@@ -1,11 +1,11 @@
-==Requirements==
+## Requirements
 
 1. Recent version of Node.js -- https://nodejs.org/en/
 2. PostgreSQL -- for Mac at http://postgresapp.com/
 3. MongoDB -- install with homebrew on Mac https://docs.mongodb.com/manual/tutorial/install-mongodb-on-os-x/
 
 
-==Install==
+## Install
 
 1. Check out repo
 2. From the project directory, run `npm install`
@@ -20,7 +20,7 @@
 
 
 
-==sample config.js file contents==
+### sample config.js file contents
 
 ```
 	module.exports = {
@@ -36,3 +36,10 @@
 		}
 	};
 ```
+
+### Front end
+All of the compiled and minified css and js files are in the repo, so to get started, you won't need to do anything to get them to work. When you make changes, though, you'll need to run the following:
+
+	* Changes to sass: `grunt css`
+	* Changes to js: `grunt uglify`
+	* Changes to riot.js `.tag` files: `riot public/js/tags/something.tag` (will produce the file `something.js`) 
