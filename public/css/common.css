@@ -814,6 +814,13 @@ bookmark div {
   width: 50%;
   height: 30rem; }
 
+.request-admin ul {
+  list-style-type: none; }
+
+.button-alert {
+  background-color: #fa3e3e;
+  color: #cecece; }
+
 /* media queries */
 @media (max-width: 719px) {
   nav.menu li {

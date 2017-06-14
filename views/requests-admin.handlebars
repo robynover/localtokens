@@ -1,6 +1,13 @@
-<h2>Invite Requests</h2>
-<ul>
-{{#each emails}}
-	<li>{{email}} -- {{formatDate datetime 'M/D/YY, h:mm a'}}</li>
-{{/each}}
-</ul>
+<div class="request-admin">
+	<h2>Invite Requests</h2>
+	<ul>
+	{{#each emails}}
+		<li><input type="checkbox"> &nbsp;{{email}} &mdash; {{formatDate datetime 'M/D/YY, h:mm a'}}</li>
+	{{/each}}
+	</ul>
+
+	<button class="button-primary">Send</button>
+	<button class="button">Hold</button>
+	<button class="button button-alert">Remove</button>
+
+</div>

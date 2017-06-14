@@ -292,7 +292,9 @@ module.exports = function(express,app){
 		context.is_admin = req.user.is_admin;
 		context.username = req.user.username;
 		context.pagetitle = "Invite Requests";
-		InviteRequest.find()
+		InviteRequest
+			.find()
+			.or([{status:null},{status:'new'}])
 			.sort({datetime: 1})
 			.exec()
 			.then(ir=>{
