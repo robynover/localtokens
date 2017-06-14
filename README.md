@@ -15,7 +15,7 @@
 6. Create your first user in the database
 	* Open Postgres.app follow set-up instructions. Then from the elephant icon on the menu bar, select "Open psql"
 	* In the terminal window that opens, type `\c communitycred` to connect to the database (assuming your db is called `communitycred`)
-	* Run the following SQL: `INSERT INTO users (username,firstname,password,created_at,updated_at) VALUES ('you', 'You', 'the encrypted password from step 5', now(), now() );`, replacing the values with your username, first name, and password
+	* Run the following SQL: `INSERT INTO users (username,firstname,password,created_at,updated_at,is_active,is_admin) VALUES ('you', 'You', 'the encrypted password from step 5', now(), now(), true, true );`, replacing the values with your username, first name, and password
 7. Go to `http://localhost:3333` and sign in with your username and password (not the encrypted one, but the one you used to get the encrypted version)
 
 
