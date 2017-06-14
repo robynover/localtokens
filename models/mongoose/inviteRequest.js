@@ -6,8 +6,13 @@ var inviteRequestSchema = mongoose.Schema({
     
     email: String,
     datetime: {
-    	type:Date,
-    	default:Date.now
+    	type: Date,
+    	default: Date.now
+    },
+    status: String,
+    sent: {
+    	type: Boolean,
+    	default: false
     }
         
 });
