@@ -292,15 +292,45 @@ module.exports = function(express,app){
 		context.is_admin = req.user.is_admin;
 		context.username = req.user.username;
 		context.pagetitle = "Invite Requests";
-		InviteRequest
-			.find()
-			.or([{status:null},{status:'new'}])
-			.sort({datetime: 1})
-			.exec()
+		var statuses = ['send','hold','new','sent'];
+		if (!req.query.status || !statuses.includes(req.query.status)){
+			context.status = 'new';
+		} else {
+			context.status = req.query.status;
+		}
+		var query;
+		if (!req.query.status || req.query.status == 'new'){
+			query = InviteRequest
+				.find()
+				.or([{status:null},{status:'new'}])
+				.sort({datetime: 1})
+				.exec();
+		}
+		if (req.query.status == 'send'){
+			query = InviteRequest
+				.find({status:'send'})
+				.or([{sent:false},{sent:null}])
+				.sort({datetime: 1})
+				.exec();
+		}
+		if (req.query.status == 'sent'){
+			query = InviteRequest
+				.find({sent:true})
+				.sort({datetime: 1})
+				.exec();
+		}
+		if (req.query.status == 'hold'){
+			query = InviteRequest
+				.find({status:'hold'})
+				.sort({datetime: 1})
+				.exec();
+		}
+		query
 			.then(ir=>{
 				context.emails = ir;
 				res.render('requests-admin',context);
 			});
+		
 	})
 
 	return router;
