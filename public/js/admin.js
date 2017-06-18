@@ -45,3 +45,48 @@ $('.bestow form #receiver').on('blur', function(){
       }
   });
 });
+
+// invite request section
+if ($('.request-admin').length > 0){
+  
+  var markEmails = function(checkboxes,status){
+    var requesters = [];
+    for (var i in checkboxes){
+      if (checkboxes[i].checked){
+        requesters.push($(checkboxes[i]).val());
+      }
+    }
+
+    if (requesters.length > 0){
+      // mark status as send
+      $.ajax({
+        method: "POST",
+        url: "/api/admin/request/status/"+status,
+        data: { ids: requesters}
+      }).done(function(resp){
+        if (resp.success){
+          //console.log(resp);
+          window.location.reload();
+        } else {
+          console.log(resp);
+        }
+      })
+    }
+  }
+
+  $('#send').on('click',function(e){
+    var checkboxes = $('input[name="requester"]');
+    markEmails(checkboxes,'send');
+  });
+
+  $('#hold').on('click',function(e){
+    var checkboxes = $('input[name="requester"]');
+    markEmails(checkboxes,'hold');
+  });
+
+  $('#remove').on('click',function(e){
+    var checkboxes = $('input[name="requester"]');
+    markEmails(checkboxes,'remove');
+  });
+
+}

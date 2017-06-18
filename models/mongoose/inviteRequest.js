@@ -9,7 +9,11 @@ var inviteRequestSchema = mongoose.Schema({
     	type: Date,
     	default: Date.now
     },
-    status: String,
+    status: {
+        type: String,
+        enum: ['new','send','hold','remove'],
+        default: 'new'
+    },
     sent: {
     	type: Boolean,
     	default: false

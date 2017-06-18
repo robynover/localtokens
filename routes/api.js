@@ -4,11 +4,13 @@ var Sequelize = require('sequelize');
 var passport = require('passport');
 var Image = require('../image.js');
 
+
 module.exports = function(express,app){
 
 	var router = express.Router();
 
 	var sequelize = app.get('models').sequelize;
+	var mongoose = require('mongoose');
 	
 	var User = app.get('models').user;
 	var Ledger = app.get('models').ledger;
@@ -17,6 +19,7 @@ module.exports = function(express,app){
 	var CreditRules = app.get('models').credit_rules;
 	var CreditsGranted = app.get('models').credits_granted;
 	var Bookmark = require('../models/mongoose/bookmark.js');
+	var InviteRequest = require('../models/mongoose/inviteRequest.js');
 
 	var transact = require('../transact.js')(app);
 
@@ -151,7 +154,39 @@ module.exports = function(express,app){
 		} else{
 			res.json({success:false,error:'Not logged in'});
 		}
-	})
+	});
+
+	router.post('/admin/request/status/:status',(req,res)=>{
+		if (req.user){
+			if(req.user.is_admin){
+				var statuses = ['send','hold','remove'];
+				var status;
+				if (statuses.includes(req.params.status)){
+					status = req.params.status;
+				} else {
+					status = 'hold';
+				}
+
+				InviteRequest.update(
+					{_id: {$in: req.body.ids}},
+					{status: status},
+					{multi: true}
+				)
+				.then(r=>{
+					//console.log(r);
+					return res.json({success:true});
+				})
+				.catch(err=>{
+					return res.json({success:false,error:err});
+				});
+			} else {
+				return res.json({success:false,error:'User is not admin'});
+			}
+		} else{
+			return res.json({success:false,error:'Not logged in'});
+		}
+	});
+
 
 	/* --- USERS --- */
 

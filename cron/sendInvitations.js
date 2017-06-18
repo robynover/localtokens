@@ -53,7 +53,7 @@ Invitation.find({sent:false})
 			.then( ()=>{
 				Promise.all(updatePromises)
 					.then( ()=>{
-						console.log('sent');
+						console.log('sent '+ docs.length);
 						db.disconnect();
 						process.exit();
 					});

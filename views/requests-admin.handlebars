@@ -1,6 +1,20 @@
-<h2>Invite Requests</h2>
-<ul>
-{{#each emails}}
-	<li>{{email}} -- {{formatDate datetime 'M/D/YY, h:mm a'}}</li>
-{{/each}}
-</ul>
+<div class="request-admin">
+	<h2>Invite Requests</h2>
+	 <p><a href="?status=new" {{#equal status 'new'}}class="current"{{/equal}}>New</a> | 
+		<a href="?status=send" {{#equal status 'send'}}class="current"{{/equal}}>Send Queue</a> | 
+		<a href="?status=sent" {{#equal status 'sent'}}class="current"{{/equal}}>Sent</a> | 
+		<a href="?status=hold" {{#equal status 'hold'}}class="current"{{/equal}}>Hold</a></p>
+	<ul>
+	{{#each emails}}
+		<li class="status-{{status}}">
+			<input type="checkbox" name="requester" value="{{_id}}"> &nbsp;{{email}} 
+			&mdash; {{formatDate datetime 'M/D/YY, h:mm a'}}
+		</li>
+	{{/each}}
+	</ul>
+
+	<button class="button-primary" id="send">Send</button>
+	<button class="button" id="hold">Hold</button>
+	<button class="button button-alert" id="remove">Remove</button>
+
+</div>
